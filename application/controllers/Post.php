@@ -274,7 +274,7 @@ class Post extends CI_Controller{
 				$this->post_term_model->insert_tag($post_term);
 			}
 		
-			$this->session->set_flashdata('post_success', '<strong>Successfully added!</strong> new post.');
+			$this->session->set_flashdata('post_success', '<li><strong>Successfully added!</strong> new post.</li>');
 
 			$random_id = $random_key;
 			redirect('admin/post-edit/'.$random_id);

@@ -6,16 +6,26 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 	
 ?>
 <div class="row">
-	<div class="col-md-2">
+	<div class="col-md-12">
+		<ul class="list-inline list-unstyled pull-right">
+			<li><?php echo anchor('admin/post-list', '<i class="fa fa-sort-amount-desc" aria-hidden="true"></i> Post List', array('class' => 'btn btn-default pull-right')); ?></li>
+		</ul>
 		<?php echo heading('Edit post', 4); ?>
 	</div>
-	<div class="col-md-6 alert-group">
+</div>
+<div class="row">
+	<div class="col-md-12">
 		<?php if($this->session->flashdata('post_success')){ ?>
-		<div class="alert alert-success alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <?php echo $this->session->flashdata('post_success'); ?></div>
-		<?php } ?>
-	</div>
-	<div class="col-md-4 alert-group">
-		<?php echo anchor('admin/post-list', '<i class="fa fa-sort-amount-desc" aria-hidden="true"></i> Post List', array('class' => 'btn btn-default pull-right')); ?>
+<div class="row">
+  <div class="col-md-12">
+    <div class="bs-callout-success">
+      <ul class="list-unstyled text-sm">
+      	<?php echo $this->session->flashdata('post_success'); ?>
+      </ul>
+     </div>
+  </div>
+</div>
+<?php } ?>
 	</div>
 </div>
 <?php 
