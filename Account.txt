@@ -1,0 +1,19 @@
+=====Role Admin=====
+admin@admin.com
+password
+
+=====Role Groups=====
+rocklee@gmail.com
+password
+
+nobitanobi@gmail.com
+password
+
+shizuka@doraemon.com
+password
+===================
+Suneo Honekawa
+Takeshi Goda
+Master Roshi
+
+===================

@@ -1,0 +1,864 @@
+<?php
+defined('BASEPATH')OR exit('No direct script access allowed');
+
+class Member extends CI_Controller{
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		# multiple groups (by id) and check if all exist
+		$group = 2;
+		if (! $this->ion_auth->in_group($group)){
+			redirect('login');
+		}
+		
+	}
+
+	public function index()
+	{	
+
+		$user = $this->ion_auth->user()->row();
+
+		//===============
+		// Posts
+		//===============
+		$recent_post = $this->member_model->get_recent_post($user->id);
+		
+		//===============
+		// Meters
+		//===============
+		$post_count = $this->member_model->count_post($user->id);
+		$category_count = $this->member_model->count_category();
+		$tag_count = $this->member_model->count_tag();
+		$comment_count = $this->member_model->count_comment($user->id);
+
+		// Comment meter
+		if($comment_count > 1){
+			$comment_meter = ' Comments';
+		}else{
+			$comment_meter = ' Comment';
+		}
+
+		// Tag meter
+		if($category_count > 1){
+			$tag_meter = ' Tags';
+		}else{
+			$tag_meter = ' Tag';
+		}
+
+		// Category meter
+		if($category_count > 1){
+			$category_meter = ' Categories';
+		}else{
+			$category_meter = ' Category';
+		}
+
+		// Post meter
+		if($post_count > 1){
+			$post_meter = ' Posts';
+		}else{
+			$post_meter = ' Post';
+		}
+
+
+		//===============
+		// Parsing data
+		//===============
+		$data = array(
+			'header' => $this->header(),
+			'post_meter' => $post_meter,
+			'post_count' => $post_count,
+			'category_meter' => $category_meter,
+			'category_count' => $category_count,
+			'tag_meter' => $tag_meter,
+			'tag_count' => $tag_count,
+			'comment_meter' => $comment_meter,
+			'comment_count' => $comment_count,
+			'recent_posts' => $recent_post,
+			'javascript' => $this->load->view('member/javascript', '', TRUE),
+			'footer' => $this->load->view('member/footer', '', TRUE),
+			);
+
+		$this->parser->parse('member/main', $data);
+
+	}
+
+	private function header()
+	{	
+		$user = $this->ion_auth->user()->row();
+
+		$setting = $this->settings_model->site_settings();
+
+		$logout = anchor('logout','<i class="fa fa-fw fa-power-off"></i> Log Out'); 
+		$profile = $this->author_model->get_author_profile($user->id);
+		
+
+		if($profile->profile_user_avatar){
+			$avatar = array(
+					'src' => 'assets/img/avatar/100-x-100/'. $profile->profile_user_avatar,
+					'class' => 'user-avatar img-circle',
+				);
+
+			$user_avatar = img($avatar);
+		}else{
+			$user_avatar = NULL;
+		}
+
+		// Site title
+		if(! $setting->title){
+			$title = 'Site Name';
+		}else{
+			$title = $setting->title;
+		}
+
+		// Site Tagline
+		if(! $setting->tagline){
+			$tagline = NULL;
+		}else{
+			$tagline = ' - '.$setting->tagline;
+		}
+
+		// Site icon
+		if($setting->favicon == NULL){
+			$favicon_16_x_16   = NULL;
+			$favicon_32_x_32   = NULL;
+			$favicon_180_x_180 = NULL;
+		}else{
+			$favicon_16_x_16_attr = array(
+				'href' => 'assets/img/favicon/16-x-16/'.$setting->favicon,
+		        'rel' => 'icon',
+		        'type' => 'image/png',
+		        'sizes' => '16x16'
+			);
+
+			$favicon_32_x_32_attr = array(
+				'href' => 'assets/img/favicon/32-x-32/'.$setting->favicon,
+		        'rel' => 'icon',
+		        'type' => 'image/png',
+		        'sizes' => '32x32'
+			);
+
+			$favicon_180_x_180_attr = array(
+				'href' => 'assets/img/favicon/180-x-180/'.$setting->favicon,
+		        'rel' => 'apple-touch-icon',
+		        'type' => 'image/png',
+		        'sizes' => '180x180'
+			);
+
+			$favicon_16_x_16   = link_tag($favicon_16_x_16_attr);
+			$favicon_32_x_32   = link_tag($favicon_32_x_32_attr);
+			$favicon_180_x_180 = link_tag($favicon_180_x_180_attr);
+
+			$favicons = $favicon_16_x_16 . $favicon_32_x_32 . $favicon_180_x_180;
+
+		}
+
+		$data = array(
+			'doctype' => doctype('html5'),
+			'site_title' => $title,
+			'tagline' => $tagline,
+			'favicons' => $favicons,
+			'user_avatar' => $user_avatar,
+			'user' => $user->first_name.' '.$user->last_name,
+			'logout' => $logout,
+		);
+
+		 $this->parser->parse('member/header', $data);
+	}
+
+	
+	public function error_page()
+	{
+		$data = array(
+			'header' => $this->header(),
+			'javascript' => $this->load->view('member/javascript', ' ', TRUE),
+			'footer' => $this->load->view('member/javascript', ' ', TRUE),
+			);
+
+		$this->parser->parse('member/error', $data);
+	}
+	
+	public function post_edit($random_id)
+	{
+
+		//==========================================//
+		$random_id = $this->uri->segment(3);
+		$post      = $this->post_model->get_single($random_id);
+
+		//==========================================//
+		if(! $post){
+			return $this->error_page(); 
+		}
+
+		$id            = $post->post_id; 
+		$title         = $post->post_title;
+		$content       = $post->post_content;
+		$slug          = $post->post_slug;
+		$category_id   = $post->post_category_id;
+		$category_name = $post->category_name;
+		$category_slug = $post->category_slug;
+		$published     = $post->post_published;
+		$featured_img  = $post->post_featured_img;
+		$gmt           = $post->post_created_gmt;
+
+		//==========================================//
+		if($featured_img){
+			$this->featured_img_1500_x_1000($featured_img);
+		}
+
+		$data_slug     = 'Permalink: '. anchor('post/'.$category_slug.'/'.$slug, base_url().'post/'.$category_slug.'/'. $slug, array('class' => 'po-link'));
+
+		if($category_id == '0'){
+			$data_category = 'Uncategorized';
+		}else{
+			$data_category = $category_name;
+		}
+
+		if($published == TRUE){
+			$data_published = 'checked';
+		}else{
+			$data_published = NULL;
+		}
+
+		if($featured_img == NULL){
+			$data_featured_img = base_url('assets/img/featured-img/set-featured-img.jpg');
+		}else{
+			$data_featured_img = base_url('assets/img/featured-img/1500-x-1000/'.$featured_img);
+		}
+
+		$comment       = $this->comment_model->get_single($id);
+		$comment_count = $this->comment_model->post_comment_count($id);
+
+		if($comment){
+			if($comment_count > 1){
+				$data_comment_header = heading('Comments', 4);
+				$data_count_comment = '<span class="badge badge-danger">'.$comment_count.'</span> Items';
+			}else{
+				$data_comment_header = heading('Comment', 4);
+				$count_post_comment = '<span class="badge badge-danger">'.$comment_count.'</span> Item';
+			}
+		}else{
+			$data_comment_header = '';
+			$data_count_comment = '';
+		}
+
+
+		//==========================================//
+			
+		$data = array(
+			'header'           => $this->header(),
+			'javascript'       => $this->load->view('member/javascript','', TRUE),
+			'post_title'       => $title,
+			'post_content'     => $content,
+			'permalink'        => $data_slug,
+			'categories'       => $this->category_model->get_all(),
+			'post_category'    => $data_category,
+			'tags'             => $this->tag_model->get_all(),
+			'published_status' => $data_published,
+			'featured_img'     => $data_featured_img,
+			'comment'          => $comment,
+			'comment_count'    => $data_count_comment,
+			'comment_header'   => $data_comment_header,
+			'footer'           => $this->load->view('member/footer','', TRUE),
+		);
+
+		$this->parser->parse('member/post_edit', $data);
+
+	}
+
+	public function post_create()
+	{
+		$data = array(
+			'header' => $this->header(),
+			'categories' => $this->category_model->get_all(),
+			'tags' => $this->tag_model->get_all(),
+			'javascript' => $this->load->view('member/javascript', '', TRUE),
+			'footer' => $this->load->view('member/footer', '', TRUE),
+			);
+
+		$this->parser->parse('member/post', $data);
+	}
+
+	public function post_add()
+	{	
+
+		$config = array(
+				'encrypt_name' => TRUE,
+				'upload_path' => './assets/img/featured-img',
+				'allowed_types' => 'png|jpg',
+				'max_size' => '1000',
+				'max_width' => '1500',
+				'max_height' => '1000',
+			);
+
+		$this->upload->initialize($config);
+
+		$rules = array(
+				array(
+					'field' => 'post_title',
+					'label' => 'Post title',
+					'rules' => 'required|strip_tags'
+					),
+				array(
+					'field' => 'post_tag[]',
+					'label' => 'Post tag',
+					'rules' => 'strip_tags'
+					),
+			);
+
+		$this->form_validation->set_rules($rules);
+	
+		if($this->form_validation->run() === FALSE){
+			$this->session->set_flashdata('failed', form_error('post_title', '', ''));
+
+			redirect('member/post');
+
+		}else{
+			    //===========================
+				// Insert entry for post data.
+				//===========================
+				$this->upload->do_upload('post_featured_img');
+
+				$category = $this->input->post('post_category', TRUE);
+
+				if(! $category ){
+					$post_category = 'uncategorized';
+				}else{
+					$post_category = '';
+				}
+
+				if($category == '0'){
+					$post_category = 'uncategorized';
+				}else{
+					$post_category_id = $this->input->post('post_category', TRUE);
+				}
+
+				$random_key = random_string('alnum', 20);
+
+				$user = $this->ion_auth->user()->row();
+
+				$post_data = array(
+					'post_random_id' => $random_key,
+					'post_title' => ucfirst($this->input->post('post_title', TRUE)),
+					'post_content' => ucfirst($this->input->post('post_content', TRUE)),
+					'post_slug' => url_title($this->input->post('post_title'), 'dash', TRUE),
+					'post_category_id' => $this->input->post('post_category', TRUE),
+					'post_uncategorized_slug' => $post_category,
+					'post_published' => $this->input->post('post_published', TRUE),
+					'post_featured_img' => $this->upload->data('file_name'),
+					'post_created' => time(),
+					'user_id' => $user->id,
+				);
+
+				$this->post_model->insert_new($post_data);
+
+
+				//===========================
+				// Insert batch for post tags.
+				//===========================
+			
+				$post_term_data = $this->input->post('post_tag');
+				
+
+				if(! $post_term_data){
+						
+				}else{
+					
+					$post_term = array();
+
+					
+					foreach($post_term_data as $key => $value){
+						$post_term[$key]['term_tag_id'] = $value;
+						$post_term[$key]['term_post_id'] = $this->db->insert_id();
+						$post_term[$key]['term_user_id'] = $user->id;
+						$post_term[$key]['term_created'] = time();
+					}
+
+					$this->post_term_model->insert_tag($post_term);
+				}
+
+				//===========================
+				// Success message after submit new post.
+				//===========================
+				$this->session->set_flashdata('post_success', '<strong>Successfully added!</strong> new post.');
+
+				//===========================
+				// Redirect to specific URL after successfully validated and store the data.
+				//===========================
+				$random_id = $random_key;
+				redirect('member/post-edit/'.$random_id);
+		}
+	}
+
+	private function featured_img_1500_x_1000($file_name)
+	{	
+		// Resize feature image automatically
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = './assets/img/featured-img/'.$file_name;
+		$config['quality'] = '100%';
+		$config['maintain_ratio'] = TRUE;
+		$config['new_image']    = './assets/img/featured-img/1500-x-1000';
+		$config['width']         = 1500;
+		$config['height']       = 1000;
+
+		
+		$this->image_lib->initialize($config);
+
+		if ( ! $this->image_lib->resize())
+		{	
+			$resize = $this->image_lib->display_errors();	
+		    $this->session->set_flashdata('resize_fail', $resize); 
+		}else{
+			$this->image_lib->resize();
+		}
+	}	
+
+
+		//=================
+	// List of posts.
+	//=================
+	public function post_list()
+	{
+		// =============================
+		// Pagination configuration.
+		// =============================
+		$page = ( $this->uri->segment(3) ) ? $this->uri->segment(3): 0;
+
+		$config = array(
+			'base_url'        =>     base_url('member/post-list/'),
+			'total_rows'      => 	 $this->post_model->count_list(),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     3,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="disabled"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+
+		$this->pagination->initialize($config);
+
+		$user = $this->ion_auth->user()->row();
+
+		$return_data = $this->member_model->item_list($config['per_page'], $page, $user->id);
+
+		if( ! $return_data ){
+
+			if($this->member_model->count_post($user->id) > 1){
+				
+				$post_count = '<span class="badge badge-flat-danger">'. $this->member_model->count_post($user->id). '</span> Items';
+
+			}else{
+				$post_count = '<span class="badge badge-flat-danger">'. $this->member_model->count_post($user->id) . '</span> Item';
+			}
+
+
+			
+			$data = array(
+				'header' => $this->header(),
+				'post_count' => $post_count,
+				'pagination_result' => $this->member_model->item_list($config['per_page'], $page, $user->id),
+				'pagination_links' => $this->pagination->create_links(),
+				'javascript' => $this->load->view('member/javascript','', TRUE),
+				'footer' => $this->load->view('member/footer','', TRUE),
+			);
+
+			$this->parser->parse('member/post_list', $data);
+
+		}else{
+
+			if($this->member_model->count_post($user->id) > 1){
+				$post_count = '<span class="badge badge-flat-danger">'. $this->member_model->count_post($user->id) . '</span> Items';
+
+			}else{
+				$post_count = '<span class="badge badge-flat-danger">'. $this->member_model->count_post($user->id) . '</span> Item';
+			}
+
+			if($return_data > 10){
+				$pagination_list =  $this->pagination->create_links();
+			}else{
+				$pagination_list = NULL;
+			}
+
+			$data = array(
+				'header' => $this->header(),
+				'post_count' => $post_count,
+				'pagination_result' => $this->member_model->item_list($config['per_page'], $page, $user->id),
+				'pagination_links' => $pagination_list,
+				'javascript' => $this->load->view('member/javascript','', TRUE),
+				'footer' => $this->load->view('member/footer','', TRUE),
+			);
+
+			$this->parser->parse('member/post_list', $data);
+
+		}
+	}
+
+	public function post_filter_uncategorized($slug)
+	{
+		$slug = $this->uri->segment(3);
+		$user = $this->ion_auth->user()->row();
+		$uncategorized_post = $this->member_model->uncategorized_post($slug, $user->id);
+
+		if(! $uncategorized_post){
+			return $this->error_page();
+		}
+
+		foreach($uncategorized_post as $row):
+			$id = $row->post_category_id;
+		endforeach;
+
+		$count_item = $this->member_model->count_uncategorized_post( $slug, $user->id );
+
+		if($count_item > 1){
+			$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Items ';
+			$post_count = "Post's";
+		}else{
+			$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Item ';
+			$post_count = 'Item';
+		}
+
+		$post_list =  anchor('member/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
+
+		$data = array(
+			'header' => $this->header(),
+			'uncategorized_post' => $uncategorized_post,
+			'post_list' => $post_list,
+			'count_result' => $count_result,
+			'post_count' => $post_count,
+			'javascript' => $this->load->view('member/javascript', '', TRUE),
+			'footer' => $this->load->view('member/footer', '', TRUE),
+		);
+
+		$this->parser->parse('member/filter_uncategorized', $data);
+	}
+
+	public function post_filter_categorized($slug)
+	{	
+		$slug = $this->uri->segment(3);
+		$user = $this->ion_auth->user()->row();
+
+		$post = $this->member_model->categorized_post($slug, $user->id);
+
+		if(! $post){
+			return $this->error_page();
+		}
+
+		foreach($post as $row):
+			$cat_title = heading(' Post related in <span class="text-primary">'. $row->category_name.'</span> category.', 5);
+			$cat_id = $row->post_category_id;
+		endforeach;
+
+		$count_item = $this->member_model->count_categorized_post($user->id, $cat_id);
+
+		if($count_item > 1){
+			$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Items ';
+		}else{
+			$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Item ';
+		}
+
+		$post_list =  anchor('member/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
+		
+
+		$data = array(
+			'header' => $this->header(),
+			'post_filter' => $post,
+			'cat_title' => $cat_title,
+			'count_result' => $count_result,
+			'post_list' => $post_list,
+			'javascript' => $this->load->view('member/javascript','', TRUE),
+			'footer' => $this->load->view('member/footer','', TRUE),
+		);
+
+		$this->parser->parse('member/filter_categorized', $data);
+	}
+
+
+	public function post_comment()
+	{	
+		$user = $this->ion_auth->user()->row();
+		$comment = $this->member_model->get_comment($user->id);
+
+		$data = array(
+			'header' => $this->header(),
+			'comments' => $comment,
+			'javascript' => $this->load->view('member/javascript','', TRUE),
+			'footer' => $this->load->view('member/footer','', TRUE),
+		);
+
+		$this->parser->parse('member/comment', $data);
+	}
+
+	public function delete_comment($id)
+	{	
+		$user = $this->ion_auth->user()->row();
+		$id = $this->uri->segment(3);
+
+		$delete_comment = $this->member_model->delete_comment($id, $user->id);
+
+		if(! $delete_comment){
+			redirect('member/comment');
+		}
+
+		redirect('member/comment');
+	}
+
+	public function post_filter_tag($slug)
+	{	
+		$slug = $this->uri->segment(3);
+		$tag = $this->tag_model->get_single($slug);
+
+		if(! $tag){
+			return $this->error_page();
+		}
+
+		$user = $this->ion_auth->user()->row();
+		$user_id = $user->id;
+
+		foreach($tag as $row):
+			$tag_name = heading(' Post with <span class="text-primary">'. $row->tag_name.'</span> tag.', 5);
+			$id = $row->tag_id;
+			$post = $this->member_model->post_tag($id, $user_id);
+		
+			$count_post_tag = $this->member_model->post_tag_count($id, $user_id);
+
+			if($count_post_tag > 1){
+				$count = '<span class="badge badge-danger text-sm">'. $count_post_tag .'</span> Items';
+			}else{
+				$count = '<span class="badge badge-danger text-sm">'. $count_post_tag .'</span> Item';
+			}
+		endforeach;
+
+
+		
+
+		$post_list = anchor('member/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
+
+		$data = array(
+			'header' => $this->header(),
+			'post' => $post,
+			'tag_name' => $tag_name,
+			'count' => $count,
+			'post_list' => $post_list,
+			'javascript' => $this->load->view('member/javascript', '', TRUE),
+			'footer' => $this->load->view('member/footer', '', TRUE),
+		);
+
+		$this->parser->parse('member/filter_tag', $data);
+	}
+
+	public function post_delete($id)
+	{
+		$id = $this->uri->segment(3);
+		$file_name = $this->uri->segment(4);
+		$user = $this->ion_auth->user()->row();
+
+		if($file_name){
+			 $this->delete_feat_img_file($file_name);
+		}
+
+		$delete_post = $this->member_model->delete_post($id, $user->id);
+		$this->post_term_model->delete_item($id);
+
+		if(! $delete_post){
+			redirect('member/post-list');	
+		}
+
+		redirect('member/post-list');
+	}
+
+	private function delete_feat_img_file($file_name)
+	{	
+		$file = 'assets/img/featured-img/'.$file_name;
+		if(is_file($file)){
+			unlink($file);
+		}
+
+		$file_1500_x_1000 = 'assets/img/featured-img/1500-x-1000/'.$file_name;
+		if(is_file($file_1500_x_1000)){
+			unlink($file_1500_x_1000);
+		}
+			
+	}
+	
+	/**
+	* Author's Profile
+	* For more info read ion_auth_model line 937
+	*/
+	
+	public function author_profile()
+	{	
+		$user = $this->ion_auth->user()->row();
+
+		$profile = $this->author_model->get_author_profile($user->id);
+
+		if($profile->profile_user_avatar){
+			$user_img = img('assets/img/avatar/100-x-100/'. $profile->profile_user_avatar);
+		}else{
+			$user_img = '<div class="text-sm user-avatar-default">Set Profile Image</div>';
+		}
+
+		$data = array(
+			'header' => $this->header(),
+			'first_name' => $user->first_name,
+			'last_name' => $user->last_name,
+			'email' => $user->email,
+			'user_img' => $user_img,
+			'nickname' => $profile->profile_user_nickname,
+			'bio_info' => $profile->profile_user_bio_info,
+			'javascript' => $this->load->view('member/javascript', '', TRUE),
+			'footer' => $this->load->view('member/footer', '', TRUE),
+		);
+
+		$this->parser->parse('member/author_profile', $data);
+	}
+
+	public function author_profile_update()
+	{	
+		// Upload Image
+		$config = array(
+				'encrypt_name' => TRUE,
+				'upload_path' => './assets/img/avatar',
+				'allowed_types' => 'png|jpg',
+				'max_size' => '200',
+			);
+
+		$this->upload->initialize($config);
+
+		$rules = array(
+				array(
+					'field' => 'first_name',
+					'label' => 'First Name',
+					'rules' => 'alpha|strip_tags'
+					),
+				array(
+					'field' => 'last_name',
+					'label' => 'Last Name',
+					'rules' => 'alpha|strip_tags'
+					),
+				array(
+					'field' => 'nickname',
+					'label' => 'Nickname',
+					'rules' => 'required|alpha|strip_tags'
+					),
+				array(
+					'field' => 'email',
+					'label' => 'Email',
+					'rules' => 'required|valid_email|strip_tags'
+					),
+			);
+
+		$this->form_validation->set_rules($rules);
+
+		if($this->form_validation->run() === FALSE){
+
+			$this->session->set_flashdata('failed', validation_errors('<li><strong>Error </strong>', '</li>'));
+			redirect('member/profile');
+
+		}else{
+			
+			$user = $this->ion_auth->user()->row();
+			$user_data = array(
+					'first_name' => $this->input->post('first_name', TRUE),
+					'last_name' => $this->input->post('last_name', TRUE),
+					'email' => $this->input->post('email', TRUE),
+					'password' => $this->input->post('new_password', TRUE),
+				);
+
+			$this->ion_auth->update($user->id, $user_data);
+			//========================================//
+			$user = $this->ion_auth->user()->row();
+			$profile_data = $this->author_model->get_author_profile($user->id);
+			$profile_picture = $this->upload->do_upload('profile_picture');
+
+			if(! $profile_picture){
+				$img_upload_file = $profile_data->profile_user_avatar;
+			}else{
+				$this->delete_profile_img_thumb($profile_data->profile_user_avatar);
+				$this->delete_profile_img($profile_data->profile_user_avatar);
+				$img_upload_file = $this->upload->data('file_name');
+
+			}
+			//========================================//
+			$data = array(
+				'profile_user_avatar' => $img_upload_file,
+				'profile_user_nickname' => $this->input->post('nickname', TRUE),
+				'profile_user_website' => $this->input->post('website', TRUE),
+				'profile_user_bio_info' => $this->input->post('biographical_info', TRUE),
+				);
+
+			//========================================//
+			$user = $this->ion_auth->user()->row();
+			$this->author_model->update_author_profile($user->id, $data);
+			
+			$user_img = $this->author_model->get_author_profile($user->id);
+			if(! $profile_picture){
+
+			}else{
+				$this->resize_profile_img($user_img->profile_user_avatar); // Resize
+			}
+			//========================================//
+			$this->delete_profile_img($user_img->profile_user_avatar); // Avatar Delete
+			$this->session->set_flashdata('success', '<li><strong>Successfully!</strong> updated</li>');
+			redirect('member/profile');
+
+		}
+		
+	}
+
+	private function resize_profile_img($img)
+	{
+        $config['image_library'] = 'gd2';
+		$config['source_image'] = './assets/img/avatar/'.$img;
+		$config['quality'] = '100%';
+		$config['maintain_ratio'] = TRUE;
+		$config['new_image']    = './assets/img/avatar/100-x-100';
+		$config['width']         = 100;
+		$config['height']       = 100;
+
+		$this->image_lib->initialize($config);
+
+		if ( ! $this->image_lib->resize())
+		{	
+			$resize = $this->image_lib->display_errors();	
+		    $this->session->set_flashdata('resize_fail', $resize); 
+		}else{
+			$this->image_lib->resize();
+		}
+	}
+
+	private function delete_profile_img($img_name)
+	{	
+		$file = 'assets/img/avatar/'.$img_name;
+		
+		if(is_file($file)){
+			unlink($file);
+		}
+			
+	}
+
+	private function delete_profile_img_thumb($img_name)
+	{	
+		$file = 'assets/img/avatar/100-x-100/'.$img_name;
+		
+		if(is_file($file)){
+			unlink($file);
+		}
+			
+	}
+
+} // Member class
