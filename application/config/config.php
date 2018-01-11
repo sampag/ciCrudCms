@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/codeigniter/ci_crud_blog/';
+$config['base_url'] = 'http://localhost/codeigniter/ciCrudCms/';
 /*
 |--------------------------------------------------------------------------
 | Index File
