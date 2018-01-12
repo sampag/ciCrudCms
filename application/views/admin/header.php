@@ -60,6 +60,7 @@ echo doctype('html5');
     <meta name='robots' content='noindex,follow' />
     <base href="<?php echo base_url(); ?>">
     <title><?php echo $title; ?><?php echo $tagline; ?></title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<?php
         // Favicons
@@ -100,6 +101,8 @@ echo doctype('html5');
             background: #fff;
             font-size: 13.5px;
             color: #424242;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
         }
         {
            font-size: 13px; 
