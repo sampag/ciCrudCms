@@ -60,13 +60,15 @@ echo doctype('html5');
     <meta name='robots' content='noindex,follow' />
     <base href="<?php echo base_url(); ?>">
     <title><?php echo $title; ?><?php echo $tagline; ?></title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-	<?php
+    <?php
         // Favicons
         echo $favicon_16_x_16; // 16x16
         echo $favicon_32_x_32; // 32x32
         echo $favicon_180_x_180; // 180x180
+    ?>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<?php
         echo link_tag('assets/css/material.cyan-light_blue.min.css');
 		echo link_tag('assets/css/bootstrap.min.css');
 		echo link_tag('assets/css/sb-admin.css');
@@ -103,9 +105,6 @@ echo doctype('html5');
             color: #424242;
             font-family: 'Roboto', sans-serif;
             font-weight: 400;
-        }
-        {
-           font-size: 13px; 
         }
         ul, p, .media-body{
             font-size: 13px; 
