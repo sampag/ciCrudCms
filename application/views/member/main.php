@@ -88,12 +88,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 		  echo anchor('member/post','<i class="fa fa-plus-circle" aria-hidden="true"></i> Add post', array('class' => 'pull-right btn btn-flat-success'));
 		?>
 		<h4>Recent Post</h4>
-		<p>
-			<?php
-				$gmt = local_to_gmt(time());
-				echo timespan($gmt, time(), 2);
-			?>
-		</p>
 	</div>
 </div>
 <br>
