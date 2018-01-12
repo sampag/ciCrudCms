@@ -3,6 +3,11 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 $add_new = anchor('admin/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add new', array('class' => 'btn btn-flat-primary'));
 ?>
 {header}
+<div class="row">
+	<div class="col-md-12">
+		<h4>Post <?php echo $add_new; ?></h4>
+	</div>
+</div>
 <br>
 <div class="row">
 	<div class="col-md-12">
@@ -19,7 +24,11 @@ $add_new = anchor('admin/post', '<i class="fa fa-plus-circle" aria-hidden="true"
 				<?php echo form_close(); ?>
 			</li>
 		</ul>
-		<?php echo $add_new; ?>
+		<ul class="nav nav-tabs">
+		  <li role="presentation" class="active"><a href="#">All</a></li>
+		  <li role="presentation" ><a href="<?php echo base_url('admin/post-list/mine'); ?>">Mine</a></li>
+		  <li role="presentation"><a href="#">Published</a></li>
+		</ul>
 	</div>
 </div>
 <div class="row">

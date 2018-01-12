@@ -103,7 +103,7 @@ $route['admin/post/:any']                 = 'post/post_filter_uncategorized/$unc
 $route['admin/post-author/(:num)']        = 'post/post_filter_author/$id';
 $route['search-posts']                    = 'post/post_search';
 
-
+$route['admin/post-list/mine']            = 'post_group/mine';
 //======================
 // Category
 //======================

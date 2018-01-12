@@ -2,7 +2,48 @@
 defined('BASEPATH')OR exit('No direct script access allowed');
 
 class Post_model extends CI_Model{
+
+	//=========================================//
+	// All post
+	public function getAll()
+	{
+		$this->db->select('*');
+		$this->db->from('post');
+		$this->db->join('category', 'category.category_id = post.post_category_id','left');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	// Published post
+	public function getPublished($published)
+	{
+		$this->db->select('*');
+		$this->db->from('post');
+		$this->db->where('post_published', $published);
+		$query = $this->db->get();
+		return $query->result();
+	}
 	
+
+	// Mine post
+	public function getMine($user_id)
+	{
+		$this->db->select('*');
+		$this->db->from('post');
+		$this->db->where('user_id', $user_id);
+		$this->db->order_by('post_id', 'DESC');
+		$this->db->join('category', 'category.category_id = post.post_category_id', 'left');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function countMine($user_id)
+	{
+		$this->db->from('post');
+		$this->db->where('user_id', $user_id);
+		return $this->db->count_all_results();
+	}
+	//=========================================//
 
 	// Return single row.
 	public function get_single($slug)
