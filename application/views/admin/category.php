@@ -163,8 +163,8 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 										  '<td>' + response[i].category_name + '</td>' +
 										  '<td>' + response[i].category_slug + '</td>' +
 										  '<td>' + moment(response[i].category_created).format('L') + '</td>' +
-										  '<td class="text-center">' + '<a href="'+baseUrl+'admin/category-edit/'+ response[i].category_id +'" class="cat-edit">Edit</a> ' +
-										  '<a href="javascript:;" title="'+ response[i].category_name +'" data="'+ response[i].category_id +'" class="cat-delete link"><i class="fa fa-fw fa-trash"></i></a>' + '</td>' +
+										  '<td class="text-center">' + '<a href="'+baseUrl+'admin/category-edit/'+ response[i].category_id +'" class="cat-edit" title="Edit"><i class="fa fa-fw fa-pencil-square-o"></i></a> ' +
+										  '<a href="javascript:;" title="Delete" data="'+ response[i].category_id +'" class="cat-delete link"><i class="fa fa-fw fa-trash"></i></a>' + '</td>' +
 										  '</tr>';
 
 							$("#parseCategory").html(categories);
