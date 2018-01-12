@@ -76,6 +76,9 @@ defined('BASEPATH')OR exit('No direct script access allowed');
             height: 100%;
             color: #676767;
         }
+        .user-name{
+            margin-bottom: 0px;
+        }
         .bs-callout-primary{
             padding: 10px 15px;
             margin: 20px 0;
@@ -168,10 +171,10 @@ defined('BASEPATH')OR exit('No direct script access allowed');
                         </li>
                     </ul>
                 </li>
-                <p class="navbar-text"> 
+                <div class="navbar-text user-name"> 
                 {user_avatar} 
                 {user}
-                </p>
+                </div>
                 <li class="dropdown">
                      <a href="javascript:void(0)" class="dropdown-toggle circle-dot" data-toggle="dropdown">
                         <i class="fa fa-circle"></i> 
