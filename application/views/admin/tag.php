@@ -193,8 +193,8 @@ $(function(){
 										  '<td>' + response[i].tag_slug + '</td>' +
 										  '<td>' + moment(response[i].tag_created).format('L') + '</td>' +
 									
-										    '<td class="text-center">' + '<a href="'+baseUrl+'admin/tag-edit/'+ response[i].tag_id +'" class="tag-edit">Edit</a> ' +
-										  '<a href="javascript:;" title="Delete" data="'+ response[i].tag_id +'" class="tag-delete link"><i class="fa fa-fw fa-trash"></i></a>' + '</td>' +
+										    '<td class="text-center">' + '<a href="'+baseUrl+'admin/tag-edit/'+ response[i].tag_id +'" class="tag-edit" title="Edit"><i class="fa fa-fw fa-pencil-square-o"></i></a> ' +
+										  '<a href="javascript:;" title="Delete" data="'+ response[i].tag_id +'" class="tag-delete link" title="Delete"><i class="fa fa-fw fa-trash"></i></a>' + '</td>' +
 										  '</tr>';
 
 							$("#parseTags").html(tags);
