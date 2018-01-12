@@ -10,6 +10,8 @@ defined('BASEPATH')OR exit('No direct script access allowed');
     <base href="<?php echo base_url(); ?>">
     <title>{site_title}{tagline}</title>
     {favicons}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<?php
         echo link_tag('assets/css/material.cyan-light_blue.min.css');
         echo link_tag('assets/css/bootstrap.min.css');
@@ -31,6 +33,16 @@ defined('BASEPATH')OR exit('No direct script access allowed');
          }
     ?>
     <style>
+          body,html{
+            background: #fff;
+            font-size: 13.5px;
+            color: #424242;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+        }
+        ul, p, .media-body{
+            font-size: 13px; 
+        }
         .note-editor.note-frame {
             border: 1px solid #c7c5c5;
         }
@@ -91,6 +103,20 @@ defined('BASEPATH')OR exit('No direct script access allowed');
         .bs-callout-danger > ul, .bs-callout-success > ul, .bs-callout-primary > ul{
             margin-top: 0;
             margin-bottom: 0px;
+        }
+        /*MDL*/
+        .material-icons{
+            font-size: 20px;
+        }
+        .mdl-badge[data-badge]:after{
+            font-size: 11px;
+            width: 18px;
+            height: 18px;
+            top: -8px;
+            right: -18px;
+        }
+        .no-line:hover{
+            text-decoration: none;
         }
     </style>
 </head>
