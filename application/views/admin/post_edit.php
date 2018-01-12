@@ -2,9 +2,6 @@
 defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 {header}
-<?php
-	
-?>
 <div class="row">
 	<div class="col-md-12">
 		<ul class="list-inline list-unstyled pull-right">
@@ -104,7 +101,6 @@ if($this->session->flashdata('post_update_failed')){
 			    	 value="<?php echo $tag->tag_id; ?>"
 			    	 <?php 
 			    	 	$checked = $this->post_term_model->checked_tag($tag->tag_id, $id);
-
 			    	 	if($checked){
 			    	 		echo "selected";
 			    	 	}else{
