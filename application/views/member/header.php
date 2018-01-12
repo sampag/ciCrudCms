@@ -10,7 +10,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
     <base href="<?php echo base_url(); ?>">
     <title>{site_title}{tagline}</title>
     {favicons}
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<?php
         echo link_tag('assets/css/material.cyan-light_blue.min.css');

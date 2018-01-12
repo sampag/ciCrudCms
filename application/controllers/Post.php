@@ -117,6 +117,7 @@ class Post extends CI_Controller{
 			//=====================================//
 			// Insert batch for post tags.
 			$post_term_data = $this->input->post('edit_post_tag');
+			
 			$randomSlug = $this->post_model->get_single($random_id_slug); // By random ID.
 			if(! $post_term_data){
 				// Delete tag item

@@ -41,8 +41,6 @@ if($this->session->flashdata('post_update_failed')){
   </div>
 </div>
 <?php } ?>
-
-
 <?php echo form_open_multipart('member/post-update/'.$this->uri->segment(3)); ?>
 	<div class="row">
 		<div class="col-md-9">

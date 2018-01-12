@@ -66,7 +66,6 @@ echo doctype('html5');
         echo $favicon_32_x_32; // 32x32
         echo $favicon_180_x_180; // 180x180
     ?>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<?php
         echo link_tag('assets/css/material.cyan-light_blue.min.css');
