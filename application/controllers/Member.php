@@ -116,7 +116,7 @@ class Member extends CI_Controller{
 
 		if($this->form_validation->run() === FALSE){
 			$this->session->set_flashdata('post_update_failed', validation_errors('<li><strong>Error </strong>', '</li>'));
-			redirect('admin/post-edit/'.$random_id_slug);
+			redirect('member/post-edit/'.$random_id_slug);
 		}else{
 
 			//=====================================//
@@ -544,7 +544,7 @@ class Member extends CI_Controller{
 				//===========================
 				// Success message after submit new post.
 				//===========================
-				$this->session->set_flashdata('post_success', '<strong>Successfully added!</strong> new post.');
+				$this->session->set_flashdata('post_success', '<li><strong>Successfully added!</strong> new post.</li>');
 
 				//===========================
 				// Redirect to specific URL after successfully validated and store the data.
