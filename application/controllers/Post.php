@@ -81,6 +81,7 @@ class Post extends CI_Controller{
 			}
 
 			$upload_feat_img = $this->upload->do_upload('edit_featured_img');
+			
 			$post = $this->post_model->get_single($random_id_slug);
 
 			if(! $upload_feat_img){
@@ -113,6 +114,7 @@ class Post extends CI_Controller{
 			}else{
 				$id = $post->post_id;
 			}
+
 			$this->post_model->update_single($data, $id, $user->id);
 			//=====================================//
 			// Insert batch for post tags.
