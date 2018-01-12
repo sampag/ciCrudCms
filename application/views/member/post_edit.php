@@ -15,9 +15,35 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 		<?php echo anchor('member/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add new post', array('class' => 'btn btn-default pull-right')); ?>
 	</div>
 </div>
+<?php 
+// Failed updation
+if($this->session->flashdata('post_update_failed')){ 
+?>
+<div class="row">
+  <div class="col-md-12">
+    <div class="bs-callout-danger">
+      <ul class="list-unstyled text-sm">
+      	<?php echo $this->session->flashdata('post_update_failed'); ?>
+      </ul>
+     </div>
+  </div>
+</div>
+<?php 
+// Success updation
+}elseif($this->session->flashdata('post_update_success')){ ?>
+<div class="row">
+  <div class="col-md-12">
+    <div class="bs-callout-success">
+      <ul class="list-unstyled text-sm">
+      	<?php echo $this->session->flashdata('post_update_success'); ?>
+      </ul>
+     </div>
+  </div>
+</div>
+<?php } ?>
 
 
-<?php echo form_open(); ?>
+<?php echo form_open_multipart('member/post-update/'.$this->uri->segment(3)); ?>
 	<div class="row">
 		<div class="col-md-9">
 			<div class="form-group">
@@ -34,6 +60,15 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					echo form_label('Content', 'edit_post_content');
 					echo form_textarea('edit_post_content', $post_content, array('id' => 'summernote'));
 				?>
+				<span class="help-block text-sm">
+					<?php 
+						/**
+						* Ex. Last edited on August 15, 2017 at 8:20pm 
+						*/
+						echo $last_updated;
+						echo br(1);
+					?>
+				</span>
 			</div>
 		</div>
 		<div class="col-md-3">
@@ -50,16 +85,26 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 				<?php echo form_label('Tags', 'edit_post_tag[]'); ?>
 				<select name="edit_post_tag[]" id="multipleCategory" class="form-control selectpicker cstm-border" multiple data-done-button="true">
 			  	<?php foreach($tags as $tag): ?>
-			    	<option value="<?php echo $tag->tag_id; ?>"><?php echo $tag->tag_name; ?></option>
+			    	<option 
+			    	value="<?php echo $tag->tag_id; ?>"
+			    	 <?php 
+			    	 	$checked = $this->post_term_model->checked_tag($tag->tag_id, $id);
+
+			    	 	if($checked){
+			    	 		echo "selected";
+			    	 	}else{
+			    	 		echo NULL;
+			    	 	}
+			    	 ?>
+			    	><?php echo $tag->tag_name; ?></option>
 			    <?php endforeach; ?>
 			    </select>
 			</div>
 			<div class="form-group">
-				<label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input cstm-border" name="edit_post_published"  {published_status}>
-                    <span class="custom-control-indicator"></span>
-                    Published
-                </label>
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
+				  <input type="checkbox" name="edit_post_published" id="switch-2" class="mdl-switch__input" value="1" {published_status}>
+				  <span class="mdl-switch__label text-sm">Published</span> 
+				</label>
 			</div>
 			<div class="form-group">
 				<?php echo form_label('Featured Image', 'edit_post_featured_image'); ?>
@@ -83,7 +128,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					    <span class="btn btn-default btn-file btn-sm">
 					    <span class="fileinput-new">Select image</span>
 					    <span class="fileinput-exists">Change</span>
-					    <input type="file" name="post_featured_img"></span>
+					    <input type="file" name="edit_featured_img"></span>
 					    <a href="#" class="btn btn-default fileinput-exists btn-sm" data-dismiss="fileinput">Remove</a>
 					  </div>
 					</div>

@@ -37,7 +37,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
             background: #fff;
             font-size: 13.5px;
             color: #424242;
-            font-family: 'Roboto', sans-serif;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
             font-weight: 400;
         }
         ul, p, .media-body{
@@ -45,6 +45,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
         }
         .note-editor.note-frame {
             border: 1px solid #c7c5c5;
+            margin-bottom: 5px;
         }
         label{
             font-weight: normal;

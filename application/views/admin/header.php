@@ -103,7 +103,7 @@ echo doctype('html5');
             background: #fff;
             font-size: 13.5px;
             color: #424242;
-            font-family: 'Roboto', sans-serif;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
             font-weight: 400;
         }
         ul, p, .media-body{

@@ -77,7 +77,7 @@ if($this->session->flashdata('post_update_failed')){
 						echo $last_updated;
 						echo br(1);
 					?>
-					</span>
+				</span>
 			</div>
 		</div>
 		<div class="col-md-3">

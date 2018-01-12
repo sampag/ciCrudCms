@@ -84,6 +84,159 @@ class Member extends CI_Controller{
 
 	}
 
+		// Update
+	public function post_update($random_id_slug)
+	{	
+		$random_id_slug = $this->uri->segment(3);
+
+		// Upload Image
+		$config = array(
+				'encrypt_name' => TRUE,
+				'upload_path' => './assets/img/featured-img',
+				'allowed_types' => 'png|jpg',
+				'max_size' => '1000',
+			);
+
+		$this->upload->initialize($config);
+
+		$rules = array(
+			array(
+				'field' => 'edit_post_title',
+				'label' => 'Title',
+				'rules' => 'required|strip_tags'
+			),
+			array(
+				'field' => 'edit_post_content',
+				'label' => 'Content',
+				'rules' => 'strip_tags'
+			),
+		);
+
+		$this->form_validation->set_rules($rules);
+
+		if($this->form_validation->run() === FALSE){
+			$this->session->set_flashdata('post_update_failed', validation_errors('<li><strong>Error </strong>', '</li>'));
+			redirect('admin/post-edit/'.$random_id_slug);
+		}else{
+
+			//=====================================//
+			$category = $this->input->post('edit_post_category', TRUE);
+			//=====================================//
+			if(! $category ){
+				$post_uncategorized = 'uncategorized';
+			}else{
+				$post_uncategorized = NULL;
+			}
+
+			if($category == '0'){
+				$post_uncategorized = 'uncategorized';
+			}else{
+				$post_category_id = $this->input->post('edit_post_category', TRUE);
+			}
+
+			$upload_feat_img = $this->upload->do_upload('edit_featured_img');
+			$post = $this->post_model->get_single($random_id_slug);
+
+			if(! $upload_feat_img){
+				$post_featured_img = $post->post_featured_img;
+			}else{
+				$this->post_delete_featured_img($post->post_featured_img);
+				$post_featured_img = $this->upload->data('file_name');
+			}
+
+			//=====================================//
+
+			$title   = strip_tags(ucfirst($this->input->post('edit_post_title', TRUE)));   // Strip_Tag
+			$content = strip_tags(ucfirst($this->input->post('edit_post_content', TRUE))); // Strip_Tag
+
+			$data = array(
+				'post_title'              => $title,
+				'post_content'            => $content,
+				'post_slug'               => url_title($title,'dash', TRUE), 
+				'post_category_id'        => $post_category_id,
+				'post_uncategorized_slug' => $post_uncategorized,
+				'post_featured_img'       => $post_featured_img,
+				'post_published'          => $this->input->post('edit_post_published', TRUE),
+			);
+
+			//=====================================//
+			$user = $this->ion_auth->user()->row();
+
+			if(! $post){
+				redirect('member/post-edit/'.$random_id_slug);
+			}else{
+				$id = $post->post_id;
+			}
+			$this->post_model->update_single($data, $id, $user->id);
+			//=====================================//
+			// Insert batch for post tags.
+			$post_term_data = $this->input->post('edit_post_tag');
+			
+			$randomSlug = $this->post_model->get_single($random_id_slug); // By random ID.
+			if(! $post_term_data){
+				// Delete tag item
+				$this->post_term_model->delete_item($randomSlug->post_id); 	
+			}else{
+				// Delete tag item
+				$this->post_term_model->delete_item($randomSlug->post_id); 
+
+				// Insert new
+				$post_term = array();
+					foreach($post_term_data as $key => $value){
+						$post_term[$key]['term_tag_id']  = $value;
+						$post_term[$key]['term_post_id'] = $randomSlug->post_id;
+						$post_term[$key]['term_user_id'] = $user->id;
+						$post_term[$key]['term_created'] = time();
+					}
+
+				$this->post_term_model->insert_tag($post_term);
+			}
+			//=======================================//
+			$this->session->set_flashdata('post_update_success', '<li><strong>Successfully </strong> updated!</li>');
+			redirect('member/post-edit/'.$random_id_slug);
+			//=====================================//
+		}
+	}
+
+	// This function is for post_update only
+	private function post_update_featured_img($img)
+	{
+		$config['image_library'] = 'gd2';
+		$config['source_image'] = './assets/img/featured-img/'.$img;
+		$config['quality'] = '100%';
+		$config['maintain_ratio'] = TRUE;
+		$config['new_image']    = './assets/img/featured-img';
+		$config['width']         = 1500;
+		$config['height']       = 1000;
+
+		$this->image_lib->initialize($config);
+
+		if ( ! $this->image_lib->resize())
+		{	
+			$resize = $this->image_lib->display_errors();	
+		    $this->session->set_flashdata('resize_fail', $resize); 
+		}else{
+			$this->image_lib->resize();
+		}
+	}
+	
+	// This function is for post_update only 
+	private function post_delete_featured_img($img)
+	{		
+		$feat_1500_x_1000 = 'assets/img/featured-img/1500-x-1000/'.$img;
+		
+		if(is_file($feat_1500_x_1000)){
+			unlink($feat_1500_x_1000);
+		}
+
+		$feat_orig = 'assets/img/featured-img/'.$img;
+		
+		if(is_file($feat_orig)){
+			unlink($feat_orig);
+		}
+			
+	}
+
 	private function header()
 	{	
 		$user = $this->ion_auth->user()->row();
@@ -201,6 +354,7 @@ class Member extends CI_Controller{
 		$published     = $post->post_published;
 		$featured_img  = $post->post_featured_img;
 		$gmt           = $post->post_created_gmt;
+		$updation      = $post->post_updated;
 
 		//==========================================//
 		if($featured_img){
@@ -227,6 +381,13 @@ class Member extends CI_Controller{
 			$data_featured_img = base_url('assets/img/featured-img/1500-x-1000/'.$featured_img);
 		}
 
+		// Post update time
+		if($updation == NULL){
+			$last_updated = NULL;
+		}else{
+			$last_updated = 'Last updated on '. date('F j, Y', strtotime($updation)) . ' @ '. date('h:i a', strtotime($updation));
+		}
+
 		$comment       = $this->comment_model->get_single($id);
 		$comment_count = $this->comment_model->post_comment_count($id);
 
@@ -249,6 +410,7 @@ class Member extends CI_Controller{
 		$data = array(
 			'header'           => $this->header(),
 			'javascript'       => $this->load->view('member/javascript','', TRUE),
+			'id'               => $id,
 			'post_title'       => $title,
 			'post_content'     => $content,
 			'permalink'        => $data_slug,
@@ -260,6 +422,7 @@ class Member extends CI_Controller{
 			'comment'          => $comment,
 			'comment_count'    => $data_count_comment,
 			'comment_header'   => $data_comment_header,
+			'last_updated'     => $last_updated,
 			'footer'           => $this->load->view('member/footer','', TRUE),
 		);
 
