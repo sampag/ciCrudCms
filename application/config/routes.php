@@ -155,6 +155,7 @@ $route['admin/system'] = 'system/index';
 $route['member/post'] = 'member/post_create';
 $route['member/post-list'] = 'member/post_list';
 $route['member/add-post'] = 'member/post_add';
+$route['member/post-update/(:any)'] = 'member/post_update/$random_slug'
 $route['member/post-delete/(:num)'] = 'member/post_delete/$id';
 $route['member/post-edit/(:any)'] ='member/post_edit/$random_id';
 $route['member/post-category/(:any)'] = 'member/post_filter_categorized/$slug';
