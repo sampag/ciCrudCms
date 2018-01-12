@@ -19,13 +19,9 @@ $add_new = anchor('admin/post', '<i class="fa fa-plus-circle" aria-hidden="true"
 				<?php echo form_close(); ?>
 			</li>
 		</ul>
-		<ul class="list-unstyled list-inline">
-			<li><?php echo $add_new; ?>
-			</li>
-		</ul>
+		<?php echo $add_new; ?>
 	</div>
 </div>
-<br>
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-responsive">
