@@ -21,9 +21,12 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<td class="list-category">
 							<?php
 								$title_limit =  character_limiter($row->post_title, 40);
+								if($row->user_id == $user_id){
+									echo anchor('member/post-edit/'.$row->post_random_id, $title_limit, array('class' => 'po-link'));
+								}else{
+									echo '<span>'.$title_limit.'</span>';
+								}
 							?>
-							<a href="<?php echo base_url('admin/post-edit/'.$row->post_random_id); ?>" class="po-link"><?php echo $title_limit; ?>
-							</a>
 						</td>
 						<td class="list-category">
 							<?php 
@@ -56,7 +59,13 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 							 ?>
 						</td>
 						<td class="text-center">
-							<?php echo anchor('admin/post-delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete')); ?>
+							<?php
+								if($row->user_id == $user_id){
+									echo anchor(uri_string().'/delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete'));
+								}else{
+									echo '-';
+								}
+							?>
 						</td>
 					</tr>
 					<?php }}else{ ?>

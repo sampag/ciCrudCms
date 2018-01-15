@@ -37,9 +37,9 @@ if($this->uri->segment(3) == 'published'){
 			'class' => 'btn btn-default btn-sm '.$active_published.'',
 		);
 
-		echo anchor('admin/post-list/all', 'All '. $count_all, $all_attr); 
-		echo anchor('admin/post-list/mine', 'Mine '. $count_mine,  $mine_attr);
-		echo anchor('admin/post-list/published', 'Published '. $count_published, $pub_attr); 
+		echo anchor('member/post-list/all', 'All '. $count_all, $all_attr); 
+		echo anchor('member/post-list/mine', 'Mine '. $count_mine,  $mine_attr);
+		echo anchor('member/post-list/published', 'Published '. $count_published, $pub_attr); 
 		?>
 		</div>
 	</div>

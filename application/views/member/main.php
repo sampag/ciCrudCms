@@ -85,7 +85,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 <div class="row">
 	<div class="col-md-12">
 		<?php
-		  echo anchor('member/post','<i class="fa fa-plus-circle" aria-hidden="true"></i> Add post', array('class' => 'pull-right btn btn-flat-success'));
+		  echo anchor('member/post','<i class="fa fa-plus-circle" aria-hidden="true"></i> Add post', array('class' => 'pull-right btn btn-primary'));
 		?>
 		<h4>Recent Post</h4>
 	</div>

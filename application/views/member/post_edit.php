@@ -5,7 +5,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 <div class="row">
 	<div class="col-md-12">
 		<ul class="list-unstyled list-inline pull-right">
-			<li><?php echo anchor('member/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add new post', array('class' => 'btn btn-default pull-right')); ?>
+			<li><?php echo anchor('member/post-list/all', '<i class="fa fa-sort-amount-desc" aria-hidden="true"></i> Post Lists', array('class' => 'btn btn-default pull-right')); ?>
 			</li>
 		</ul>
 		<?php echo heading('Edit post', 4); ?>

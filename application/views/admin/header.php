@@ -15,31 +15,32 @@ if(! $setting->tagline){
 }
 
 if(! $setting->favicon){
-    $favicon_16_x_16 = NULL;
-    $favicon_32_x_32 = NULL;
+    $favicon_16_x_16   = NULL;
+    $favicon_32_x_32   = NULL;
     $favicon_180_x_180 = NULL;
 }else{
+
     // for 180 x 180 apple touch
     $favicon_180_x_180_prop = array(
-        'href' => 'assets/img/favicon/180-x-180/'.$setting->favicon,
-        'rel' => 'apple-touch-icon',
-        'type' => 'image/png',
+        'href'  => 'assets/img/favicon/180-x-180/'.$setting->favicon,
+        'rel'   => 'apple-touch-icon',
+        'type'  => 'image/png',
         'sizes' => '180x180'
     );
 
     // for 16 x 16
     $favicon_16_x_16_prop = array(
-        'href' => 'assets/img/favicon/16-x-16/'.$setting->favicon,
-        'rel' => 'icon',
-        'type' => 'image/png',
+        'href'  => 'assets/img/favicon/16-x-16/'.$setting->favicon,
+        'rel'   => 'icon',
+        'type'  => 'image/png',
         'sizes' => '16x16'
     );
 
     // for 32 x 32
     $favicon_32_x_32_prop = array(
-        'href' => 'assets/img/favicon/32-x-32/'.$setting->favicon,
-        'rel' => 'icon',
-        'type' => 'image/png',
+        'href'  => 'assets/img/favicon/32-x-32/'.$setting->favicon,
+        'rel'   => 'icon',
+        'type'  => 'image/png',
         'sizes' => '32x32'
     );
     
@@ -66,7 +67,6 @@ echo doctype('html5');
         echo $favicon_32_x_32; // 32x32
         echo $favicon_180_x_180; // 180x180
     ?>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<?php
         echo link_tag('assets/css/material.cyan-light_blue.min.css');
 		echo link_tag('assets/css/bootstrap.min.css');
@@ -204,7 +204,9 @@ echo doctype('html5');
         .no-line:hover{
             text-decoration: none;
         }
-
+        .top-15{
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -218,16 +220,10 @@ echo doctype('html5');
                     <span class="icon-bar"></span>
                 </button>
                 <?php
-                    echo anchor('admin', $title, array('class' => 'navbar-brand title')); 
+                    echo anchor('admin',$title, array('class' => 'navbar-brand title')); 
                 ?>
             </div>
-            <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
-                <li>
-                    <a href="">
-                        <span class="mdl-badge" data-badge="4">Notification</span>
-                    </a>
-                </li>
                <li>
                 <div class="navbar-text user-name"> 
                  <span class="glyphicon glyphicon-user"></span>  
@@ -291,11 +287,11 @@ echo doctype('html5');
                     ?>
                     <li <?php echo $active_post; ?>>
                         <?php
-                            echo anchor('admin/post','<i class="fa fa-fw fa-edit"></i> New');
+                            echo anchor('admin/post','<i class="fa fa-fw fa-edit"></i> Add');
                         ?>
                     </li>
                             <li>
-                                <?php echo anchor('admin/post-list', '<i class="fa fa-fw fa-sort-amount-desc"></i> List'); ?>
+                                <?php echo anchor('admin/post-list/all', '<i class="fa fa-fw fa-sort-amount-desc"></i> List'); ?>
                             </li>
                         </ul>
                     </li>

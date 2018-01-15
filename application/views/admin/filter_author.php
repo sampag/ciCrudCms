@@ -7,7 +7,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 		<ul class="list-unstyled list-inline pull-right">
 			<li>{found}</li>
 			<li>
-				<?php echo anchor('admin/post-list', '<i class="fa fa-fw fa-sort-amount-desc"></i> Post list', array('class' => 'btn btn-default')); ?>
+				<?php echo anchor('admin/post-list/all', '<i class="fa fa-fw fa-sort-amount-desc"></i> Post list', array('class' => 'btn btn-default')); ?>
 			</li>
 		</ul>
 		{post_by}

@@ -2,39 +2,59 @@
 defined('BASEPATH')OR exit('No direct script access allowed');
 
 class Post_model extends CI_Model{
+	//=========================================//
+	public function getById($post_id)
+	{
+		$this->db->select('*');
+		$this->db->from('post');
+		$this->db->where('post_id', $post_id);
+		$query = $this->db->get();
+		return $query->row();
+	}
 
 	//=========================================//
 	// All post
-	public function getAll()
+	public function getAll($limit, $start)
 	{
-		$this->db->select('*');
-		$this->db->from('post');
-		$this->db->join('category', 'category.category_id = post.post_category_id','left');
-		$query = $this->db->get();
-		return $query->result();
+		$this->db->limit($limit, $start);
+		$this->db->order_by('post_id', 'DESC');
+		$this->db->join('category', 'category_id = post_category_id', 'left');
+		$this->db->join('users', 'id = user_id', 'left');
+		$query = $this->db->get('post');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
 	}
 
-	// Published post
-	public function getPublished($published)
+	public function countAll()
 	{
-		$this->db->select('*');
-		$this->db->from('post');
-		$this->db->where('post_published', $published);
-		$query = $this->db->get();
-		return $query->result();
+		return $this->db->count_all('post');
 	}
-	
 
+	//=========================================//
 	// Mine post
-	public function getMine($user_id)
+	public function getMine($limit, $start, $user_id)
 	{
-		$this->db->select('*');
-		$this->db->from('post');
+		$this->db->limit($limit, $start);
 		$this->db->where('user_id', $user_id);
 		$this->db->order_by('post_id', 'DESC');
-		$this->db->join('category', 'category.category_id = post.post_category_id', 'left');
-		$query = $this->db->get();
-		return $query->result();
+		$this->db->join('category', 'category_id = post_category_id', 'left');
+		$query = $this->db->get('post');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
 	}
 
 	public function countMine($user_id)
@@ -43,6 +63,35 @@ class Post_model extends CI_Model{
 		$this->db->where('user_id', $user_id);
 		return $this->db->count_all_results();
 	}
+
+	//=========================================//
+	// Published post
+	public function getPublished($limit, $start)
+	{
+		$this->db->limit($limit, $start);
+		$this->db->where('post_published', TRUE);
+		$this->db->order_by('post_id', 'DESC');
+		$this->db->join('category', 'category_id = post_category_id', 'left');
+		$query = $this->db->get('post');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
+	}
+
+	public function countPublished()
+	{
+		$this->db->from('post');
+		$this->db->where('post_published', TRUE);
+		return $this->db->count_all_results();
+	}
+	
+
 	//=========================================//
 
 	// Return single row.
@@ -103,6 +152,7 @@ class Post_model extends CI_Model{
 
 	public function insert_new($post_data)
 	{	
+		$this->db->set('post_published_created', 'now()', FALSE);
 		$this->db->insert('post', $post_data);
 	}
 

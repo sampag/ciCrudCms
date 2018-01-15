@@ -10,6 +10,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<td>Title</td>
 						<td>Categories</td>
 						<td>Tags</td>
+						<td>Authors</td>
 						<td>Created</td>
 						<td class="text-center">Action</td>
 					</tr>
@@ -50,13 +51,21 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 							?>
 						</td>
+						<td class="text-primary">
+							<?php
+								$user_name =  $row->first_name.' '.$row->last_name;
+								echo anchor('admin/post-author/'. $row->user_id, $user_name, array('class' => 'po-link'));
+							?>
+						</td>
 						<td>
 							<?php 
 								echo time_ago($row->post_created);
 							 ?>
 						</td>
 						<td class="text-center">
-							<?php echo anchor('admin/post-delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete')); ?>
+							<?php
+								echo anchor(uri_string().'/delete/'.$row->post_id, '<i class="fa fa-fw fa-trash"></i>', array('class' => 'po-link', 'title' => 'Delete'));
+							?>
 						</td>
 					</tr>
 					<?php }}else{ ?>
@@ -70,6 +79,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<td>Title</td>
 						<td>Categories</td>
 						<td>Tags</td>
+						<td>Authors</td>
 						<td>Created</td>
 						<td class="text-center">Action</td>
 					</tr>

@@ -10,7 +10,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
     <base href="<?php echo base_url(); ?>">
     <title>{site_title}{tagline}</title>
     {favicons}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<?php
         echo link_tag('assets/css/material.cyan-light_blue.min.css');
         echo link_tag('assets/css/bootstrap.min.css');
@@ -121,6 +120,9 @@ defined('BASEPATH')OR exit('No direct script access allowed');
         .no-line:hover{
             text-decoration: none;
         }
+        .top-15{
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -221,7 +223,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 	                        <?php echo anchor('member/post','<i class="fa fa-fw fa-edit"></i> New'); ?>
 	                    </li>
                         <li>
-                            <?php echo anchor('member/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> List'); ?>
+                            <?php echo anchor('member/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> List'); ?>
                         </li>
                         </ul>
                     </li>

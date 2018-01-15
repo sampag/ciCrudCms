@@ -22,16 +22,16 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 							<?php
 								$title_limit =  character_limiter($row->post_title, 40);
 							?>
-							<a href="<?php echo base_url('admin/post-edit/'.$row->post_random_id); ?>" class="po-link"><?php echo $title_limit; ?>
+							<a href="<?php echo base_url('member/post-edit/'.$row->post_random_id); ?>" class="po-link"><?php echo $title_limit; ?>
 							</a>
 						</td>
 						<td class="list-category">
 							<?php 
 								if($row->post_category_id == '0'){
-									echo anchor('admin/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
+									echo anchor('member/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
 
 								}else{
-									echo anchor('admin/post-category/'. $row->category_slug, $row->category_name, array('class'=>'post-list'));
+									echo anchor('member/post-category/'. $row->category_slug, $row->category_name, array('class'=>'post-list'));
 								}
 							?>
 						</td>
@@ -42,7 +42,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 															
 								if($post_tag){
 									foreach($post_tag as $tag):
-									echo anchor('admin/post-tag/'.$tag->tag_slug, character_limiter($tag->tag_name, 10).' ', array('class'=>'post-list'));
+									echo anchor('member/post-tag/'.$tag->tag_slug, character_limiter($tag->tag_name, 10).' ', array('class'=>'post-list'));
 									endforeach;
 								}else{
 									echo "-";
@@ -56,7 +56,13 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 							 ?>
 						</td>
 						<td class="text-center">
-							<?php echo anchor('admin/post-delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete')); ?>
+							<?php
+								if($row->user_id == $user_id){
+									echo anchor(uri_string().'/delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete'));
+								}else{
+									echo '-';
+								}
+							?>
 						</td>
 					</tr>
 					<?php }}else{ ?>

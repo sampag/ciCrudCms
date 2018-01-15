@@ -10,7 +10,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<td>Title</td>
 						<td>Categories</td>
 						<td>Tags</td>
-						<td>Created</td>
+						<td>Published</td>
 						<td class="text-center">Action</td>
 					</tr>
 				</thead>
@@ -21,17 +21,20 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<td class="list-category">
 							<?php
 								$title_limit =  character_limiter($row->post_title, 40);
+								if($row->user_id == $user_id){
+									echo anchor('member/post-edit/'.$row->post_random_id, $title_limit, array('class' => 'po-link'));
+								}else{
+									echo '<span>'.$title_limit.'</span>';
+								}
 							?>
-							<a href="<?php echo base_url('admin/post-edit/'.$row->post_random_id); ?>" class="po-link"><?php echo $title_limit; ?>
-							</a>
 						</td>
 						<td class="list-category">
 							<?php 
 								if($row->post_category_id == '0'){
-									echo anchor('admin/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
+									echo anchor('member/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
 
 								}else{
-									echo anchor('admin/post-category/'. $row->category_slug, $row->category_name, array('class'=>'post-list'));
+									echo anchor('member/post-category/'. $row->category_slug, $row->category_name, array('class'=>'post-list'));
 								}
 							?>
 						</td>
@@ -42,7 +45,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 															
 								if($post_tag){
 									foreach($post_tag as $tag):
-									echo anchor('admin/post-tag/'.$tag->tag_slug, character_limiter($tag->tag_name, 10).' ', array('class'=>'post-list'));
+									echo anchor('member/post-tag/'.$tag->tag_slug, character_limiter($tag->tag_name, 10).' ', array('class'=>'post-list'));
 									endforeach;
 								}else{
 									echo "-";
@@ -52,11 +55,20 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td>
 							<?php 
-								echo time_ago($row->post_created);
+								//echo time_ago($row->post_created);
+								if($row->post_published_created){
+									echo '<span class="text-muted">'. date('m/d/Y', strtotime($row->post_published_created)).'</span>';
+								}
 							 ?>
 						</td>
 						<td class="text-center">
-							<?php echo anchor('admin/post-delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete')); ?>
+							<?php
+								if($row->user_id == $user_id){
+									echo anchor(uri_string().'/delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete'));
+								}else{
+									echo '-';
+								}
+							?>
 						</td>
 					</tr>
 					<?php }}else{ ?>
@@ -70,7 +82,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<td>Title</td>
 						<td>Categories</td>
 						<td>Tags</td>
-						<td>Created</td>
+						<td>Published</td>
 						<td class="text-center">Action</td>
 					</tr>
 				</thead>

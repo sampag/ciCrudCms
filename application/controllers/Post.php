@@ -305,25 +305,52 @@ class Post extends CI_Controller{
 		}else{
 			$this->image_lib->resize();
 		}
-	}	
+	}
 
 
-	// Delete post item.
-	public function post_delete($id)
-	{	
-		$id = $this->uri->segment(3);
-		$file_name = $this->uri->segment(4);
+	public function delete_post_paginated($id)
+	{
+		$group = $this->uri->segment(3);
+		$page  = $this->uri->segment(4);
+		$id    = $this->uri->segment(6);
 
-		if($file_name){
-			 $this->delete_feat_img_file($file_name);
+		if($page){
+			$pagination = $page;
 		}
-			
+
+		$post = $this->post_model->getById($id);
+		if($post){
+			$this->delete_feat_img_file($post->post_featured_img);
+		}
+
 		$this->post_term_model->delete_item($id);
 		$this->post_model->delete_item($id);
 		$this->post_model->delete_comment($id);
 		
-		redirect('admin/post-list');
+		redirect('admin/post-list/'.$group.'/'.$pagination);
 	}
+
+	public function delete_post_none_paginated()
+	{
+		$group = $this->uri->segment(3);
+		$id    = $this->uri->segment(5);
+
+		if($group){
+			$by_group = $group;
+		}
+
+		$post = $this->post_model->getById($id);
+		if($post){
+			$this->delete_feat_img_file($post->post_featured_img);
+		}
+
+		$this->post_term_model->delete_item($id);
+		$this->post_model->delete_item($id);
+		$this->post_model->delete_comment($id);
+		
+		redirect('admin/post-list/'.$group);
+	}	
+
 
 	private function delete_feat_img_file($file_name)
 	{	
@@ -338,155 +365,6 @@ class Post extends CI_Controller{
 			unlink($file_1500_x_1000);
 		}
 			
-	}
-
-	//=================
-	// List of posts.
-	//=================
-	public function post_list()
-	{
-		// =============================
-		// Pagination configuration.
-		// =============================
-		$page = ( $this->uri->segment(3) ) ? $this->uri->segment(3): 0;
-
-		$config = array(
-			'base_url'        =>     base_url('admin/post-list/'),
-			'total_rows'      => 	 $this->post_model->count_list(),
-			'per_page'        =>     $this->settings_model->pagination(),
-			'uri_segment'     =>     3,
-			'last_link'       =>     false,
-			'first_link'      =>     false,
-			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
-			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
-			'full_tag_open'   =>     '<ul class="pagination">',
-			'full_tag_close'  =>     '</ul>',
-			'first_tag_open'  =>     '<li>',
-			'first_tag_close' =>   	 '</li>',
-			'last_tag_open'   =>     '<li>',
-			'last_tag_close'  =>     '</li>',
-			'next_tag_open'   =>     '<li>',
-			'next_tag_close'  =>     '</li>',
-			'prev_tag_open'   =>     '<li>',
-			'prev_tag_close'  =>     '</li>',
-			'cur_tag_open'    =>     '<li class="disabled"><span>',
-			'cur_tag_close'   =>     '</span></li>',
-			'num_tag_open'    =>     '<li>',
-			'num_tag_close'   =>     '</li>',
-		);
-
-		$this->pagination->initialize($config);
-
-		$return_data = $this->post_model->item_list($config['per_page'], $page);
-
-		if( ! $return_data ){
-
-			if($this->db->count_all('post') > 1){
-				
-				$post_count = '<span class="badge badge-flat-danger">'. $this->db->count_all('post') . '</span> Items';
-
-			}else{
-				$post_count = '<span class="badge badge-flat-danger">'. $this->db->count_all('post') . '</span> Item';
-			}
-			
-			$data = array(
-				'header' => $this->load->view('admin/header','', TRUE),
-				'post_count' => $post_count,
-				'pagination_result' => $this->post_model->item_list($config['per_page'], $page),
-				'pagination_links' => $this->pagination->create_links(),
-				'javascript' => $this->load->view('admin/javascript','', TRUE),
-				'footer' => $this->load->view('admin/footer','', TRUE),
-			);
-
-			$this->parser->parse('admin/post_list', $data);
-
-		}else{
-
-			if($this->db->count_all('post') > 1){
-				$post_count = '<span class="badge badge-flat-danger">'. $this->db->count_all('post') . '</span> Items';
-
-			}else{
-				$post_count = '<span class="badge badge-flat-danger">'. $this->db->count_all('post') . '</span> Item';
-			}
-
-			$data = array(
-				'header' => $this->load->view('admin/header','', TRUE),
-				'post_count' => $post_count,
-				'pagination_result' => $this->post_model->item_list($config['per_page'], $page),
-				'pagination_links' => $this->pagination->create_links(),
-				'javascript' => $this->load->view('admin/javascript','', TRUE),
-				'footer' => $this->load->view('admin/footer','', TRUE),
-			);
-
-			$this->parser->parse('admin/post_list', $data);
-
-		}
-	}
-
-
-	// List of posts.
-	public function post_list_pagination($page)
-	{
-
-		// =============================
-		// Pagination configuration.
-		// =============================
-		$page = ( $this->uri->segment(3) ) ? $this->uri->segment(3): 0;
-
-		$config = array(
-			'base_url'        =>     base_url('admin/post-list/'),
-			'total_rows'      => 	 $this->post_model->count_list(),
-			'per_page'        =>     $this->settings_model->pagination(),
-			'uri_segment'     =>     3,
-			'last_link'       =>     false,
-			'first_link'      =>     false,
-			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
-			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
-			'full_tag_open'   =>     '<ul class="pagination">',
-			'full_tag_close'  =>     '</ul>',
-			'first_tag_open'  =>     '<li>',
-			'first_tag_close' =>   	 '</li>',
-			'last_tag_open'   =>     '<li>',
-			'last_tag_close'  =>     '</li>',
-			'next_tag_open'   =>     '<li>',
-			'next_tag_close'  =>     '</li>',
-			'prev_tag_open'   =>     '<li>',
-			'prev_tag_close'  =>     '</li>',
-			'cur_tag_open'    =>     '<li class="disabled"><span>',
-			'cur_tag_close'   =>     '</span></li>',
-			'num_tag_open'    =>     '<li>',
-			'num_tag_close'   =>     '</li>',
-		);
-
-		$this->pagination->initialize($config);
-
-		$return_data = $this->post_model->item_list($config['per_page'], $page);
-
-		if( ! $return_data ){
-
-			return $this->error_page();
-
-		}else{
-
-			if($this->db->count_all('post') > 1){
-				$post_count = '<span class="badge badge-flat-danger">'. $this->db->count_all('post') . '</span> Items';
-
-			}else{
-				$post_count = '<span class="badge badge-flat-danger">'. $this->db->count_all('post') . '</span> Item';
-			}
-
-			$data = array(
-				'header' => $this->load->view('admin/header','', TRUE),
-				'post_count' => $post_count,
-				'pagination_result' => $this->post_model->item_list($config['per_page'], $page),
-				'pagination_links' => $this->pagination->create_links(),
-				'javascript' => $this->load->view('admin/javascript','', TRUE),
-				'footer' => $this->load->view('admin/footer','', TRUE),
-			);
-
-			$this->parser->parse('admin/post_list', $data);
-
-		}
 	}
 
 	private function error_page()
@@ -745,7 +623,7 @@ class Post extends CI_Controller{
 		$this->form_validation->set_rules($rules);
 
 		if($this->form_validation->run() == FALSE){
-			redirect('admin/post-list');
+			redirect('admin/post-list/all');
 		}else{
 
 			$match = $this->input->post('search_post_title', TRUE);

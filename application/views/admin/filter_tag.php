@@ -9,7 +9,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 				{count}
 			</li>
 			<li>
-				<?php echo anchor('admin/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default')); ?>
+				<?php echo anchor('admin/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default')); ?>
 			</li>
 		</ul>
 		{tag_name}

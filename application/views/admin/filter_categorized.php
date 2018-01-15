@@ -13,7 +13,7 @@
 		$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Item ';
 	}
 
-	$post_list =  anchor('admin/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
+	$post_list =  anchor('admin/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
 
 ?>
 {header}

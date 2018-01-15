@@ -79,6 +79,7 @@ $route['admin'] = 'admin/index';
 //======================
 // Errors
 //======================
+$route['admin/post-list'] = 'errors/index';
 $route['admin/post-category'] = 'errors/index';
 $route['admin/post-edit'] = 'errors/index';
 $route['admin/post-tag'] = 'errors/index';
@@ -93,17 +94,26 @@ $route['admin/post']                      = 'post/index';
 $route['add-post']                        = 'post/post_add';
 $route['admin/post-edit/:any']            = 'post/post_edit/$random_id';
 $route['admin/post-update/(:any)']        = 'post/post_update/$random_id';
-$route['admin/post-list']                 = 'post/post_list'; 
-$route['admin/post-list/(:num)']          = 'post/post_list_pagination/$page';
-$route['admin/post-delete/(:num)/(:any)'] = 'post/post_delete/$id/$file_name'; // with featured image
-$route['admin/post-delete/(:num)']        = 'post/post_delete/$id'; // without featured image
+
+
+$route['admin/post-list/(:any)/(:num)/delete/(:num)'] = 'post/delete_post_paginated/$id'; // Paginated
+$route['admin/post-list/(:any)/delete/(:num)'] = 'post/delete_post_none_paginated/$id'; // None Paginated
+
+
 $route['admin/post-category/(:any)']      = 'post/post_filter_categorized/$categorized_slug';
 $route['admin/post-tag/:any']             = 'post/post_filter_tag/$slug';
 $route['admin/post/:any']                 = 'post/post_filter_uncategorized/$uncategorized_slug';
 $route['admin/post-author/(:num)']        = 'post/post_filter_author/$id';
 $route['search-posts']                    = 'post/post_search';
 
-$route['admin/post-list/mine']            = 'post_group/mine';
+// Filter Group for admin
+$route['admin/post-list/all']               = 'post_group_admin/all';
+$route['admin/post-list/mine']              = 'post_group_admin/mine';
+$route['admin/post-list/published']         = 'post_group_admin/published';
+$route['admin/post-list/all/(:num)']	    = 'post_group_admin/all_paginated/$per_page';
+$route['admin/post-list/mine/(:num)']	    = 'post_group_admin/mine_paginated/$per_page';
+$route['admin/post-list/published/(:num)']	= 'post_group_admin/published_paginated/$per_page';
+
 //======================
 // Category
 //======================
@@ -153,10 +163,13 @@ $route['admin/system'] = 'system/index';
 // Member
 //======================
 $route['member/post'] = 'member/post_create';
-$route['member/post-list'] = 'member/post_list';
 $route['member/add-post'] = 'member/post_add';
 $route['member/post-update/(:any)'] = 'member/post_update/$random_slug';
-$route['member/post-delete/(:num)'] = 'member/post_delete/$id';
+
+$route['member/post-list/(:any)/(:num)/delete/(:num)/(:any)'] = 'member/post_delete_paginated/$list/$pagination/$group/$id/$file_name'; // With pagination
+
+$route['member/post-list/(:any)/delete/(:num)/(:any)'] = 'member/post_delete_none_paginated/$list/$pagination/$group/$id/$file_name'; // Without pagination
+
 $route['member/post-edit/(:any)'] ='member/post_edit/$random_id';
 $route['member/post-category/(:any)'] = 'member/post_filter_categorized/$slug';
 $route['member/post-category'] = 'member/error_page';
@@ -166,3 +179,10 @@ $route['member/comment'] = 'member/post_comment';
 $route['member/comment-delete/(:num)'] = 'member/delete_comment/$id';
 $route['member/profile'] = 'member/author_profile';
 $route['member/profile-update'] = 'member/author_profile_update';
+// Filter Group for contributors
+$route['member/post-list/all/(:num)']       = 'post_group_contributor/all/$per_page';
+$route['member/post-list/mine/(:num)']      = 'post_group_contributor/mine/$per_page';
+$route['member/post-list/published/(:num)'] = 'post_group_contributor/published/$per_page';
+$route['member/post-list/all']              = 'post_group_contributor/all';
+$route['member/post-list/mine']             = 'post_group_contributor/mine';
+$route['member/post-list/published']        = 'post_group_contributor/published';

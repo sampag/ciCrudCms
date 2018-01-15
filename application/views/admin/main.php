@@ -9,7 +9,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 			<div class="tile-footer">
 				<div class="media">
 				<div class="media-left">
-				<a href="<?php echo base_url('admin/post-list'); ?>" class="dash-ico">
+				<a href="<?php echo base_url('admin/post-list/all'); ?>" class="dash-ico">
 					<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 				</a>
 				</div>
@@ -86,7 +86,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 <div class="row">
 	<div class="col-md-12">
 		<?php
-		  echo anchor('admin/post','<i class="fa fa-plus-circle" aria-hidden="true"></i> Add post', array('class' => 'btn btn-flat-primary pull-right'));
+		  echo anchor('admin/post','<i class="fa fa-plus-circle" aria-hidden="true"></i> Add post', array('class' => 'btn btn-primary pull-right'));
 		?>
 		<h4>Recent Post</h4>
 	</div>
@@ -146,7 +146,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td class="list-tag">
 							<?php 
-								if($recent_post->post_category_id == NULL){
+								if($recent_post->post_category_id == '0'){
 									echo anchor('admin/post/'.$recent_post->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
 
 								}else{

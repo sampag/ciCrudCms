@@ -3,6 +3,84 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 class Member_model extends CI_Model{
 
+	// All
+	public function getAll($limit, $start)
+	{	
+		$this->db->limit($limit, $start);
+		$this->db->order_by('post_id', 'DESC');
+		$this->db->join('category', 'category.category_id = post.post_category_id', 'left');
+		$query = $this->db->get('post');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
+	}
+
+	public function countAll()
+	{
+		return $this->db->count_all('post');
+	}
+
+	//================================================//
+	// Mine
+	public function getMine($limit, $start, $user_id)
+	{
+		$this->db->limit($limit, $start);
+		$this->db->where('user_id', $user_id);
+		$this->db->order_by('post_id', 'DESC');
+		$this->db->join('category', 'category.category_id = post.post_category_id', 'left');
+		$query = $this->db->get('post');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
+	}
+
+	public function countMine($user_id)
+	{
+		$this->db->from('post');
+		$this->db->where('user_id', $user_id);
+		return $this->db->count_all_results();
+	}	
+	//================================================//
+	// Published
+
+	public function getPublished($limit, $start)
+	{
+		$this->db->limit($limit, $start);
+		$this->db->where('post_published', TRUE);
+		$this->db->order_by('post_id', 'DESC');
+		$this->db->join('category', 'category.category_id = post.post_category_id', 'left');
+		$query = $this->db->get('post');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
+	}
+
+	public function countPublished()
+	{
+		$this->db->from('post');
+		$this->db->where('post_published', TRUE);
+		return $this->db->count_all_results();
+	}
+
+
 	//==========================
 	// Tags
 	//==========================

@@ -578,98 +578,7 @@ class Member extends CI_Controller{
 	}	
 
 
-		//=================
-	// List of posts.
-	//=================
-	public function post_list()
-	{
-		// =============================
-		// Pagination configuration.
-		// =============================
-		$page = ( $this->uri->segment(3) ) ? $this->uri->segment(3): 0;
 
-		$config = array(
-			'base_url'        =>     base_url('member/post-list/'),
-			'total_rows'      => 	 $this->post_model->count_list(),
-			'per_page'        =>     $this->settings_model->pagination(),
-			'uri_segment'     =>     3,
-			'last_link'       =>     false,
-			'first_link'      =>     false,
-			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
-			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
-			'full_tag_open'   =>     '<ul class="pagination">',
-			'full_tag_close'  =>     '</ul>',
-			'first_tag_open'  =>     '<li>',
-			'first_tag_close' =>   	 '</li>',
-			'last_tag_open'   =>     '<li>',
-			'last_tag_close'  =>     '</li>',
-			'next_tag_open'   =>     '<li>',
-			'next_tag_close'  =>     '</li>',
-			'prev_tag_open'   =>     '<li>',
-			'prev_tag_close'  =>     '</li>',
-			'cur_tag_open'    =>     '<li class="disabled"><span>',
-			'cur_tag_close'   =>     '</span></li>',
-			'num_tag_open'    =>     '<li>',
-			'num_tag_close'   =>     '</li>',
-		);
-
-		$this->pagination->initialize($config);
-
-		$user = $this->ion_auth->user()->row();
-
-		$return_data = $this->member_model->item_list($config['per_page'], $page, $user->id);
-
-		if( ! $return_data ){
-
-			if($this->member_model->count_post($user->id) > 1){
-				
-				$post_count = '<span class="badge badge-flat-danger">'. $this->member_model->count_post($user->id). '</span> Items';
-
-			}else{
-				$post_count = '<span class="badge badge-flat-danger">'. $this->member_model->count_post($user->id) . '</span> Item';
-			}
-
-
-			
-			$data = array(
-				'header' => $this->header(),
-				'post_count' => $post_count,
-				'pagination_result' => $this->member_model->item_list($config['per_page'], $page, $user->id),
-				'pagination_links' => $this->pagination->create_links(),
-				'javascript' => $this->load->view('member/javascript','', TRUE),
-				'footer' => $this->load->view('member/footer','', TRUE),
-			);
-
-			$this->parser->parse('member/post_list', $data);
-
-		}else{
-
-			if($this->member_model->count_post($user->id) > 1){
-				$post_count = '<span class="badge badge-flat-danger">'. $this->member_model->count_post($user->id) . '</span> Items';
-
-			}else{
-				$post_count = '<span class="badge badge-flat-danger">'. $this->member_model->count_post($user->id) . '</span> Item';
-			}
-
-			if($return_data > 10){
-				$pagination_list =  $this->pagination->create_links();
-			}else{
-				$pagination_list = NULL;
-			}
-
-			$data = array(
-				'header' => $this->header(),
-				'post_count' => $post_count,
-				'pagination_result' => $this->member_model->item_list($config['per_page'], $page, $user->id),
-				'pagination_links' => $pagination_list,
-				'javascript' => $this->load->view('member/javascript','', TRUE),
-				'footer' => $this->load->view('member/footer','', TRUE),
-			);
-
-			$this->parser->parse('member/post_list', $data);
-
-		}
-	}
 
 	public function post_filter_uncategorized($slug)
 	{
@@ -695,7 +604,7 @@ class Member extends CI_Controller{
 			$post_count = 'Item';
 		}
 
-		$post_list =  anchor('member/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
+		$post_list =  anchor('member/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
 
 		$data = array(
 			'header' => $this->header(),
@@ -734,7 +643,7 @@ class Member extends CI_Controller{
 			$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Item ';
 		}
 
-		$post_list =  anchor('member/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
+		$post_list =  anchor('member/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
 		
 
 		$data = array(
@@ -809,7 +718,7 @@ class Member extends CI_Controller{
 
 		
 
-		$post_list = anchor('member/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
+		$post_list = anchor('member/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
 
 		$data = array(
 			'header' => $this->header(),
@@ -824,24 +733,58 @@ class Member extends CI_Controller{
 		$this->parser->parse('member/filter_tag', $data);
 	}
 
-	public function post_delete($id)
-	{
-		$id = $this->uri->segment(3);
-		$file_name = $this->uri->segment(4);
-		$user = $this->ion_auth->user()->row();
+	public function post_delete_none_paginated()
+	{	
+		$list       = $this->uri->segment(2);
+		$group      = $this->uri->segment(3);
+		$id         = $this->uri->segment(5);
+		$file_name  = $this->uri->segment(6);
 
 		if($file_name){
 			 $this->delete_feat_img_file($file_name);
 		}
 
+		$user        = $this->ion_auth->user()->row();
 		$delete_post = $this->member_model->delete_post($id, $user->id);
 		$this->post_term_model->delete_item($id);
 
 		if(! $delete_post){
-			redirect('member/post-list');	
+			redirect('member/'.$list.'/'.$group);	
 		}
 
-		redirect('member/post-list');
+		redirect('member/'.$list.'/'.$group);	
+	}
+
+	public function post_delete_paginated()
+	{	
+		$list       = $this->uri->segment(2);
+		$group      = $this->uri->segment(3);
+		$pagination = $this->uri->segment(4);
+		
+
+		if($pagination){
+			$id     = $this->uri->segment(6);
+			$page   = $this->uri->segment(4);
+			$file_name  = $this->uri->segment(7);
+		}else{
+			$id         = $this->uri->segment(5);
+			$file_name  = $this->uri->segment(6);
+			$page       = NULL;
+		}
+
+		if($file_name){
+			 $this->delete_feat_img_file($file_name);
+		}
+
+		$user        = $this->ion_auth->user()->row();
+		$delete_post = $this->member_model->delete_post($id, $user->id);
+		$this->post_term_model->delete_item($id);
+
+		if(! $delete_post){
+			redirect('member/'.$list.'/'.$group.'/'.$page);	
+		}
+
+		redirect('member/'.$list.'/'.$group.'/'.$page);	
 	}
 
 	private function delete_feat_img_file($file_name)
