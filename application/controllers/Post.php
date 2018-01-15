@@ -501,6 +501,7 @@ class Post extends CI_Controller{
 		$data = array(
 			'header' => $this->load->view('admin/header','', TRUE),
 			'uncategorized_post' => $uncategorized_post,
+			'title' => 'Uncategorized',
 			'javascript' => $this->load->view('admin/javascript','', TRUE),
 			'footer' => $this->load->view('admin/footer','', TRUE),
 		);
@@ -512,42 +513,123 @@ class Post extends CI_Controller{
 	public function post_filter_author($id)
 	{	
 		$id = $this->uri->segment(3);
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		
+		$config = array(
+			'base_url'        =>     base_url('admin/post-author/'.$id),
+			'total_rows'      => 	 $this->author_model->author_post_count($id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
 
-		$author_post = $this->author_model->get_author_post($id);
+		$this->pagination->initialize($config);
+
+		$author_post = $this->author_model->get_author_post($config['per_page'], $page,$id);
 		$post_count = $this->author_model->author_post_count($id);
+
 
 		if(! $author_post){
 			return $this->error_page();
-		}
-
-		foreach($author_post as $row):
-			$name = $row->first_name.' '.$row->last_name;
-		endforeach;
-
-		if($post_count > 1){
-			$item_count = '<span class="badge badge-danger">'. $post_count .'</span> Items';
-			$post_by = 'Posts by <span class="text-primary">'. $name . '</span>';
 		}else{
-			$item_count = '<span class="badge badge-danger">'. $post_count .'</span> Item';
-			$post_by = 'Post by <span class="text-primary">'. $name . '</span>';
-		}	
+			foreach($author_post as $row):
+				$name = $row->first_name.' '.$row->last_name;
+			endforeach;
 
-		$data = array(
-			'header' => $this->load->view('admin/header','', TRUE),
-			'found' => $item_count,
-			'author_post' => $author_post,
-			'post_by' => $post_by,
-			'javascript' => $this->load->view('admin/javascript','', TRUE),
-			'footer' => $this->load->view('admin/footer','', TRUE),
+
+			$data = array(
+				'header' => $this->load->view('admin/header','', TRUE),
+				'author_post' => $author_post,
+				'title' => $name,
+				'count' => $post_count,
+				'pagination' => $this->pagination->create_links(),
+				'javascript' => $this->load->view('admin/javascript','', TRUE),
+				'footer' => $this->load->view('admin/footer','', TRUE),
+			);
+
+			$this->parser->parse('admin/filter_author', $data);
+		}
+	}
+
+
+	public function post_filter_author_paginated($page, $id)
+	{
+		$id = $this->uri->segment(3);
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		
+		$config = array(
+			'base_url'        =>     base_url('admin/post-author/'.$id),
+			'total_rows'      => 	 $this->author_model->author_post_count($id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
 		);
 
-		$this->parser->parse('admin/filter_author', $data);
+		$this->pagination->initialize($config);
+
+		$author_post = $this->author_model->get_author_post($config['per_page'], $page,$id);
+		$post_count  = $this->author_model->author_post_count($id);
+
+
+		if(! $author_post){
+			return $this->error_page();
+		}else{
+			foreach($author_post as $row):
+				$name = $row->first_name.' '.$row->last_name;
+			endforeach;
+
+
+			$data = array(
+				'header' => $this->load->view('admin/header','', TRUE),
+				'author_post' => $author_post,
+				'title' => $name,
+				'count' => $post_count,
+				'pagination' => $this->pagination->create_links(),
+				'javascript' => $this->load->view('admin/javascript','', TRUE),
+				'footer' => $this->load->view('admin/footer','', TRUE),
+			);
+
+			$this->parser->parse('admin/filter_author', $data);
+		}
 	}
 
 	// Filter post by category slug
 	public function post_filter_categorized($categorized_slug)
 	{
-
 		$categorized_slug = $this->uri->segment(3);
 
 		$categorized_post = $this->category_model->categorized_post($categorized_slug);
@@ -556,22 +638,22 @@ class Post extends CI_Controller{
 			return $this->error_page();
 		}
 
+		foreach($categorized_post as $row):
+			$title = $row->category_name;
+		endforeach;
 
-			foreach($categorized_post as $row):
-				$cat_title = heading(' Post related in <span class="text-primary">'. $row->category_name.'</span> category.', 5);
-			endforeach;
+		$data = array(
+			'header' => $this->load->view('admin/header','', TRUE),
+			'title'     => $title,
+			'post_filter' => $categorized_post,
+			'javascript' => $this->load->view('admin/javascript','', TRUE),
+			'footer' => $this->load->view('admin/footer','', TRUE),
+		);
 
-			$data = array(
-				'header' => $this->load->view('admin/header','', TRUE),
-				'cat_title' => $cat_title,
-				'post_filter' => $categorized_post,
-				'javascript' => $this->load->view('admin/javascript','', TRUE),
-				'footer' => $this->load->view('admin/footer','', TRUE),
-			);
-
-			$this->parser->parse('admin/filter_categorized', $data);
-		
+		$this->parser->parse('admin/filter_categorized', $data);	
 	}
+
+	//============================================//
 
 
 	public function post_filter_tag($slug)
@@ -583,18 +665,13 @@ class Post extends CI_Controller{
 			$tag_name = heading(' Post with <span class="text-primary">'. $row->tag_name.'</span> tag.', 5);
 			$id = $row->tag_id;
 			$post = $this->tag_model->get_post($id);
+			$title = $row->tag_name;
 		}
 
 		if(! $tag){
 			return $this->error_page();
 		}
 
-		// Count
-		if($this->tag_model->count_filter_tag($id) > 1){
-			$count = '<span class="badge badge-danger">'.$this->tag_model->count_filter_tag($id).'</span> Items';
-		}else{
-			$count = '<span class="badge badge-danger">'.$this->tag_model->count_filter_tag($id).'</span> Item';
-		}
 
 		$data = array(
 			'header' => $this->load->view('admin/header','', TRUE),
@@ -602,8 +679,8 @@ class Post extends CI_Controller{
 			'tag' => $tag,
 			'id' => $id,
 			'post' => $post,
-			'tag_name' => $tag_name,
-			'count' => $count,
+			'title' => $title,
+			'count_tag' => $this->tag_model->count_filter_tag($id),
 			'footer' => $this->load->view('admin/footer','', TRUE),
 		);
 
