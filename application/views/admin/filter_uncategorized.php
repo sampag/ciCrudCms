@@ -1,34 +1,25 @@
 <?php
 defined('BASEPATH')OR exit('No direct script access allowed');
 	
-	foreach($uncategorized_post as $row):
-		$id = $row->post_category_id;
-	endforeach;
+foreach($uncategorized_post as $row):
+	$id = $row->post_category_id;
+endforeach;
 
-	$count_item = $this->category_model->count_uncategorized_item($id);
-
-	if($count_item > 1){
-		$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Items ';
-		$post_count = "Post's";
-	}else{
-		$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Item ';
-		$post_count = 'Item';
-	}
-
-	$post_list =  anchor('admin/post-list','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
-
+$count = $this->category_model->count_uncategorized_item($id);
 ?>
 {header}
+<br>
 	<div class="row">
 		<div class="col-md-12">
-			<ul class="list-unstyled list-inline pull-right">
-				<li><?php echo $count_result; ?></li>
-				<li><?php echo $post_list; ?></li>				
-			</ul>
-			<?php echo heading('<span class="text-primary">Uncategorized</span> '.$post_count,5);?>
+			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
+				<a href="<?php echo base_url('admin/post-list/all'); ?>" class="btn btn-default"><i class="fa fa-sort-amount-desc" aria-hidden="true"></i> Posts</a>
+			</div>
+			<div class="btn-group btn-group-sm" role="group" aria-label="...">
+				<a href="<?php echo base_url(uri_string()); ?>" class="btn btn-primary"><?php echo $title; ?> (<?php echo $count; ?>)</a>
+			</div>
 		</div>
 	</div>
-	<br>
+<br>
 	<div class="row">
 		<div class="col-md-12">
 			

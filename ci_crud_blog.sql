@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.7.4
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 11, 2018 at 02:01 PM
--- Server version: 10.1.16-MariaDB
--- PHP Version: 5.6.24
+-- Generation Time: Jan 15, 2018 at 04:26 PM
+-- Server version: 10.1.28-MariaDB
+-- PHP Version: 5.6.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -112,20 +114,13 @@ CREATE TABLE `post` (
   `post_category_id` int(11) DEFAULT NULL,
   `post_uncategorized_slug` varchar(50) DEFAULT NULL,
   `post_published` tinyint(1) DEFAULT NULL,
+  `post_published_created` timestamp NULL DEFAULT NULL,
   `post_featured_img` varchar(100) DEFAULT NULL,
   `post_created` int(11) DEFAULT NULL,
   `post_created_gmt` int(11) DEFAULT NULL,
   `post_updated` timestamp NULL DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `post`
---
-
-INSERT INTO `post` (`post_id`, `post_random_id`, `post_title`, `post_content`, `post_slug`, `post_category_id`, `post_uncategorized_slug`, `post_published`, `post_featured_img`, `post_created`, `post_created_gmt`, `post_updated`, `user_id`) VALUES
-(173, 'onyY9mQJljZqIbSDPiCd2KHFs5LTE4', 'First post by admin', 'First post by admin', 'first-post-by-admin', NULL, 'uncategorized', 1, '307d572dd7d0fd9f19badfc81d19bd5f.jpg', 1515664534, 1515664534, '2018-01-11 10:49:05', 1),
-(174, 'Mm9vR60G3hNZlfBDrPVcbEigjqJedI', 'Second post by admins', 'Second post by admins', 'second-post-by-admins', 15, NULL, 1, '', 1515667914, 1515667914, '2018-01-11 10:53:49', 1);
 
 -- --------------------------------------------------------
 
@@ -140,15 +135,6 @@ CREATE TABLE `post_term` (
   `term_user_id` int(11) DEFAULT NULL,
   `term_created` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `post_term`
---
-
-INSERT INTO `post_term` (`term_order`, `term_tag_id`, `term_post_id`, `term_user_id`, `term_created`) VALUES
-(59, 51, 173, 1, 1515667746),
-(60, 50, 173, 1, 1515667746),
-(64, 50, 174, 1, 1515668029);
 
 -- --------------------------------------------------------
 
@@ -227,8 +213,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, 'O6Bq9AxeYQ0JUrSBIbCwoO', 1268889823, 1515663956, 1, 'John', 'Cena', 'ADMIN', '0'),
-(10, '::1', 'nobitanobi@gmail.com', '$2y$08$TYDKd28TkyhKl0unfA7I6u9DyoPFyx43CrC7wqRllqEbStx09rh6.', NULL, 'nobitanobi@gmail.com', NULL, NULL, NULL, NULL, 1514429082, 1515582346, 1, 'Nobita', 'Nobi', 'Doraemon', '');
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, 'O6Bq9AxeYQ0JUrSBIbCwoO', 1268889823, 1516029940, 1, 'John', 'Cena', 'ADMIN', '0'),
+(10, '::1', 'nobitanobi@gmail.com', '$2y$08$TYDKd28TkyhKl0unfA7I6u9DyoPFyx43CrC7wqRllqEbStx09rh6.', NULL, 'nobitanobi@gmail.com', NULL, NULL, NULL, NULL, 1514429082, 1515998147, 1, 'Nobita', 'Nobi', 'Doraemon', '');
 
 -- --------------------------------------------------------
 
@@ -354,56 +340,67 @@ ALTER TABLE `user_profile`
 --
 ALTER TABLE `category`
   MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
 --
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
   MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `groups`
 --
 ALTER TABLE `groups`
   MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=220;
+
 --
 -- AUTO_INCREMENT for table `post_term`
 --
 ALTER TABLE `post_term`
-  MODIFY `term_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `term_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
+
 --
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
   MODIFY `setting_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `tag`
 --
 ALTER TABLE `tag`
   MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
 --
 -- AUTO_INCREMENT for table `users_groups`
 --
 ALTER TABLE `users_groups`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
 --
 -- AUTO_INCREMENT for table `user_profile`
 --
 ALTER TABLE `user_profile`
   MODIFY `profile_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
 --
 -- Constraints for dumped tables
 --
@@ -414,6 +411,7 @@ ALTER TABLE `user_profile`
 ALTER TABLE `users_groups`
   ADD CONSTRAINT `fk_users_groups_groups1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_users_groups_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -52,7 +52,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td>
 							<?php 
-								echo time_ago($row->post_created);
+								echo date('Y/m/d', strtotime($row->post_published_created));
 							 ?>
 						</td>
 						<td class="text-center">

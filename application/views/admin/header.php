@@ -207,6 +207,9 @@ echo doctype('html5');
         .top-15{
             margin-top: 15px;
         }
+        .active-head{
+            background-color: #dedede;
+        }
     </style>
 </head>
 <body>

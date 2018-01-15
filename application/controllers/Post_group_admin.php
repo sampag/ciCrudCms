@@ -263,7 +263,6 @@ class Post_group_admin extends CI_Controller{
 
 	public function published()
 	{
-
 		$per_page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
 		
 		$config = array(
@@ -370,7 +369,6 @@ class Post_group_admin extends CI_Controller{
 		}
 	}
 	//=================================================//
-
 
 
 

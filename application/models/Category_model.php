@@ -35,14 +35,15 @@ class Category_model extends CI_Model{
 	}
 
 	// Join post and get by category slug.
-	public function categorized_post($categorized_slug)
+	public function categorized_post($cat_slug)
 	{	
-		$this->db->where('category_slug', $categorized_slug);
+		$this->db->where('category_slug', $cat_slug);
 		$this->db->order_by('post_id', 'DESC');
 		$this->db->join('post','post_category_id = category_id', 'inner');
 		$query = $this->db->get('category');
 		return $query->result();
 	}
+
 
 	public function categorized_user_name($id)
 	{

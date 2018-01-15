@@ -2,19 +2,18 @@
 defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 {header}
-<div class="row">
-	<div class="col-md-12">
-		<ul class="list-inline list-unstyled pull-right">
-			<li>
-				{count}
-			</li>
-			<li>
-				<?php echo anchor('admin/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default')); ?>
-			</li>
-		</ul>
-		{tag_name}
+<br>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
+				<a href="<?php echo base_url('admin/post-list/all'); ?>" class="btn btn-default"><i class="fa fa-sort-amount-desc" aria-hidden="true"></i> Posts</a>
+			</div>
+			<span class="text-sm">Tag</span>
+			<div class="btn-group btn-group-sm" role="group" aria-label="...">
+				<a href="<?php echo base_url(uri_string()); ?>" class="btn btn-primary"><?php echo $title; ?> (<?php echo $count_tag; ?>)</a>
+			</div>
+		</div>
 	</div>
-</div>
 <br>
 <div class="row">
 	<div class="col-md-12">

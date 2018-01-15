@@ -2,17 +2,19 @@
 defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 {header}
-<div class="row">
-	<div class="col-md-12">
-		<ul class="list-unstyled list-inline pull-right">
-			<li>{found}</li>
-			<li>
-				<?php echo anchor('admin/post-list/all', '<i class="fa fa-fw fa-sort-amount-desc"></i> Post list', array('class' => 'btn btn-default')); ?>
-			</li>
-		</ul>
-		{post_by}
+<br>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
+				<a href="<?php echo base_url('admin/post-list/all'); ?>" class="btn btn-default"><i class="fa fa-sort-amount-desc" aria-hidden="true"></i> Posts</a>
+			</div>
+			<span class="text-sm">Author</span>
+			<div class="btn-group btn-group-sm" role="group" aria-label="...">
+				<a href="<?php echo base_url(uri_string()); ?>" class="btn btn-primary"><?php echo $title; ?> (<?php echo $count; ?>)</a>
+			</div>
+		</div>
 	</div>
-</div>
+<br>
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-responsive">
@@ -95,14 +97,30 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td>
 							<?php 
-								echo time_ago($row->post_created);
+								echo date('Y/m/d', strtotime($row->post_published_created));
 							 ?>
 						</td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>
+				<thead>
+					<tr>
+						<td>Title</td>
+						<td>Category</td>
+						<td>Tag</td>
+						<td>Author</td>
+						<td>Created</td>
+					</tr>
+				</thead>
 			</table>
 		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<nav aria-label="Page navigation" class="text-center pull-right">
+		{pagination}
+	</nav>
 	</div>
 </div>
 {javascript}

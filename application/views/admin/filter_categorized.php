@@ -8,25 +8,26 @@
 	$count_item = $this->category_model->count_categorized_item($id);
 
 	if($count_item > 1){
-		$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Items ';
+		$count_result = '<span class="badge badge-danger">'.$count_item.'</span>';
 	}else{
-		$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Item ';
+		$count_result = '<span class="badge badge-danger">'.$count_item.'</span>';
 	}
-
-	$post_list =  anchor('admin/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
 
 ?>
 {header}
+<br>
 	<div class="row">
 		<div class="col-md-12">
-			<ul class="list-unstyled list-inline pull-right">
-				<li><?php echo $count_result; ?></li>
-				<li><?php echo $post_list; ?></li>
-			</ul>
-			{cat_title}
+			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
+				<a href="<?php echo base_url('admin/post-list/all'); ?>" class="btn btn-default"><i class="fa fa-sort-amount-desc" aria-hidden="true"></i> Posts</a>
+			</div>
+			<span class="text-sm">Category</span>
+			<div class="btn-group btn-group-sm" role="group" aria-label="...">
+				<a href="<?php echo base_url(uri_string()); ?>" class="btn btn-primary"><?php echo $title; ?> (<?php echo $count_item; ?>)</a>
+			</div>
 		</div>
 	</div>
-	<br>
+<br>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="table-responsive">
@@ -117,6 +118,15 @@
 						</tr>
 					    <?php endforeach;  ?>
 					</tbody>
+					<thead>
+						<tr>
+							<td>Title</td>
+							<td>Category</td>
+							<td>Tag</td>
+							<td>Author</td>
+							<td>Created</td>
+						</tr>
+					</thead>
 				</table>
 			</div>
 		</div>
