@@ -33,9 +33,9 @@ class Post_group_admin extends CI_Controller{
 		$count_published = $this->post_model->countPublished();
 
 		$data = array(
-			'count_mine'      => '('.$count_mine.')',
-			'count_published' => '('.$count_published.')',
-			'count_all'       => '('.$count_all.')',
+			'count_mine'      => $count_mine,
+			'count_published' => $count_published,
+			'count_all'       => $count_all,
 		);
 
 		$this->load->view('admin/group_header', $data);

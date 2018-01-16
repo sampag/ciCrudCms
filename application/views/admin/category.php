@@ -4,7 +4,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 {header}
 	<div class="row">
 		<div class="col-md-12">
-			<?php echo heading('Add New Category', 4); ?>
+			<?php echo heading('Category', 4); ?>
 		</div>	
 	</div><!-- row -->
 	<div class="row">
@@ -33,10 +33,10 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 		</div>
 		<div class="col-md-8">
 			<div class="row">
-				<div class="col-md-6 term-count">
+				<div class="col-md-6 col-sm-6 term-count">
 					<span id="catCount"></span>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6 col-sm-6">
 					<!-- Search Box -->
 					<?php echo form_open('search-categories', array('class' => 'form-inline pull-right')); ?>
 						<div class="form-group">
@@ -65,8 +65,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</tbody>
 					</table>
 				</div>
-
-			<!-- Delete modal -->
 			<div id="deleteModal" class="modal fade" tabindex="-1" role="dialog" >
 			  <div class="modal-dialog modal-sm" role="document">
 			    <div class="modal-content">

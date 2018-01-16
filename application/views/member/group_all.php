@@ -18,7 +18,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<?php if($item){?>
 					<?php foreach($item as $row){ ?>
 					<tr>
-						<td class="list-category">
+						<td>
 							<?php
 								$title_limit =  character_limiter($row->post_title, 40);
 								if($row->user_id == $user_id){
@@ -55,7 +55,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td>
 							<?php 
-								//echo time_ago($row->post_created);
 								if($row->post_published_created){
 									echo '<span class="text-muted">'. date('m/d/Y', strtotime($row->post_published_created)).'</span>';
 								}

@@ -456,8 +456,6 @@ class Post extends CI_Controller{
 			$data_count_comment = '';
 		}
 
-
-		//==========================================//
 			
 		$data = array(
 			'header'           => $this->load->view('admin/header','', TRUE),
@@ -491,8 +489,36 @@ class Post extends CI_Controller{
 	public function post_filter_uncategorized($uncategorized_slug)
 	{
 		$uncategorized_slug = $this->uri->segment(3);
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		
+		$config = array(
+			'base_url'        =>     base_url('admin/post/uncategorized'),
+			'total_rows'      => 	 $this->category_model->count_uncategorized(),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
 
-		$uncategorized_post = $this->category_model->uncategorized_post($uncategorized_slug);
+		$this->pagination->initialize($config);
+
+		$uncategorized_post = $this->category_model->uncategorized_post($config['per_page'], $page, $uncategorized_slug);
 
 		if(! $uncategorized_post ){
 			return $this->error_page();
@@ -502,6 +528,8 @@ class Post extends CI_Controller{
 			'header' => $this->load->view('admin/header','', TRUE),
 			'uncategorized_post' => $uncategorized_post,
 			'title' => 'Uncategorized',
+			'pagination' => $this->pagination->create_links(),
+			'count' => $this->category_model->count_uncategorized(),
 			'javascript' => $this->load->view('admin/javascript','', TRUE),
 			'footer' => $this->load->view('admin/footer','', TRUE),
 		);
@@ -509,7 +537,7 @@ class Post extends CI_Controller{
 		$this->parser->parse('admin/filter_uncategorized', $data);
 	}
 
-	// Filter post by author
+	
 	public function post_filter_author($id)
 	{	
 		$id = $this->uri->segment(3);
@@ -627,34 +655,117 @@ class Post extends CI_Controller{
 		}
 	}
 
-	// Filter post by category slug
 	public function post_filter_categorized($categorized_slug)
 	{
 		$categorized_slug = $this->uri->segment(3);
-
-		$categorized_post = $this->category_model->categorized_post($categorized_slug);
-
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		$single_category = $this->category_model->categorized_single($categorized_slug);
+		
+		$config = array(
+			'base_url'        =>     base_url('admin/post-category/'.$categorized_slug),
+			'total_rows'      => 	 $this->category_model->count_categorized_item($single_category->post_category_id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+		$categorized_post = $this->category_model->categorized_post($config['per_page'], $page, $categorized_slug);
+		
 		if(! $categorized_post ){
 			return $this->error_page();
+			
 		}
 
 		foreach($categorized_post as $row):
-			$title = $row->category_name;
+				$title = $row->category_name;
+				$id    = $row->post_category_id;
 		endforeach;
+
 
 		$data = array(
 			'header' => $this->load->view('admin/header','', TRUE),
 			'title'     => $title,
 			'post_filter' => $categorized_post,
+			'pagination' => $this->pagination->create_links(),
 			'javascript' => $this->load->view('admin/javascript','', TRUE),
 			'footer' => $this->load->view('admin/footer','', TRUE),
 		);
 
-		$this->parser->parse('admin/filter_categorized', $data);	
+		$this->parser->parse('admin/filter_categorized', $data);
 	}
 
-	//============================================//
+	public function post_filter_uncategorized_paginated()
+	{
+		$categorized_slug = $this->uri->segment(3);
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		$single_category = $this->category_model->categorized_single($categorized_slug);
+		
+		$config = array(
+			'base_url'        =>     base_url('admin/post-category/'.$categorized_slug),
+			'total_rows'      => 	 $this->category_model->count_categorized_item($single_category->post_category_id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+		$categorized_post = $this->category_model->categorized_post($config['per_page'], $page, $categorized_slug);
+		
+		if(! $categorized_post ){
+			return $this->error_page();
+			
+		}
 
+		foreach($categorized_post as $row):
+				$title = $row->category_name;
+				$id    = $row->post_category_id;
+		endforeach;
+
+
+		$data = array(
+			'header' => $this->load->view('admin/header','', TRUE),
+			'title'     => $title,
+			'post_filter' => $categorized_post,
+			'pagination' => $this->pagination->create_links(),
+			'javascript' => $this->load->view('admin/javascript','', TRUE),
+			'footer' => $this->load->view('admin/footer','', TRUE),
+		);
+
+		$this->parser->parse('admin/filter_categorized', $data);
+	}
 
 	public function post_filter_tag($slug)
 	{

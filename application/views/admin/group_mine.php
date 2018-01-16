@@ -18,7 +18,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<?php if($item){?>
 					<?php foreach($item as $row){ ?>
 					<tr>
-						<td class="list-category">
+						<td>
 							<?php
 								$title_limit =  character_limiter($row->post_title, 40);
 							?>
@@ -52,7 +52,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td>
 							<?php 
-								echo date('Y/m/d', strtotime($row->post_published_created));
+								echo date('m/d/Y', strtotime($row->post_published_created));
 							 ?>
 						</td>
 						<td class="text-center">

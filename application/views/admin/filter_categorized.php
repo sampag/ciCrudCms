@@ -48,7 +48,6 @@
 							<div class="po-markup">
 								<?php 
 									$title_string =  character_limiter($row->post_title, 40);
-						
 									echo anchor('admin/post-edit/'.$row->post_random_id, $title_string, array('class' => 'po-link')); 
 								?>
 								<div class="po-content hidden">
@@ -131,24 +130,31 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+	<div class="col-md-12">
+		<nav aria-label="Page navigation" class="text-center pull-right">
+		{pagination}
+	</nav>
+	</div>
+</div>
 {javascript}
 <script>
 $(function(){
-	    $('.po-markup > .po-link').popover({
-		    trigger: 'hover',
-		    html: true,  
+    $('.po-markup > .po-link').popover({
+	    trigger: 'hover',
+	    html: true,  
 
-			title: function() {
-		      return $(this).parent().find('.po-title').html();
-		    },
+		title: function() {
+	      return $(this).parent().find('.po-title').html();
+	    },
 
-		    content: function() {
-		      return $(this).parent().find('.po-body').html();
-		    },
+	    content: function() {
+	      return $(this).parent().find('.po-body').html();
+	    },
 
-		    container: 'body',
-		    placement: 'right'
-		    });
+	    container: 'body',
+	    placement: 'right'
+	    });
 });
 </script>
 {footer}

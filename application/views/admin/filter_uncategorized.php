@@ -4,25 +4,43 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 foreach($uncategorized_post as $row):
 	$id = $row->post_category_id;
 endforeach;
-
-$count = $this->category_model->count_uncategorized_item($id);
 ?>
 {header}
-<br>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
-				<a href="<?php echo base_url('admin/post-list/all'); ?>" class="btn btn-default"><i class="fa fa-sort-amount-desc" aria-hidden="true"></i> Posts</a>
-			</div>
-			<div class="btn-group btn-group-sm" role="group" aria-label="...">
-				<a href="<?php echo base_url(uri_string()); ?>" class="btn btn-primary"><?php echo $title; ?> (<?php echo $count; ?>)</a>
-			</div>
-		</div>
+<div class="row top-15">
+	<div class="col-md-8">
+		<?php echo anchor('admin/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add New', array('class' => 'btn btn-primary btn-sm')); ?>
 	</div>
+	<div class="col-md-4">
+		<?php echo form_open('search-posts', array('class' => 'form-inline pull-right')); ?>
+		<div class="input-group">
+			<input type="text" name="search_post_title" class="form-control input-sm" placeholder="Search post...">
+			<span class="input-group-btn">
+				<button type="subbit" class="btn btn-primary btn-sm" type="button">Search</button>
+			</span>
+		</div>
+		<?php echo form_close(); ?>
+	</div>
+</div>
+<div class="row top-15">
+	<div class="col-md-6">
+		<?php
+			if($count > 1){
+				$word_post = plural('Post');
+				$word_item = plural('item');
+			}else{
+				$word_post = plural('Posts');
+				$word_item = singular('items');
+			}
+		?>
+		<p class="text-sm"><?php echo $title; ?> <span class="text-muted"><?php echo $word_post; ?></span></p>
+	</div>
+	<div class="col-md-6 text-right">
+		<span class="badge badge-danger"><?php echo $count; ?></span> <?php echo $word_item; ?>
+	</div>
+</div>
 <br>
 	<div class="row">
 		<div class="col-md-12">
-			
 			<div class="table-responsive">
 				<table class="table table-hover table-bordered ">
 					<thead>
@@ -95,16 +113,34 @@ $count = $this->category_model->count_uncategorized_item($id);
 									echo anchor('admin/post-author/'.$row->user_id, $user);
 								?>
 							</td>
-							<td class="text-muted">
-								<?php
-									echo time_ago($row->post_created);
-								?>
+							<td >
+								<?php 
+									echo date('m/d/Y', strtotime($row->post_published_created));
+							 	?>
 							</td>
 						</tr>
 					    <?php endforeach; ?>
 					</tbody>
+					<thead>
+						<tr>
+							<td>Title</td>
+							<td>Category</td>
+							<td>Tag</td>
+							<td>Author</td>
+							<td>Created</td>
+						</tr>
+					</thead>
 				</table>
 			</div>
 		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<nav aria-label="Page navigation" class="text-center pull-right">
+				{pagination}
+			</nav>
+		</div>
+	</div>
+		
 {javascript}
 {footer}

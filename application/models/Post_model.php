@@ -64,8 +64,6 @@ class Post_model extends CI_Model{
 		return $this->db->count_all_results();
 	}
 
-	//=========================================//
-	// Published post
 	public function getPublished($limit, $start)
 	{
 		$this->db->limit($limit, $start);
@@ -91,9 +89,6 @@ class Post_model extends CI_Model{
 		return $this->db->count_all_results();
 	}
 	
-	//=========================================//
-
-	// Return single row.
 	public function get_single($slug)
 	{	
 		$this->db->select('*');
@@ -104,7 +99,6 @@ class Post_model extends CI_Model{
 		return $query->row();
 	}
 
-	// Update by id.
 	public function update_single($data,$id,$uid)
 	{	
 		$this->db->where('post_id', $id);

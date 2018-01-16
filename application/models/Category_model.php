@@ -11,37 +11,71 @@ class Category_model extends CI_Model{
 		return $query->result();
 	}
 
-	public function count_categorized_item($category_id)
+
+
+	public function count_uncategorized()
 	{
-		$this->db->where('post_category_id', $category_id);
+		$this->db->where('post_category_id', FALSE);
 		$this->db->from('post');
 		return $this->db->count_all_results();
 	}
 
-	public function count_uncategorized_item($category_id)
+	public function uncategorized_post($limit ,$start ,$slug)
 	{
-		$this->db->where('post_category_id', $category_id);
-		$this->db->from('post');
-		return $this->db->count_all_results();
-	}
-
-	public function uncategorized_post($uncategorized_slug)
-	{
-		$this->db->where('post_uncategorized_slug', $uncategorized_slug);
+		$this->db->limit($limit, $start);
+		$this->db->where('post_uncategorized_slug', $slug);
 		$this->db->order_by('post_id', 'DESC');
 		$this->db->join('users', 'id = user_id', 'left');
-		$query = $this->db->get('post');
-		return $query->result();
+		$query = $this->db->get('post');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
 	}
 
-	// Join post and get by category slug.
-	public function categorized_post($cat_slug)
-	{	
-		$this->db->where('category_slug', $cat_slug);
+	public function count_categorized_item($id)
+	{
+		$this->db->where('post_category_id', $id);
+		$this->db->from('post');
+		return $this->db->count_all_results();
+	}
+
+	public function categorized_single($slug)
+	{
+		$this->db->where('category_slug', $slug);
 		$this->db->order_by('post_id', 'DESC');
 		$this->db->join('post','post_category_id = category_id', 'inner');
 		$query = $this->db->get('category');
-		return $query->result();
+		return $query->row();
+	}
+
+	public function categorized_post($limit, $start, $slug)
+	{	
+		// $this->db->where('category_slug', $slug);
+		// $this->db->order_by('post_id', 'DESC');
+		// $this->db->join('post','post_category_id = category_id', 'inner');
+		// $query = $this->db->get('category');
+		// return $query->result();
+
+		$this->db->limit($limit, $start);
+		$this->db->order_by('post_id', 'DESC');
+		$this->db->where('category_slug', $slug);
+		$this->db->join('post','post_category_id = category_id', 'inner');
+		$query = $this->db->get('category');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
 	}
 
 

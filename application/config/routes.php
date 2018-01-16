@@ -96,9 +96,15 @@ $route['admin/post-edit/:any']            = 'post/post_edit/$random_id';
 $route['admin/post-update/(:any)']        = 'post/post_update/$random_id';
 $route['admin/post-list/(:any)/(:num)/delete/(:num)'] = 'post/delete_post_paginated/$id'; // Paginated
 $route['admin/post-list/(:any)/delete/(:num)'] = 'post/delete_post_none_paginated/$id'; // None Paginated
-$route['admin/post-category/(:any)']      = 'post/post_filter_categorized/$categorized_slug';
+
+$route['admin/post-category/(:any)']             = 'post/post_filter_categorized/$categorized_slug';
+$route['admin/post-category/(:any)/(:num)']      = 'post/post_filter_uncategorized_paginated/$categorized_slug';
+
 $route['admin/post-tag/:any']             = 'post/post_filter_tag/$slug';
+
 $route['admin/post/:any']                 = 'post/post_filter_uncategorized/$uncategorized_slug';
+$route['admin/post/:any/:num']            = 'post/post_filter_uncategorized_paginated/$uncategorized_slug/$per_page';
+
 $route['admin/post-author/(:num)']        = 'post/post_filter_author/$id'; // Non Paginated
 $route['admin/post-author/(:num)/(:num)'] = 'post/post_filter_author_paginated/$id/$per_page';
 $route['search-posts']                    = 'post/post_search';

@@ -59,7 +59,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td>
 							<?php 
-								echo date('Y/m/d', strtotime($row->post_published_created));
+								echo date('m/d/Y', strtotime($row->post_published_created));
 							 ?>
 						</td>
 						<td class="text-center">
@@ -87,7 +87,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 			</table>
 		</div>
 	</div>
-</div><!-- row -->
+</div>
 <div class="row">
 	<div class="col-md-12">
 		<nav aria-label="Page navigation" class="text-center pull-right">
