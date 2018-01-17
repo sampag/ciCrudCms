@@ -1,32 +1,50 @@
 <?php
-	defined('BASEPATH')OR exit('No direct script access allowed');
+defined('BASEPATH')OR exit('No direct script access allowed');
 
-	foreach($post_filter as $row){
-		$id = $row->post_category_id;
-	} 
+foreach($post_filter as $row){
+	$id = $row->post_category_id;
+} 
 
-	$count_item = $this->category_model->count_categorized_item($id);
+$count_item = $this->category_model->count_categorized_item($id);
 
-	if($count_item > 1){
-		$count_result = '<span class="badge badge-danger">'.$count_item.'</span>';
-	}else{
-		$count_result = '<span class="badge badge-danger">'.$count_item.'</span>';
-	}
+if($count_item > 1){
+	$count_result = '<span class="badge badge-danger">'.$count_item.'</span>';
+}else{
+	$count_result = '<span class="badge badge-danger">'.$count_item.'</span>';
+}
 
 ?>
 {header}
-<br>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
-				<a href="<?php echo base_url('admin/post-list/all'); ?>" class="btn btn-default"><i class="fa fa-sort-amount-desc" aria-hidden="true"></i> Posts</a>
-			</div>
-			<span class="text-sm">Category</span>
-			<div class="btn-group btn-group-sm" role="group" aria-label="...">
-				<a href="<?php echo base_url(uri_string()); ?>" class="btn btn-primary"><?php echo $title; ?> (<?php echo $count_item; ?>)</a>
-			</div>
-		</div>
+<div class="row top-15">
+	<div class="col-md-8">
+		<?php echo anchor('admin/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add New', array('class' => 'btn btn-primary btn-sm')); ?>
 	</div>
+	<div class="col-md-4">
+		<?php echo form_open('search-posts', array('class' => 'form-inline pull-right')); ?>
+		<div class="input-group">
+			<input type="text" name="search_post_title" class="form-control input-sm" placeholder="Search post...">
+			<span class="input-group-btn">
+				<button type="subbit" class="btn btn-primary btn-sm" type="button">Search</button>
+			</span>
+		</div>
+		<?php echo form_close(); ?>
+	</div>
+</div>
+<div class="row top-15">
+	<div class="col-md-6">
+		<?php
+			if($count_item > 1){
+				$word_item = plural('item');
+			}else{
+				$word_item = singular('items');
+			}
+		?>
+		<p class="text-sm">Category: <?php echo anchor(uri_string(), $title); ?></p>
+	</div>
+	<div class="col-md-6 text-right">
+		<span class="badge badge-danger"><?php echo $count_item; ?></span> <?php echo $word_item; ?>
+	</div>
+</div>
 <br>
 	<div class="row">
 		<div class="col-md-12">
