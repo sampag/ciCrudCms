@@ -148,12 +148,12 @@ if($count_item > 1){
 			</div>
 		</div>
 	</div>
-	<div class="row">
-	<div class="col-md-12">
-		<nav aria-label="Page navigation" class="text-center pull-right">
-		{pagination}
-	</nav>
-	</div>
+<div class="row">
+<div class="col-md-12">
+	<nav aria-label="Page navigation" class="text-center pull-right">
+	{pagination}
+</nav>
+</div>
 </div>
 {javascript}
 <script>

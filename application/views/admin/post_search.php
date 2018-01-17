@@ -2,27 +2,37 @@
 defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 {header}
-<div class="row">
-	<div class="col-md-12">
-		<ul class="list-unstyled list-inline pull-right">
-			<li>
-				<?php echo form_open('search-posts', array('class' => 'form-inline')); ?>
-					<div class="form-group">
-						<?php echo form_input('search_post_title', '',array('class' => 'form-control', 'placeholder' => 'Search post...')); ?>
-					</div>
-					<div class="form-group">
-						<?php echo form_submit('search_post', 'Search', array('class' => 'btn btn-flat-primary')); ?>
-					</div>
-				<?php echo form_close(); ?>
-			</li>
-		</ul>
-		<ul class="list-unstyled list-inline">
-			<li>{match}</li>
-		</ul>
+<div class="row top-15">
+	<div class="col-md-8">
+		<?php echo anchor('admin/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add New', array('class' => 'btn btn-primary btn-sm')); ?>
+	</div>
+	<div class="col-md-4">
+		<?php echo form_open('search-posts', array('class' => 'form-inline pull-right')); ?>
+		<div class="input-group">
+			<input type="text" name="search_post_title" class="form-control input-sm" placeholder="Search post...">
+			<span class="input-group-btn">
+				<button type="subbit" class="btn btn-primary btn-sm" type="button">Search</button>
+			</span>
+		</div>
+		<?php echo form_close(); ?>
 	</div>
 </div>
-<br>
-<div class="row">
+<div class="row top-15">
+	<div class="col-md-6">
+		<p class="text-muted">{match}</p>
+	</div>
+	<div class="col-md-6 text-right">
+		<?php
+			if($count > 1){
+				$word_item = plural('Item');
+			}else{
+				$word_item = singular('Items');
+			}
+		?>
+		<span class="badge badge-danger">{count}</span> <?php echo $word_item; ?>
+	</div>
+</div>
+<div class="row top-15">
 	<div class="col-md-12">
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered">
@@ -97,7 +107,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td>
 							<?php 
-								echo time_ago($row->post_created);
+								echo date('m/d/Y', strtotime($row->post_published_created));
 							 ?>
 						</td>
 						<td class="text-center">
@@ -113,8 +123,24 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</tr>
 					<?php } ?>
 				</tbody>
+				<thead>
+					<tr>
+						<td>Title</td>
+						<td>Category</td>
+						<td>Tag</td>
+						<td>Created</td>
+						<td class="text-center">Action</td>
+					</tr>
+				</thead>
 			</table>
 		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<nav aria-label="Page navigation" class="text-center pull-right">
+		{pagination}
+	</nav>
 	</div>
 </div>
 {javascript}

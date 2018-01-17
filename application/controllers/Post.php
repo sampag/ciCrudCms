@@ -537,6 +537,57 @@ class Post extends CI_Controller{
 		$this->parser->parse('admin/filter_uncategorized', $data);
 	}
 
+	public function post_filter_uncategorized_paginated($uncategorized_slug)
+	{
+		$uncategorized_slug = $this->uri->segment(3);
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		
+		$config = array(
+			'base_url'        =>     base_url('admin/post/uncategorized'),
+			'total_rows'      => 	 $this->category_model->count_uncategorized(),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+
+		$this->pagination->initialize($config);
+
+		$uncategorized_post = $this->category_model->uncategorized_post($config['per_page'], $page, $uncategorized_slug);
+
+		if(! $uncategorized_post ){
+			return $this->error_page();
+		}
+
+		$data = array(
+			'header' => $this->load->view('admin/header','', TRUE),
+			'uncategorized_post' => $uncategorized_post,
+			'title' => 'Uncategorized',
+			'pagination' => $this->pagination->create_links(),
+			'count' => $this->category_model->count_uncategorized(),
+			'javascript' => $this->load->view('admin/javascript','', TRUE),
+			'footer' => $this->load->view('admin/footer','', TRUE),
+		);
+
+		$this->parser->parse('admin/filter_uncategorized', $data);
+	}
+
 	
 	public function post_filter_author($id)
 	{	
@@ -660,10 +711,16 @@ class Post extends CI_Controller{
 		$categorized_slug = $this->uri->segment(3);
 		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
 		$single_category = $this->category_model->categorized_single($categorized_slug);
+
+		if($single_category){
+			$single_cat = $single_category->post_category_id;
+		}else{
+			return $this->error_page();
+		}
 		
 		$config = array(
 			'base_url'        =>     base_url('admin/post-category/'.$categorized_slug),
-			'total_rows'      => 	 $this->category_model->count_categorized_item($single_category->post_category_id),
+			'total_rows'      => 	 $this->category_model->count_categorized_item($single_cat),
 			'per_page'        =>     $this->settings_model->pagination(),
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
@@ -712,15 +769,21 @@ class Post extends CI_Controller{
 		$this->parser->parse('admin/filter_categorized', $data);
 	}
 
-	public function post_filter_uncategorized_paginated()
+	public function post_filter_categorized_paginated()
 	{
 		$categorized_slug = $this->uri->segment(3);
 		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
 		$single_category = $this->category_model->categorized_single($categorized_slug);
+
+		if($single_category){
+			$single_cat = $single_category->post_category_id;
+		}else{
+			return $this->error_page();
+		}
 		
 		$config = array(
 			'base_url'        =>     base_url('admin/post-category/'.$categorized_slug),
-			'total_rows'      => 	 $this->category_model->count_categorized_item($single_category->post_category_id),
+			'total_rows'      => 	 $this->category_model->count_categorized_item($single_cat),
 			'per_page'        =>     $this->settings_model->pagination(),
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
@@ -769,22 +832,53 @@ class Post extends CI_Controller{
 		$this->parser->parse('admin/filter_categorized', $data);
 	}
 
+	
+
 	public function post_filter_tag($slug)
 	{
 		$slug = $this->uri->segment(3);
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
 		$tag = $this->tag_model->get_single($slug);
 
 		foreach($tag as $row){
-			$tag_name = heading(' Post with <span class="text-primary">'. $row->tag_name.'</span> tag.', 5);
 			$id = $row->tag_id;
-			$post = $this->tag_model->get_post($id);
-			$title = $row->tag_name;
 		}
 
 		if(! $tag){
 			return $this->error_page();
 		}
 
+		$config = array(
+			'base_url'        =>     base_url('admin/post-tag/'. $slug),
+			'total_rows'      => 	 $this->tag_model->count_filter_tag($id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+
+		foreach($tag as $row){
+			$tag_name = heading(' Post with <span class="text-primary">'. $row->tag_name.'</span> tag.', 5);
+			$post = $this->tag_model->get_post($config['per_page'], $page ,$id);
+			$title = $row->tag_name;
+		}
 
 		$data = array(
 			'header' => $this->load->view('admin/header','', TRUE),
@@ -793,7 +887,73 @@ class Post extends CI_Controller{
 			'id' => $id,
 			'post' => $post,
 			'title' => $title,
-			'count_tag' => $this->tag_model->count_filter_tag($id),
+			'pagination' => $this->pagination->create_links(),
+			'count' => $this->tag_model->count_filter_tag($id),
+			'footer' => $this->load->view('admin/footer','', TRUE),
+		);
+
+		$this->parser->parse('admin/filter_tag', $data);
+	}
+
+	public function post_filter_tag_paginated()
+	{
+				$slug = $this->uri->segment(3);
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		$tag = $this->tag_model->get_single($slug);
+
+		if(! $tag){
+			return $this->error_page();
+		}
+
+		foreach($tag as $row){
+			$id = $row->tag_id;
+		}
+
+		$config = array(
+			'base_url'        =>     base_url('admin/post-tag/'. $slug),
+			'total_rows'      => 	 $this->tag_model->count_filter_tag($id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+
+		foreach($tag as $row){
+			$tag_name = heading(' Post with <span class="text-primary">'. $row->tag_name.'</span> tag.', 5);
+			$post = $this->tag_model->get_post($config['per_page'], $page ,$id);
+			$title = $row->tag_name;
+		}
+
+		if(! $post){
+			return $this->error_page();
+		}
+
+		$data = array(
+			'header' => $this->load->view('admin/header','', TRUE),
+			'javascript' => $this->load->view('admin/javascript','', TRUE),
+			'tag' => $tag,
+			'id' => $id,
+			'post' => $post,
+			'title' => $title,
+			'pagination' => $this->pagination->create_links(),
+			'count' => $this->tag_model->count_filter_tag($id),
 			'footer' => $this->load->view('admin/footer','', TRUE),
 		);
 
@@ -830,28 +990,60 @@ class Post extends CI_Controller{
 			return $this->error_page();
 		}
 
-		$search_result = $this->post_model->search(str_replace('+', ' ', $match));
-		$search_count = $this->post_model->count_search_item(str_replace('+', ' ', $match));
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+
+
+		$config = array(
+			'base_url'        =>     base_url('post/post-search-result/'. $match),
+			'total_rows'      => 	 $this->post_model->count_search_item($match),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+
+		$search_result = $this->post_model->search($config['per_page'], $page, str_replace('+', ' ', $match));
+		$search_count  = $this->post_model->count_search_item(str_replace('+', ' ', $match));
 
 		if($search_count > 1){
 			$result = 'Search results for '. "'".str_replace('+', ' ', $match)."'";
-			$search_match = '<span class="badge badge-danger">'.$search_count.'</span> Items - ' . $result;
+			$search_match = $result;
 		}else{
 			$result = 'Search result for '. "'".str_replace('+', ' ', $match)."'";
-			$search_match = '<span class="badge badge-danger">'.$search_count.'</span> Item - '. $result;
+			$search_match = $result;
 		}
 
 		$data = array(
-			'header' => $this->load->view('admin/header','', TRUE),
-			'posts' => $search_result,
-			'match' => $search_match,
+			'header'     => $this->load->view('admin/header','', TRUE),
+			'posts'      => $search_result,
+			'match'      => $search_match,
+			'count'      => $search_count,
+			'pagination' => $this->pagination->create_links(),
 			'javascript' => $this->load->view('admin/javascript','', TRUE),
-			'footer' => $this->load->view('admin/footer','', TRUE)
+			'footer'     => $this->load->view('admin/footer','', TRUE)
 		);
 
 		$this->parser->parse('admin/post_search', $data);
 	}
 
+	
 	
 
 }// Post class

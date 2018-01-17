@@ -25,17 +25,16 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 							<a href="<?php echo base_url('admin/post-edit/'.$row->post_random_id); ?>" class="po-link"><?php echo $title_limit; ?>
 							</a>
 						</td>
-						<td class="list-category">
+						<td class="list-tag">
 							<?php 
 								if($row->post_category_id == '0'){
 									echo anchor('admin/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
-
 								}else{
 									echo anchor('admin/post-category/'. $row->category_slug, $row->category_name, array('class'=>'post-list'));
 								}
 							?>
 						</td>
-						<td class="list-tag">
+						<td class="list-category">
 							<?php
 								$id = $row->post_id;
 								$post_tag = $this->post_term_model->count_post_tag($id);
@@ -50,7 +49,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 							?>
 						</td>
-						<td>
+						<td class="list-category">
 							<?php 
 								echo date('m/d/Y', strtotime($row->post_published_created));
 							 ?>
@@ -81,8 +80,8 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 <div class="row">
 	<div class="col-md-12">
 		<nav aria-label="Page navigation" class="text-center pull-right">
-		{pagination}
-	</nav>
+			{pagination}
+		</nav>
 	</div>
 </div>
 {javascript}

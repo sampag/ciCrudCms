@@ -3,17 +3,12 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 class Tag_model extends CI_Model{
 
-	//===================================
-	// Counting Results
-	//===================================
 	public function count_filter_tag($id)
 	{
 		$this->db->where('term_tag_id', $id);
 		$this->db->from('post_term');
 		return $this->db->count_all_results();
 	}
-
-
 
 	public function get_author($user_id)
 	{
@@ -34,13 +29,22 @@ class Tag_model extends CI_Model{
 	}
 
 
-	public function get_post($id)
+	public function get_post($limit, $start, $id)
 	{
+		$this->db->limit($limit, $start);
 		$this->db->where('term_tag_id', $id);
 		$this->db->order_by('term_order', 'DESC');
 		$this->db->join('post', 'post_id = term_post_id', 'left');
-		$query = $this->db->get('post_term');
-		return $query->result();
+		$query = $this->db->get('post_term');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
 	}
 
 	public function get_single($slug)

@@ -51,7 +51,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 							?>
 						</td>
-						<td class="text-primary">
+						<td class="text-primary list-tag">
 							<?php
 								$user_name =  $row->first_name.' '.$row->last_name;
 								echo anchor('admin/post-author/'. $row->user_id, $user_name, array('class' => 'po-link'));
@@ -62,7 +62,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 								echo date('m/d/Y', strtotime($row->post_published_created));
 							 ?>
 						</td>
-						<td class="text-center">
+						<td class="text-center list-tag">
 							<?php
 								echo anchor(uri_string().'/delete/'.$row->post_id, '<i class="fa fa-fw fa-trash"></i>', array('class' => 'po-link', 'title' => 'Delete'));
 							?>
