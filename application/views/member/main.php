@@ -9,7 +9,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 			<div class="tile-footer">
 				<div class="media">
 				<div class="media-left">
-				<a href="<?php echo base_url('member/post-list'); ?>" class="dash-ico">
+				<a href="<?php echo base_url('member/post-list/mine'); ?>" class="dash-ico">
 					<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 				</a>
 				</div>
