@@ -578,13 +578,39 @@ class Member extends CI_Controller{
 	}	
 
 
-
-
 	public function post_filter_uncategorized($slug)
 	{
 		$slug = $this->uri->segment(3);
+		$page     = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
 		$user = $this->ion_auth->user()->row();
-		$uncategorized_post = $this->member_model->uncategorized_post($slug, $user->id);
+
+		$config = array(
+			'base_url'        =>     base_url('member/post/'. $slug),
+			'total_rows'      => 	 $this->member_model->count_uncategorized_post($slug, $user->id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+
+		$uncategorized_post = $this->member_model->uncategorized_post($config['per_page'], $page, $slug, $user->id);
 
 		if(! $uncategorized_post){
 			return $this->error_page();
@@ -596,22 +622,11 @@ class Member extends CI_Controller{
 
 		$count_item = $this->member_model->count_uncategorized_post( $slug, $user->id );
 
-		if($count_item > 1){
-			$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Items ';
-			$post_count = "Post's";
-		}else{
-			$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Item ';
-			$post_count = 'Item';
-		}
-
-		$post_list =  anchor('member/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
-
 		$data = array(
 			'header' => $this->header(),
 			'uncategorized_post' => $uncategorized_post,
-			'post_list' => $post_list,
-			'count_result' => $count_result,
-			'post_count' => $post_count,
+			'count' => $count_item,
+			'pagination' => $this->pagination->create_links(),
 			'javascript' => $this->load->view('member/javascript', '', TRUE),
 			'footer' => $this->load->view('member/footer', '', TRUE),
 		);
@@ -621,39 +636,123 @@ class Member extends CI_Controller{
 
 	public function post_filter_categorized($slug)
 	{	
-		$slug = $this->uri->segment(3);
-		$user = $this->ion_auth->user()->row();
+		$slug     = $this->uri->segment(3);
+		$page     = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		$user     = $this->ion_auth->user()->row();
+		$category = $this->member_model->get_single_category($slug);
 
-		$post = $this->member_model->categorized_post($slug, $user->id);
-
-		if(! $post){
+		if($category){
+			$category_id = $category->category_id;
+		}else{
 			return $this->error_page();
 		}
 
+		$config = array(
+			'base_url'        =>     base_url('member/post-category/'. $slug),
+			'total_rows'      => 	 $this->member_model->count_categorized_post($user->id, $category_id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+		$post = $this->member_model->categorized_post($config['per_page'], $page, $slug, $user->id);
+
 		foreach($post as $row):
-			$cat_title = heading(' Post related in <span class="text-primary">'. $row->category_name.'</span> category.', 5);
+			$cat_title = $row->category_name;
 			$cat_id = $row->post_category_id;
 		endforeach;
 
 		$count_item = $this->member_model->count_categorized_post($user->id, $cat_id);
+		
+		$data = array(
+			'header' => $this->header(),
+			'post_filter' => $post,
+			'title'       => $cat_title,
+			'count'       => $count_item,
+			'pagination'  => $this->pagination->create_links(),
+			'javascript'  => $this->load->view('member/javascript','', TRUE),
+			'footer'      => $this->load->view('member/footer','', TRUE),
+		);
 
-		if($count_item > 1){
-			$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Items ';
+		$this->parser->parse('member/filter_categorized', $data);
+	}
+
+	public function post_filter_categorized_paginated($slug)
+	{
+		$slug     = $this->uri->segment(3);
+		$page     = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		$user     = $this->ion_auth->user()->row();
+		$category = $this->member_model->get_single_category($slug);
+
+		if($category){
+			$category_id = $category->category_id;
 		}else{
-			$count_result = '<span class="badge badge-danger text-sm">'.$count_item.'</span> Item ';
+			return $this->error_page();
 		}
 
-		$post_list =  anchor('member/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
-		
+		$config = array(
+			'base_url'        =>     base_url('member/post-category/'. $slug),
+			'total_rows'      => 	 $this->member_model->count_categorized_post($user->id, $category_id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+		$post = $this->member_model->categorized_post($config['per_page'], $page, $slug, $user->id);
+
+		if(! $post){
+			return $this->error_page();
+		}else{
+			foreach($post as $row):
+				$cat_title = $row->category_name;
+				$cat_id = $row->post_category_id;
+			endforeach;
+
+			$count_item = $this->member_model->count_categorized_post($user->id, $cat_id);
+		}
 
 		$data = array(
 			'header' => $this->header(),
 			'post_filter' => $post,
-			'cat_title' => $cat_title,
-			'count_result' => $count_result,
-			'post_list' => $post_list,
-			'javascript' => $this->load->view('member/javascript','', TRUE),
-			'footer' => $this->load->view('member/footer','', TRUE),
+			'title'       => $cat_title,
+			'count'       => $count_item,
+			'pagination'  => $this->pagination->create_links(),
+			'javascript'  => $this->load->view('member/javascript','', TRUE),
+			'footer'      => $this->load->view('member/footer','', TRUE),
 		);
 
 		$this->parser->parse('member/filter_categorized', $data);
@@ -691,41 +790,54 @@ class Member extends CI_Controller{
 
 	public function post_filter_tag($slug)
 	{	
-		$slug = $this->uri->segment(3);
-		$tag = $this->tag_model->get_single($slug);
+		$slug     = $this->uri->segment(3);
+		$page     = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		$tag      = $this->tag_model->get_single($slug);
+		$user     = $this->ion_auth->user()->row();
+		$user_id  = $user->id;
 
 		if(! $tag){
 			return $this->error_page();
 		}
 
-		$user = $this->ion_auth->user()->row();
-		$user_id = $user->id;
+		$config = array(
+			'base_url'        =>     base_url('member/post-tag/'. $slug),
+			'total_rows'      => 	 $this->member_model->post_tag_count($tag->tag_id, $user->id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+		$post = $this->member_model->post_tag($config['per_page'], $page, $tag->tag_id, $user_id);
+		$count = $this->member_model->post_tag_count($tag->tag_id, $user_id);
 
-		foreach($tag as $row):
-			$tag_name = heading(' Post with <span class="text-primary">'. $row->tag_name.'</span> tag.', 5);
-			$id = $row->tag_id;
-			$post = $this->member_model->post_tag($id, $user_id);
-		
-			$count_post_tag = $this->member_model->post_tag_count($id, $user_id);
-
-			if($count_post_tag > 1){
-				$count = '<span class="badge badge-danger text-sm">'. $count_post_tag .'</span> Items';
-			}else{
-				$count = '<span class="badge badge-danger text-sm">'. $count_post_tag .'</span> Item';
-			}
-		endforeach;
-
-
-		
-
-		$post_list = anchor('member/post-list/all','<i class="fa fa-fw fa-sort-amount-desc"></i> Posts list', array('class' => 'btn btn-default'));
+		if(! $post){
+			return $this->error_page();
+		}
 
 		$data = array(
 			'header' => $this->header(),
 			'post' => $post,
-			'tag_name' => $tag_name,
+			'title' => $tag->tag_name,
 			'count' => $count,
-			'post_list' => $post_list,
+			'pagination' => $this->pagination->create_links(),
 			'javascript' => $this->load->view('member/javascript', '', TRUE),
 			'footer' => $this->load->view('member/footer', '', TRUE),
 		);

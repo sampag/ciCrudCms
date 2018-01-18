@@ -1,14 +1,36 @@
 <?php
 defined('BASEPATH')OR exit('No direct script access allowed');
+
+if($count > 1){
+	$word_item = plural('Item');
+	$word_post = plural('Post');
+}else{
+	$word_item = singular('Items');
+	$word_post = singular('Post');
+}
 ?>
 {header}
-	<div class="row">
-		<div class="col-md-12">
-			<ul class="list-unstyled list-inline pull-right">
-				<li><?php echo $count_result; ?></li>
-				<li><?php echo $post_list; ?></li>				
-			</ul>
-			<?php echo heading('<span class="text-primary">Uncategorized</span> '.$post_count,5);?>
+<div class="row top-15">
+	<div class="col-md-6">
+		<?php echo anchor('member/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add New', array('class' => 'btn btn-primary btn-sm')); ?>
+	</div>
+	<div class="col-md-6">
+		<?php echo form_open('search-posts', array('class' => 'form-inline pull-right')); ?>
+		<div class="input-group">
+			<input type="text" name="search_post_title" class="form-control input-sm" placeholder="Search post...">
+			<span class="input-group-btn">
+				<button type="subbit" class="btn btn-primary btn-sm" type="button">Search</button>
+			</span>
+		</div>
+		<?php echo form_close(); ?>
+	</div>
+</div>
+	<div class="row top-15">
+		<div class="col-md-6">
+			<p class="text-sm"><?php echo anchor(uri_string(), 'Uncategorized'); ?> <?php echo $word_post; ?></p>
+		</div>
+		<div class="col-md-6 text-right">
+			<span class="badge badge-danger"><?php echo $count; ?></span> <?php echo $word_item; ?>
 		</div>
 	</div>
 	<br>
@@ -81,15 +103,31 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 							</td>
 							<td class="text-muted">
 								<?php
-									echo time_ago($row->post_created);
+									echo date('m/d/Y', strtotime($row->post_published_created));
 								?>
 							</td>
 						</tr>
 					    <?php endforeach; ?>
 					</tbody>
+					<thead>
+						<tr>
+							<td>Title</td>
+							<td>Category</td>
+							<td>Tag</td>
+							<td>Created</td>
+						</tr>
+					</thead>
 				</table>
 			</div>
 		</div>
+	</div>
+	<div class="row">
+<div class="col-md-12">
+	<nav aria-label="Page navigation" class="text-center pull-right">
+	{pagination}
+</nav>
+</div>
+</div>
 {javascript}
 <script>
 $(function(){

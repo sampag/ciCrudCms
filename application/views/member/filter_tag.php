@@ -2,13 +2,34 @@
 defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 {header}
-<div class="row">
-	<div class="col-md-12">
-		<ul class="list-unstyled list-inline pull-right">
-			<li>{count}</li>
-			<li>{post_list}</li>
-		</ul>
-		{tag_name}
+<div class="row top-15">
+	<div class="col-md-6">
+		<?php echo anchor('member/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add New', array('class' => 'btn btn-primary btn-sm')); ?>
+	</div>
+	<div class="col-md-6">
+		<?php echo form_open('search-posts', array('class' => 'form-inline pull-right')); ?>
+		<div class="input-group">
+			<input type="text" name="search_post_title" class="form-control input-sm" placeholder="Search post...">
+			<span class="input-group-btn">
+				<button type="subbit" class="btn btn-primary btn-sm" type="button">Search</button>
+			</span>
+		</div>
+		<?php echo form_close(); ?>
+	</div>
+</div>
+<div class="row top-15">
+	<div class="col-md-6">
+		<?php
+			if($count > 1){
+				$word_item = plural('item');
+			}else{
+				$word_item = singular('items');
+			}
+		?>
+		<p class="text-sm">Tag: <?php echo anchor(uri_string(), $title); ?></p>
+	</div>
+	<div class="col-md-6 text-right">
+		<span class="badge badge-danger"><?php echo $count; ?></span> <?php echo $word_item; ?>
 	</div>
 </div>
 <br>
@@ -87,7 +108,11 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 									endforeach;
 								?>
 						</td>
-						<td class="list-tag"><?php echo time_ago($row->post_created); ?></td>
+						<td class="list-tag">
+							<?php 
+							echo date('m/d/Y', strtotime($row->post_published_created));
+							?>
+						</td>
 					</tr>
 					<?php endforeach;  }else{ ?>
 					<tr>
@@ -95,9 +120,24 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					</tr>
 					<?php } ?>
 				</tbody>
+				<thead>
+					<tr>
+						<td>Title</td>
+						<td>Category</td>
+						<td>Tag</td>
+						<td>Created</td>
+					</tr>
+				</thead>
 			</table>
 		</div>
 	</div>
+</div>
+	<div class="row">
+<div class="col-md-12">
+	<nav aria-label="Page navigation" class="text-center pull-right">
+	{pagination}
+</nav>
+</div>
 </div>
 {javascript}
 <script>

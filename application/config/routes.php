@@ -163,27 +163,25 @@ $route['save-settings'] = 'settings/settings_save_changes';
 //======================
 $route['admin/system'] = 'system/index';
 
-//======================
-// Member
-//======================
+/**
+* Member Contributors
+*/
 $route['member/post'] = 'member/post_create';
 $route['member/add-post'] = 'member/post_add';
 $route['member/post-update/(:any)'] = 'member/post_update/$random_slug';
-
-$route['member/post-list/(:any)/(:num)/delete/(:num)/(:any)'] = 'member/post_delete_paginated/$list/$pagination/$group/$id/$file_name'; // With pagination
-
-$route['member/post-list/(:any)/delete/(:num)/(:any)'] = 'member/post_delete_none_paginated/$list/$pagination/$group/$id/$file_name'; // Without pagination
-
+$route['member/post-list/(:any)/(:num)/delete/(:num)/(:any)'] = 'member/post_delete_paginated/$list/$pagination/$group/$id/$file_name'; 
+$route['member/post-list/(:any)/delete/(:num)/(:any)'] = 'member/post_delete_none_paginated/$list/$pagination/$group/$id/$file_name'; 
 $route['member/post-edit/(:any)'] ='member/post_edit/$random_id';
 $route['member/post-category/(:any)'] = 'member/post_filter_categorized/$slug';
-$route['member/post-category'] = 'member/error_page';
+$route['member/post-category/(:any)/(:num)']  = 'member/post_filter_categorized_paginated/$slug/$page';
 $route['member/post-tag/(:any)'] = 'member/post_filter_tag/$slug';
+$route['member/post-tag/(:any)/(:num)'] = 'member/post_filter_tag/$slug/$page';
 $route['member/post/(:any)'] = 'member/post_filter_uncategorized/$slug';
+$route['member/post/(:any)/(:num)'] = 'member/post_filter_uncategorized/$slug/$page';
 $route['member/comment'] = 'member/post_comment';
 $route['member/comment-delete/(:num)'] = 'member/delete_comment/$id';
 $route['member/profile'] = 'member/author_profile';
 $route['member/profile-update'] = 'member/author_profile_update';
-// Filter Group for contributors
 $route['member/post-list/all/(:num)']       = 'post_group_contributor/all/$per_page';
 $route['member/post-list/mine/(:num)']      = 'post_group_contributor/mine/$per_page';
 $route['member/post-list/published/(:num)'] = 'post_group_contributor/published/$per_page';

@@ -92,14 +92,30 @@ class Member_model extends CI_Model{
 		return $this->db->count_all_results();
 	}
 
-	public function post_tag($id, $user_id)
+	public function post_tag( $limit, $start, $id, $user_id )
 	{
+		// $this->db->where('term_tag_id', $id); // Tag ID
+		// $this->db->where('term_user_id', $user_id); // User ID
+		// $this->db->order_by('term_order', 'DESC');
+		// $this->db->join('post', 'post_id = term_post_id', 'left');
+		// $query = $this->db->get('post_term');
+		// return $query->result();
+
+		$this->db->limit($limit, $start);
 		$this->db->where('term_tag_id', $id); // Tag ID
 		$this->db->where('term_user_id', $user_id); // User ID
 		$this->db->order_by('term_order', 'DESC');
 		$this->db->join('post', 'post_id = term_post_id', 'left');
 		$query = $this->db->get('post_term');
-		return $query->result();
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
 	}
 
 
@@ -126,19 +142,28 @@ class Member_model extends CI_Model{
 	//==========================
 	// Uncategorized Post by users and uncategorized slug.
 	//==========================
-	public function uncategorized_post($u_slug, $u_id)
+	public function uncategorized_post($limit, $start ,$slug, $id)
 	{	
-		$this->db->where('user_id', $u_id);
-		$this->db->where('post_uncategorized_slug', $u_slug);
+		$this->db->limit($limit, $start);
+		$this->db->where('user_id', $id);
+		$this->db->where('post_uncategorized_slug', $slug);
 		$this->db->order_by('post_id', 'DESC');
 		$query = $this->db->get('post');
-		return $query->result();
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
 	}
 
-	public function count_uncategorized_post($uc_slug, $u_id)
+	public function count_uncategorized_post($slug, $id)
 	{
-		$this->db->where('user_id', $u_id);
-		$this->db->where('post_uncategorized_slug', $uc_slug);
+		$this->db->where('user_id', $id);
+		$this->db->where('post_uncategorized_slug', $slug);
 		$this->db->from('post');
 		return $this->db->count_all_results();
 	}
@@ -154,15 +179,33 @@ class Member_model extends CI_Model{
 		return $this->db->count_all_results();
 	}
 
+	public function get_single_category($slug)
+	{
+		$this->db->select('category_id');
+		$this->db->from('category');
+		$this->db->where('category_slug', $slug);
+		$query = $this->db->get();
+		return $query->row();
+	}
 
-	public function categorized_post($categorized_slug, $id)
+
+	public function categorized_post($limit, $start, $slug, $id)
 	{	
+		$this->db->limit($limit, $start);
 		$this->db->where('user_id', $id);
-		$this->db->where('category_slug', $categorized_slug);
+		$this->db->where('category_slug', $slug);
 		$this->db->order_by('post_id', 'DESC');
 		$this->db->join('post','post_category_id = category_id', 'inner');
-		$query = $this->db->get('category');
-		return $query->result();
+		$query = $this->db->get('category');	
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
 	}
 
 

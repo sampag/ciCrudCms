@@ -105,9 +105,9 @@ class Post_group_contributor extends CI_Controller{
 		$count_published = $this->member_model->countPublished();
 
 		$data = array(
-			'count_all'       => '('.$count_all.')',
-			'count_mine'      => '('.$count_mine.')',
-			'count_published' => '('.$count_published.')',
+			'count_all'       => $count_all,
+			'count_mine'      => $count_mine,
+			'count_published' => $count_published,
 		);
 
 		$this->load->view('member/group_header', $data);
