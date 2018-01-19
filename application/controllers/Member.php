@@ -792,7 +792,7 @@ class Member extends CI_Controller{
 	{	
 		$slug     = $this->uri->segment(3);
 		$page     = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
-		$tag      = $this->tag_model->get_single($slug);
+		$tag      = $this->tag_model->get_single_tag($slug);
 		$user     = $this->ion_auth->user()->row();
 		$user_id  = $user->id;
 
