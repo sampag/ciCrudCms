@@ -51,6 +51,13 @@ class Tag_model extends CI_Model{
 	{
 		$this->db->where('tag_slug', $slug);
 		$query = $this->db->get('tag');
+		return $query->result();
+	}
+
+	public function get_single_tag($slug)
+	{
+		$this->db->where('tag_slug', $slug);
+		$query = $this->db->get('tag');
 		return $query->row();
 	}
 
