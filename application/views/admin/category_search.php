@@ -64,13 +64,13 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</thead>
 						<tbody>
 							<?php if($categories){ ?>
-								<?php foreach($categories as $result): ?>
+								<?php foreach($categories as $row): ?>
 								<tr>
-									<td><?php echo $result->category_id; ?></td>
-									<td><?php echo $result->category_name; ?></td>
-									<td><?php echo $result->category_slug; ?></td>
-									<td><?php echo date('m/j/Y', strtotime($result->category_created)); ?></td>
-									<td>Delete</td>
+									<td><?php echo $row->category_id; ?></td>
+									<td><?php echo $row->category_name; ?></td>
+									<td><?php echo $row->category_slug; ?></td>
+									<td><?php echo date('m/j/Y', strtotime($row->category_created)); ?></td>
+									<td class="text-center"><?php echo anchor('admin/category-edit/'.$row->category_id, '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'); ?></td>
 								</tr>
 								<?php endforeach; ?>
 							<?php }else{ ?>

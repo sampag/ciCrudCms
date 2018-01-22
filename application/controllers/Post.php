@@ -975,7 +975,6 @@ class Post extends CI_Controller{
 		if($this->form_validation->run() == FALSE){
 			redirect('admin/post-list/all');
 		}else{
-
 			$match = $this->input->post('search_post_title', TRUE);
 			$url_match = str_replace(' ', ' ', $match);
 			redirect('post/post-search-result/'. urlencode($url_match));
@@ -1031,16 +1030,18 @@ class Post extends CI_Controller{
 		}
 
 		$data = array(
-			'header'     => $this->load->view('admin/header','', TRUE),
-			'posts'      => $search_result,
-			'match'      => $search_match,
-			'count'      => $search_count,
-			'pagination' => $this->pagination->create_links(),
-			'javascript' => $this->load->view('admin/javascript','', TRUE),
-			'footer'     => $this->load->view('admin/footer','', TRUE)
-		);
+				'header'     => $this->load->view('admin/header','', TRUE),
+				'posts'      => $search_result,
+				'match'      => $search_match,
+				'count'      => $search_count,
+				'pagination' => $this->pagination->create_links(),
+				'javascript' => $this->load->view('admin/javascript','', TRUE),
+				'footer'     => $this->load->view('admin/footer','', TRUE)
+			);
 
-		$this->parser->parse('admin/post_search', $data);
+			$this->parser->parse('admin/post_search', $data);
+
+		
 	}
 
 	
