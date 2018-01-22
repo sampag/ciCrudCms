@@ -201,7 +201,7 @@ $(function(){
 										  '<td>' + moment(response[i].tag_created).format('L') + '</td>' +
 									
 										    '<td class="text-center">' + '<a href="'+baseUrl+'admin/tag-edit/'+ response[i].tag_id +'" class="tag-edit" title="Edit"><i class="fa fa-fw fa-pencil-square-o"></i></a> ' +
-										  '<a href="javascript:;" title="Delete" data="'+ response[i].tag_id +'" class="tag-delete link" title="Delete"><i class="fa fa-fw fa-trash"></i></a>' + '</td>' +
+										  '<a href="javascript:;" title="'+response[i].tag_name+'" data="'+ response[i].tag_id +'" class="tag-delete link" title="Delete"><i class="fa fa-fw fa-trash"></i></a>' + '</td>' +
 										  '</tr>';
 
 							$("#parseTags").html(tags);
