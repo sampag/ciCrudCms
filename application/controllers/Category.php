@@ -70,7 +70,7 @@ class Category extends CI_Controller{
 				$this->category_model->insert_new($category_data);
 
 				$status = array(
-					'success' => $this->input->post('category_name', TRUE),
+					'success' => 'Successfully added!s',
 				);
 
 				$this->output

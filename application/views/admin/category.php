@@ -6,7 +6,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 		<div class="col-md-12">
 			<?php echo heading('Category', 4); ?>
 		</div>	
-	</div><!-- row -->
+	</div>
 	<div class="row">
 		<div class="col-md-4">
 			<br>
@@ -30,6 +30,11 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<?php echo form_submit('add_category', 'Add Category', array('class' => 'btn btn-flat-primary')); ?>
 				</div>
 			</form>
+		<!-- MDL TOAST -->
+		<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+		<div class="mdl-snackbar__text"></div>
+		<button class="mdl-snackbar__action" type="button"></button>
+		</div>
 		</div>
 		<div class="col-md-8">
 			<div class="row">
@@ -238,6 +243,10 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						if(response.success){
 							$("#addCategory")[0].reset();
 							$(".status").html(" ");
+
+							var snackbarContainer = document.querySelector('#demo-toast-example');
+							var data = {message: response.success};
+							snackbarContainer.MaterialSnackbar.showSnackbar(data);
 							getCategories();
 						}
 						
@@ -257,6 +266,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 		$("#categoryDescription").on("keyup", function(){
 			$(".error-category-description").html(" ");
 		});
+
 
 
 	});

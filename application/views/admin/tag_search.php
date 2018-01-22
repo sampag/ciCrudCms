@@ -61,13 +61,13 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</thead>
 						<tbody>
 							<?php if($tags){ ?>
-								<?php foreach($tags as $result): ?>
+								<?php foreach($tags as $row): ?>
 								<tr>
-									<td><?php echo $result->tag_id; ?></td>
-									<td><?php echo $result->tag_name; ?></td>
-									<td><?php echo $result->tag_slug; ?></td>
-									<td><?php echo date('m/j/Y', strtotime($result->tag_created)); ?></td>
-									<td>Delete</td>
+									<td><?php echo $row->tag_id; ?></td>
+									<td><?php echo $row->tag_name; ?></td>
+									<td><?php echo $row->tag_slug; ?></td>
+									<td><?php echo date('m/j/Y', strtotime($row->tag_created)); ?></td>
+									<td class="text-center"><?php echo anchor('admin/tag-edit/'.$row->tag_id, '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>'); ?></td>
 								</tr>
 								<?php endforeach; ?>
 							<?php }else{ ?>

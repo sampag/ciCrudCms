@@ -82,7 +82,7 @@ class Tag extends CI_Controller{
 				$this->tag_model->insert_new($tag_data);
 
 				$status = array(
-					'success' => 'successfully added new tag!',
+					'success' => 'Successfully added!',
 				);
 
 				$this->output
