@@ -165,4 +165,5 @@ $autoload['model'] = array(
 	'comment_model',
 	'member_model',
 	'author_model',
+	'public_model'
 	);
