@@ -77,7 +77,7 @@ echo doctype('html5');
     if($this->uri->segment(2) == 'post-edit'){ 
        $summernote = link_tag('assets/libs/summernote/summernote.css');
         $bs_select = link_tag('assets/libs/bootstrap-select/bootstrap-select.css');
-        $bs_jasny = link_tag('assets/libs/bootstrap-jasny/bootstrap-jasny.min.css');
+        $bs_jasny  = link_tag('assets/libs/bootstrap-jasny/bootstrap-jasny.min.css');
         echo $summernote;
         echo $bs_select;
         echo $bs_jasny;
@@ -117,7 +117,7 @@ echo doctype('html5');
             font-weight: normal;
         }
         .circle-dot{
-            font-size: 6.2px;
+            font-size: 5px;
         }
         .title{
             font-size: 16px;
@@ -209,6 +209,9 @@ echo doctype('html5');
         }
         .active-head{
             background-color: #dedede;
+        }
+        .dropdown-menu>li>a{
+            font-size: 13px;
         }
     </style>
 </head>

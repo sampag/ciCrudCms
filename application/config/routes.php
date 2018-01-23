@@ -49,11 +49,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'auth/login';
+$route['default_controller'] = 'public_view/post_all'; // Change this
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = TRUE;
-
-
 
 
 
@@ -188,3 +186,10 @@ $route['member/post-list/published/(:num)'] = 'post_group_contributor/published/
 $route['member/post-list/all']              = 'post_group_contributor/all';
 $route['member/post-list/mine']             = 'post_group_contributor/mine';
 $route['member/post-list/published']        = 'post_group_contributor/published';
+
+
+/**
+*Public
+*/
+
+$route['post'] = 'public_view/post_all';
