@@ -53,14 +53,14 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 							?>
 						</td>
-						<td>
+						<td class="list-category">
 							<?php 
 								if($row->post_published_created){
 									echo '<span class="text-muted">'. date('m/d/Y', strtotime($row->post_published_created)).'</span>';
 								}
 							 ?>
 						</td>
-						<td class="text-center">
+						<td class="text-center list-category">
 							<?php
 								if($row->user_id == $user_id){
 									echo anchor(uri_string().'/delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete'));
