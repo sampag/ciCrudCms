@@ -16,7 +16,6 @@ echo doctype('html5');
 		);
 		echo link_tag($canonical);
 	?>
-	<!-- Facebook -->
 	<meta property="og:locale" content="en_US" />
 	<meta property="og:url" content="<?php echo current_url(); ?>" />
 	<meta property="og:type" content="website">
@@ -24,16 +23,13 @@ echo doctype('html5');
 	<meta property="og:description" content="<?php echo $site_description; ?>"/>
 	<meta property="og:site_title" content="<?php echo $site_title; ?>"/>
 	<meta property="og:fb:app_id" content="App id goes here..."/>
-	<!-- Twitter -->
 	<meta name="twitter:card" content="summary" >
 	<meta name="twitter:title" content="<?php echo $site_title; ?>"/>
 	<meta name="twitter:description" content="<?php echo $site_description?>"/>
 	<?php
-		// Favicon
 		echo $favicon_180;
 		echo $favicon_32;
 		echo $favicon_16;
-		//Style
 		echo link_tag('assets/css/bootstrap.min.css');
 	?>
 </head>

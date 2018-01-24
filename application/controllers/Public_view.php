@@ -63,7 +63,6 @@ class Public_view extends CI_Controller{
 		    
 		}
 
-		// Meta
 		$meta = array(
 			array(
 				'name'    => 'robots',
@@ -93,7 +92,6 @@ class Public_view extends CI_Controller{
 
 		);
 
-		// Data pass to view
 		$data = array(
 			'meta'             => $meta,
 			'site_title'       => $site_title,
