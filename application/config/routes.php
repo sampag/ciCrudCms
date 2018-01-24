@@ -83,7 +83,7 @@ $route['admin/post-edit'] = 'errors/index';
 $route['admin/post-tag'] = 'errors/index';
 $route['admin/category-edit'] = 'errors/index';
 $route['admin/tag-edit'] = 'errors/index';
-
+$route['admin/post-list'] = 'errors/index';
 
 /**
 * Admin Routes Only
@@ -186,7 +186,9 @@ $route['member/post-list/published/(:num)'] = 'post_group_contributor/published/
 $route['member/post-list/all']              = 'post_group_contributor/all';
 $route['member/post-list/mine']             = 'post_group_contributor/mine';
 $route['member/post-list/published']        = 'post_group_contributor/published';
-
+$route['member/post-category'] = 'member/error_page';
+$route['member/post-tag'] = 'member/error_page';
+$route['member/post-list'] = 'member/error_page';
 
 /**
 *Public
