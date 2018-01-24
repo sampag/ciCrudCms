@@ -8,6 +8,11 @@ class Public_view extends CI_Controller{
 		parent::__construct();
 	}
 
+	public function page_not_found()
+	{
+		$this->load->view('public/page_not_found');
+	}
+
 	private function header()
 	{	
 		
