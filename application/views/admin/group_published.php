@@ -20,7 +20,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<tr>
 						<td>
 							<?php
-								$title_limit =  character_limiter($row->post_title, 40);
+								$title_limit =  character_limiter($row->post_title, 20);
 							?>
 							<a href="<?php echo base_url('admin/post-edit/'.$row->post_random_id); ?>" class="po-link"><?php echo $title_limit; ?>
 							</a>
@@ -54,7 +54,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 								echo date('m/d/Y', strtotime($row->post_published_created));
 							 ?>
 						</td>
-						<td class="text-center">
+						<td class="text-center list-category">
 							<?php echo anchor('admin/post-delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete')); ?>
 						</td>
 					</tr>
