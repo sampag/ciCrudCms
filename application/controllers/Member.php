@@ -674,12 +674,16 @@ class Member extends CI_Controller{
 		$this->pagination->initialize($config);
 		$post = $this->member_model->categorized_post($config['per_page'], $page, $slug, $user->id);
 
+		if(! $post){
+			return $this->error_page();
+		}
+
 		foreach($post as $row):
 			$cat_title = $row->category_name;
-			$cat_id = $row->post_category_id;
+			$cat_id    = $row->post_category_id;
 		endforeach;
-
 		$count_item = $this->member_model->count_categorized_post($user->id, $cat_id);
+		
 		
 		$data = array(
 			'header' => $this->header(),
