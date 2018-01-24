@@ -21,7 +21,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<tr>
 						<td class="list-category">
 							<?php
-								$title_limit =  character_limiter($row->post_title, 40);
+								$title_limit =  character_limiter($row->post_title, 20);
 							?>
 							<a href="<?php echo base_url('admin/post-edit/'.$row->post_random_id); ?>" class="po-link"><?php echo $title_limit; ?>
 							</a>
