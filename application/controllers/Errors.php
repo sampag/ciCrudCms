@@ -20,7 +20,6 @@ class Errors extends CI_Controller{
 
 	private function error_page()
 	{
-		
 		$this->load->view('admin/header');
 		$this->load->view('admin/error');
 		$this->load->view('admin/javascript');
