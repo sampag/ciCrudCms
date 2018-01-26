@@ -146,7 +146,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td class="list-tag">
 							<?php 
-								if($recent_post->post_category_id == '0'){
+								if($recent_post->post_category_id == 0){
 									echo anchor('admin/post/'.$recent_post->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
 
 								}else{
