@@ -11,7 +11,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 		<div class="input-group">
 			<input type="text" name="search_post_title" class="form-control input-sm" placeholder="Search post...">
 			<span class="input-group-btn">
-				<button type="subbit" class="btn btn-primary btn-sm" type="button">Search</button>
+				<button type="submit" class="btn btn-primary btn-sm">Search</button>
 			</span>
 		</div>
 		<?php echo form_close(); ?>
