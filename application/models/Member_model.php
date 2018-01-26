@@ -3,6 +3,33 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 class Member_model extends CI_Model{
 
+	public function count_search_item($match, $user_id)
+	{
+		$this->db->like('post_title', $match);
+		$this->db->where('user_id', $user_id);
+		$this->db->from('post');
+		return $this->db->count_all_results();
+	}
+
+	public function search($limit, $start, $match, $user_id)
+	{
+		$this->db->limit($limit, $start);
+		$this->db->like('post_title', $match);
+		$this->db->where('user_id', $user_id);
+		$this->db->order_by('post_id', 'DESC');
+		$this->db->join('category', 'category_id = post_category_id', 'left');
+		$query = $this->db->get('post');
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
+	}
+
 	// All
 	public function getAll($limit, $start)
 	{	
