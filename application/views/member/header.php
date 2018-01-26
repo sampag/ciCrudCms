@@ -49,7 +49,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
             font-weight: normal;
         }
         .circle-dot{
-            font-size: 6.2px;
+            font-size: 5px;
         }
         .title{
             font-size: 16px;
@@ -122,6 +122,9 @@ defined('BASEPATH')OR exit('No direct script access allowed');
         }
         .top-15{
             margin-top: 15px;
+        }
+        .dropdown-menu>li>a{
+            font-size: 13px;
         }
     </style>
 </head>
