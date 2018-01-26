@@ -255,7 +255,6 @@ class Settings extends CI_Controller{
 		}
 	}
 
-
 	private function del_icon_16_32_180($file_name)
 	{	
 		// Delete site icon size 16 x 16
