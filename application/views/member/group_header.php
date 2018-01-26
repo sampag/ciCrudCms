@@ -2,8 +2,6 @@
 defined('BASEPATH')OR exit('No direct script access allowed');
 
 
-
-
 if($this->uri->segment(3) == 'all'){
 	$active_all = 'btn-primary';
 	$item_count = $count_all;
@@ -16,7 +14,6 @@ if($this->uri->segment(3) == 'all'){
 }else{
 	$active_all = NULL;
 }
-
 
 
 if($this->uri->segment(3) == 'mine'){
@@ -51,7 +48,7 @@ if($this->uri->segment(3) == 'published'){
 		<?php echo anchor('member/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add New', array('class' => 'btn btn-primary btn-sm')); ?>
 	</div>
 	<div class="col-md-6">
-		<?php echo form_open('search-posts', array('class' => 'form-inline pull-right')); ?>
+		<?php echo form_open('member/search-posts', array('class' => 'form-inline pull-right')); ?>
 		<div class="input-group">
 			<input type="text" name="search_post_title" class="form-control input-sm" placeholder="Search post...">
 			<span class="input-group-btn">
