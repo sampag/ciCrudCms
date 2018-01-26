@@ -40,7 +40,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 									}
 								}else{
 									if($row->post_category_id == '0'){
-										echo '<span>Uncategorized</span>';
+										echo '<span class="text-muted">Uncategorized</span>';
 									}else{
 										echo '<span class="text-muted">'.$row->category_name.'</span>';
 									}	
