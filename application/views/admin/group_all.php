@@ -4,7 +4,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 <div class="row">
 	<div class="col-md-12">
 		<div class="table-responsive">
-			<table class="table table-bordered table-striped">
+			<table class="table table-bordered table-hovered table-striped">
 				<thead>
 					<tr>
 						<td>Title</td>
@@ -12,23 +12,28 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<td>Tags</td>
 						<td>Authors</td>
 						<td>Created</td>
-						<td class="text-center">Action</td>
 					</tr>
 				</thead>
 				<tbody>
 					<?php if($item){?>
 					<?php foreach($item as $row){ ?>
 					<tr>
-						<td class="list-category">
+						<td class="width-20">
 							<?php
 								$title_limit =  character_limiter($row->post_title, 20);
 							?>
 							<a href="<?php echo base_url('admin/post-edit/'.$row->post_random_id); ?>" class="po-link"><?php echo $title_limit; ?>
 							</a>
+							<div class="text-sm">
+								<a href="<?php echo base_url('admin/post-edit/'.$row->post_random_id); ?>" class="text-muted text-sm po-link">Edit</a> |  
+								<?php
+									echo anchor(uri_string().'/trash/'.$row->post_random_id, 'Trash', array('class' => 'text-sm text-muted po-link'));
+								?>
+							</div>
 						</td>
-						<td class="list-category">
+						<td class="width-20">
 							<?php 
-								if($row->post_category_id == '0'){
+								if($row->post_category_id == 0){
 									echo anchor('admin/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
 
 								}else{
@@ -36,7 +41,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 								}
 							?>
 						</td>
-						<td class="list-tag">
+						<td class="width-20">
 							<?php
 								$id = $row->post_id;
 								$post_tag = $this->post_term_model->count_post_tag($id);
@@ -51,21 +56,16 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 							?>
 						</td>
-						<td class="text-primary list-tag">
+						<td class="text-primary width-20">
 							<?php
 								$user_name =  $row->first_name.' '.$row->last_name;
 								echo anchor('admin/post-author/'. $row->user_id, $user_name, array('class' => 'po-link'));
 							?>
 						</td>
-						<td>
+						<td class="text-muted">
 							<?php 
-								echo date('m/d/Y', strtotime($row->post_published_created));
+								echo date('M d, Y', strtotime($row->post_published_created));
 							 ?>
-						</td>
-						<td class="text-center list-tag">
-							<?php
-								echo anchor(uri_string().'/delete/'.$row->post_id, '<i class="fa fa-fw fa-trash"></i>', array('class' => 'po-link', 'title' => 'Delete'));
-							?>
 						</td>
 					</tr>
 					<?php }}else{ ?>
@@ -81,7 +81,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<td>Tags</td>
 						<td>Authors</td>
 						<td>Created</td>
-						<td class="text-center">Action</td>
 					</tr>
 				</thead>
 			</table>
