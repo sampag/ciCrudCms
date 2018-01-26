@@ -24,17 +24,26 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 								if($row->user_id == $user_id){
 									echo anchor('member/post-edit/'.$row->post_random_id, $title_limit, array('class' => 'po-link'));
 								}else{
-									echo '<span>'.$title_limit.'</span>';
+									echo '<span class="text-muted">'.$title_limit.'</span>';
 								}
 							?>
 						</td>
 						<td class="list-category">
 							<?php 
-								if($row->post_category_id == '0'){
-									echo anchor('admin/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
+								if($row->user_id == $user_id)
+								{
+									if($row->post_category_id == '0'){
+										echo anchor('member/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
 
+									}else{
+										echo anchor('member/post-category/'. $row->category_slug, $row->category_name, array('class'=>'post-list'));
+									}
 								}else{
-									echo anchor('admin/post-category/'. $row->category_slug, $row->category_name, array('class'=>'post-list'));
+									if($row->post_category_id == '0'){
+										echo '<span class="text-muted">Uncategorized</span>';
+									}else{
+										echo '<span class="text-muted">'.$row->category_name.'</span>';
+									}	
 								}
 							?>
 						</td>
@@ -42,15 +51,24 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 							<?php
 								$id = $row->post_id;
 								$post_tag = $this->post_term_model->count_post_tag($id);
-															
-								if($post_tag){
-									foreach($post_tag as $tag):
-									echo anchor('admin/post-tag/'.$tag->tag_slug, character_limiter($tag->tag_name, 10).' ', array('class'=>'post-list'));
-									endforeach;
-								}else{
-									echo "-";
-								}
 
+								if($row->user_id == $user_id){
+									if($post_tag){
+										foreach($post_tag as $tag):
+										echo anchor('member/post-tag/'.$tag->tag_slug, character_limiter($tag->tag_name, 10).' ', array('class'=>'post-list'));
+										endforeach;
+									}else{
+										echo "-";
+									}
+								}else{
+									if($post_tag){
+										foreach($post_tag as $tag):
+										echo '<span class="text-muted">'.character_limiter($tag->tag_name, 10).'</span>';
+										endforeach;
+									}else{
+										echo "-";
+									}
+								}						
 							?>
 						</td>
 						<td class="list-category">
