@@ -996,9 +996,9 @@ class Member extends CI_Controller{
 			$user = $this->ion_auth->user()->row();
 			$user_data = array(
 					'first_name' => $this->input->post('first_name', TRUE),
-					'last_name' => $this->input->post('last_name', TRUE),
-					'email' => $this->input->post('email', TRUE),
-					'password' => $this->input->post('new_password', TRUE),
+					'last_name'  => $this->input->post('last_name', TRUE),
+					'email'      => $this->input->post('email', TRUE),
+					'password'   => $this->input->post('new_password', TRUE),
 				);
 
 			$this->ion_auth->update($user->id, $user_data);
@@ -1081,6 +1081,90 @@ class Member extends CI_Controller{
 			unlink($file);
 		}
 			
+	}
+
+	// To be continued...
+	public function post_search()
+	{
+		$rules = array(
+			array(
+				'field' => 'search_post_title',
+				'label' => 'Post title',
+				'rules' => 'required|strip_tags|xss_clean'
+			),
+		);
+
+		$this->form_validation->set_rules($rules);
+
+		if($this->form_validation->run() == FALSE){
+			redirect('member/post-list/all');
+		}else{
+			$match = $this->input->post('search_post_title', TRUE);
+			$url_match = str_replace(' ', ' ', $match);
+			redirect('member/post-search-result/'. urlencode($url_match));
+		}
+	}
+
+	public function post_search_result($match = NULL)
+	{
+
+		if($match == NULL){
+			return $this->error_page();
+		}
+
+		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		$user = $this->ion_auth->user()->row();
+
+
+		$config = array(
+			'base_url'        =>     base_url('member/post-search-result/'. $match),
+			'total_rows'      => 	 $this->member_model->count_search_item($match, $user->id),
+			'per_page'        =>     $this->settings_model->pagination(),
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+
+		$search_result = $this->member_model->search($config['per_page'], $page, str_replace('+', ' ', $match), $user->id);
+		$search_count  = $this->member_model->count_search_item(str_replace('+', ' ', $match), $user->id);
+
+		if($search_count > 1){
+			$result = 'Search results for '. "'".str_replace('+', ' ', $match)."'";
+			$search_match = $result;
+		}else{
+			$result = 'Search result for '. "'".str_replace('+', ' ', $match)."'";
+			$search_match = $result;
+		}
+
+		$data = array(
+				'header'       => $this->header(),
+				'group_header' => $this->load->view('member/group_header','', TRUE),
+				'posts'        => $search_result,
+				'match'        => $search_match,
+				'count'        => $search_count,
+				'pagination'   => $this->pagination->create_links(),
+				'javascript'   => $this->load->view('member/javascript','', TRUE),
+				'footer'       => $this->load->view('member/footer','', TRUE)
+			);
+
+			$this->parser->parse('member/post_search', $data);
 	}
 
 } // Member class
