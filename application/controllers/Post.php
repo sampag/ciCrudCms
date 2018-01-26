@@ -308,65 +308,6 @@ class Post extends CI_Controller{
 	}
 
 
-	public function delete_post_paginated($id)
-	{
-		$group = $this->uri->segment(3);
-		$page  = $this->uri->segment(4);
-		$id    = $this->uri->segment(6);
-
-		if($page){
-			$pagination = $page;
-		}
-
-		$post = $this->post_model->getById($id);
-		if($post){
-			$this->delete_feat_img_file($post->post_featured_img);
-		}
-
-		$this->post_term_model->delete_item($id);
-		$this->post_model->delete_item($id);
-		$this->post_model->delete_comment($id);
-		
-		redirect('admin/post-list/'.$group.'/'.$pagination);
-	}
-
-	public function delete_post_none_paginated()
-	{
-		$group = $this->uri->segment(3);
-		$id    = $this->uri->segment(5);
-
-		if($group){
-			$by_group = $group;
-		}
-
-		$post = $this->post_model->getById($id);
-		if($post){
-			$this->delete_feat_img_file($post->post_featured_img);
-		}
-
-		$this->post_term_model->delete_item($id);
-		$this->post_model->delete_item($id);
-		$this->post_model->delete_comment($id);
-		
-		redirect('admin/post-list/'.$group);
-	}	
-
-
-	private function delete_feat_img_file($file_name)
-	{	
-
-		$file = 'assets/img/featured-img/'.$file_name;
-		if(is_file($file)){
-			unlink($file);
-		}
-
-		$file_1500_x_1000 = 'assets/img/featured-img/1500-x-1000/'.$file_name;
-		if(is_file($file_1500_x_1000)){
-			unlink($file_1500_x_1000);
-		}
-			
-	}
-
 	private function error_page()
 	{
 		$this->load->view('admin/header');
@@ -1040,11 +981,128 @@ class Post extends CI_Controller{
 			);
 
 			$this->parser->parse('admin/post_search', $data);
+	}
 
+
+	// =========================//
+	public function post_trash($random_id)
+	{	
+		$random_id = $this->uri->segment(5);
+		$group = $this->uri->segment(3);
+
+		if(! $random_id){
+			redirect('admin/post-list/'.$group);
+		}else{
+			$this->post_model->setTrash($random_id);
+			redirect('admin/post-list/'.$group);
+		}
+	}
+
+	public function post_trash_paginated($random_id)
+	{
+		$random_id = $this->uri->segment(6);
+		$group = $this->uri->segment(3);
+		$page = $this->uri->segment(4);
+
+		if(! $random_id){
+			redirect('admin/post-list/'.$group.'/'.$page);
+		}else{
+			$this->post_model->setTrash($random_id);
+			redirect('admin/post-list/'.$group.'/'.$page);
+		}
+	}
+
+	public function post_restore($random_id)
+	{
+		$random_id = $this->uri->segment(5);
+		$group = $this->uri->segment(3);
+		$setRestore = $this->post_model->setRestore($random_id);
+
+		if($setRestore){
+			$this->post_model->setRestore($random_id);
+			redirect('admin/post-list/'. $group);
+		}else{
+			redirect('admin/post-list/'. $group);
+		}
+	}
+
+	public function post_restore_paginated($random_id)
+	{
+		$random_id = $this->uri->segment(6);
+		$page = $this->uri->segment(4);
+		$group = $this->uri->segment(3);
+		$setRestore = $this->post_model->setRestore($random_id);
+
+		if($setRestore){
+			$this->post_model->setRestore($random_id);
+			redirect('admin/post-list/'. $group.'/'.$page);
+		}else{
+			redirect('admin/post-list/'. $group.'/'.$page);
+		}
+	}
+
+		public function post_delete_permanently_paginated($random_id)
+	{
+		$group = $this->uri->segment(3);
+		$page  = $this->uri->segment(4);
+		$random_id    = $this->uri->segment(6);
+
+		if($page){
+			$pagination = $page;
+		}
+
+		$post = $this->post_model->getByRandomId($random_id);
+		if($post){
+			$this->delete_feat_img_file($post->post_featured_img);
+		}
+
+		$this->post_term_model->delete_item($post->post_id);
+		$this->post_model->delete_item($post->post_id);
+		$this->post_model->delete_comment($post->post_id);
 		
+		redirect('admin/post-list/'.$group.'/'.$pagination);
+	}
+
+	public function post_delete_permanently($random_id)
+	{	
+
+		$group = $this->uri->segment(3);
+		$random_id  = $this->uri->segment(5);
+
+		if($group){
+			$by_group = $group;
+		}
+
+		$post = $this->post_model->getByRandomId($random_id);
+
+		if($post){
+			$this->delete_feat_img_file($post->post_featured_img);
+		}
+
+		$this->post_term_model->delete_item($post->post_id);
+		$this->post_model->delete_item($post->post_id);
+		$this->post_model->delete_comment($post->post_id);
+		
+		redirect('admin/post-list/'.$group);
+	}	
+
+
+	private function delete_feat_img_file($file_name)
+	{	
+
+		$file = 'assets/img/featured-img/'.$file_name;
+		if(is_file($file)){
+			unlink($file);
+		}
+
+		$file_1500_x_1000 = 'assets/img/featured-img/1500-x-1000/'.$file_name;
+		if(is_file($file_1500_x_1000)){
+			unlink($file_1500_x_1000);
+		}
+			
 	}
 
 	
 	
 
-}// Post class
+}// end of class...
