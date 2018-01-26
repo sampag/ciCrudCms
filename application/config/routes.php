@@ -92,29 +92,35 @@ $route['admin/post']                      = 'post/index';
 $route['add-post']                        = 'post/post_add';
 $route['admin/post-edit/:any']            = 'post/post_edit/$random_id';
 $route['admin/post-update/(:any)']        = 'post/post_update/$random_id';
-$route['admin/post-list/(:any)/(:num)/delete/(:num)'] = 'post/delete_post_paginated/$id'; // Paginated
-$route['admin/post-list/(:any)/delete/(:num)'] = 'post/delete_post_none_paginated/$id'; // None Paginated
-
 $route['admin/post-category/(:any)']             = 'post/post_filter_categorized/$categorized_slug';
 $route['admin/post-category/(:any)/(:num)']      = 'post/post_filter_categorized_paginated/$categorized_slug';
-
 $route['admin/post-tag/:any']             = 'post/post_filter_tag/$slug';
 $route['admin/post-tag/(:any)/(:num)']    = 'post/post_filter_tag_paginated/$slug/$page';
-
 $route['admin/post/:any']                 = 'post/post_filter_uncategorized/$uncategorized_slug';
 $route['admin/post/:any/:num']            = 'post/post_filter_uncategorized_paginated/$uncategorized_slug/$per_page';
-
 $route['admin/post-author/(:num)']        = 'post/post_filter_author/$id'; // Non Paginated
 $route['admin/post-author/(:num)/(:num)'] = 'post/post_filter_author_paginated/$id/$per_page';
 $route['search-posts']                    = 'post/post_search';
 
 // Filter Group for admin
-$route['admin/post-list/all']               = 'post_group_admin/all';
+$route['admin/post-list/all']        = 'post_group_admin/all';
+$route['admin/post-list/all/(:num)']        = 'post_group_admin/all/$per_page';
 $route['admin/post-list/mine']              = 'post_group_admin/mine';
+$route['admin/post-list/mine/(:num)']	    = 'post_group_admin/mine/$per_page';
 $route['admin/post-list/published']         = 'post_group_admin/published';
-$route['admin/post-list/all/(:num)']	    = 'post_group_admin/all_paginated/$per_page';
-$route['admin/post-list/mine/(:num)']	    = 'post_group_admin/mine_paginated/$per_page';
-$route['admin/post-list/published/(:num)']	= 'post_group_admin/published_paginated/$per_page';
+$route['admin/post-list/published/(:num)']	= 'post_group_admin/published/$per_page';
+$route['admin/post-list/trash']  = 'post_group_admin/trash';
+$route['admin/post-list/trash/(:num)']  = 'post_group_admin/trash';
+// Trash
+$route['admin/post-list/(:any)/trash/(:any)'] = 'post/post_trash/$random_id'; // for non paginated
+$route['admin/post-list/(:any)/(:num)/trash/(:any)'] = 'post/post_trash_paginated/$random_id'; // for paginated
+// Restore
+$route['admin/post-list/trash/restore/(:any)'] = 'post/post_restore/$random_id';// for non paginated
+$route['admin/post-list/trash/(:num)/restore/(:any)'] = 'post/post_restore_paginated/$random_id';// for paginated
+// Delete Permanently
+$route['admin/post-list/trash/(:any)/delete-permanently/(:any)'] = 'post/post_delete_permanently_paginated/$random_id'; 
+$route['admin/post-list/trash/delete-permanently/(:any)'] = 'post/post_delete_permanently/$random_id'; 
+
 
 //======================
 // Category
@@ -189,7 +195,7 @@ $route['member/post-list/published']        = 'post_group_contributor/published'
 $route['member/post-category'] = 'member/error_page';
 $route['member/post-tag'] = 'member/error_page';
 $route['member/post-list'] = 'member/error_page';
-
+$route['member/search-posts'] = 'member/post_search';
 /**
 *Public
 */
