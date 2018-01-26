@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 25, 2018 at 02:45 PM
+-- Generation Time: Jan 26, 2018 at 01:32 PM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -44,7 +44,8 @@ INSERT INTO `category` (`category_id`, `category_name`, `category_description`, 
 (12, 'PHP', 'PHP', 'php', '2017-12-26 23:46:33', NULL),
 (13, 'Node Js', 'Node Js', 'node-js', '2017-12-26 23:46:39', NULL),
 (14, 'Python', 'Python', 'python', '2017-12-26 23:47:22', NULL),
-(15, 'Django', 'Django', 'django', '2017-12-26 23:47:30', '2018-01-10 10:20:59');
+(15, 'Django', 'Django', 'django', '2017-12-26 23:47:30', '2018-01-10 10:20:59'),
+(16, 'Cv', 'Bcvb', 'cv', '2018-01-26 09:19:12', NULL);
 
 -- --------------------------------------------------------
 
@@ -177,27 +178,23 @@ INSERT INTO `post` (`post_id`, `post_random_id`, `post_title`, `post_content`, `
 (52, 'gGyVPpHvq39MWuhiJC80', 'Sixth post by member', '<p>sixth post by member<br></p>', 'sixth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:17:14', '', 1516263434, NULL, NULL, NULL, 10),
 (53, '6rGASvtNmu4I7VpMse1Y', 'Seventh post by member', '<p>seventh post by member<br></p>', 'seventh-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:17:29', '', 1516263449, NULL, NULL, NULL, 10),
 (54, 'srqOxC95flY4Gvta62c7', 'Eigth post by member', '<p>eigth post by member<br></p>', 'eigth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:17:43', '', 1516263463, NULL, NULL, NULL, 10),
-(55, 'xN46wqFuLsVXPCnjmQbl', 'Ninth post by member', '<p>ninth post by member<br></p>', 'ninth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:18:21', '', 1516263501, NULL, NULL, NULL, 10),
 (56, 'Z8htf6A7VQgFuOpEUxjw', 'Tenth post by member', '<p>tenth post by member<br></p>', 'tenth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:18:37', '', 1516263517, NULL, NULL, NULL, 10),
-(57, 'Hjlf35ykxwvhu16e4ELI', 'Eleventh post by member', '<p>eleventh post by member<br></p>', 'eleventh-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:18:49', '', 1516263529, NULL, NULL, NULL, 10),
 (58, 'QEV5zDgHPK9m8y2XbSke', 'Twelvth post by member', '<p>twelvth post by member<br></p>', 'twelvth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:19:43', '', 1516263583, NULL, NULL, NULL, 10),
 (59, 'UemIiqhS6df1YsXkvozM', 'Thirtent post by member', '<p>thirtent post by member<br></p>', 'thirtent-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:20:04', '', 1516263604, NULL, NULL, NULL, 10),
 (60, 'sa0j9TO65xeKC2IzqAvY', 'Fourtenth post by member', '<p>fourtenth post by member<br></p>', 'fourtenth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:20:27', '', 1516263627, NULL, NULL, NULL, 10),
 (61, '2jZWAb8QfzHLgEKFw5Yn', 'Fifthtenth post by member', '<p>fifthtenth post by member<br></p>', 'fifthtenth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:20:51', '', 1516263651, NULL, NULL, NULL, 10),
 (62, 'IkxrloyTAuGivaLMjSh6w47mEtY9JU', 'Post by admin with feature img and protected asset', 'Post by admin with feature img and protected asset', 'post-by-admin-with-feature-img-and-protected-asset', 12, NULL, 1, '2018-01-24 06:33:01', '549a12206cee0118a9623bbd1d9c5bcb.jpg', 1516775581, 1516775581, '2018-01-24 07:08:42', NULL, 1),
 (63, 'ynPqQjEIUKR1HN73OasV', 'Post with featured img and protected assets folder', 'Post with featured img and protected assets folder', 'post-with-featured-img-and-protected-assets-folder', 13, NULL, 1, '2018-01-24 07:10:39', '2131fd920bd31efa1b33629c32084542.jpg', 1516777839, NULL, '2018-01-24 07:10:50', NULL, 10),
-(64, '10QsfJiujq9WBOGk3wcR', 'Post with php category by nobita', '<p>post with php category by nobita<br></p>', 'post-with-php-category-by-nobita', 12, '', 1, '2018-01-24 07:18:23', '4e7ff58fb8a95f3152586b9ddf0497bd.jpg', 1516778303, NULL, NULL, 1, 10),
-(65, 'jchJm0rbBEgTRMAIk76PZzCDXfUS2Y', 'Trash post by admin', '<p>trash post by admin<br></p>', 'trash-post-by-admin', 13, NULL, NULL, '2018-01-25 10:28:27', '', 1516876107, 1516876107, NULL, 1, 1),
-(66, 'XmTUZs9dGS1P8IQEWrwL4FaoMyHA07', 'Second post to trash', '<p>second post to trash<br></p>', 'second-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 12:52:59', '', 1516884779, 1516884779, NULL, 1, 1),
-(67, '8nxEVrCzD5i1ZlbHy0LRsXvNk7AgTK', 'Third post to trash', '<p>third post to trash<br></p>', 'third-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 12:54:57', '', 1516884897, 1516884897, NULL, 1, 1),
-(68, 'M4up3CN5S18at0IkUBDEyiTAwdYxrQ', 'Fourth post to trash', '<p>fourth post to trash<br></p>', 'fourth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:21:40', '', 1516886500, 1516886500, NULL, 1, 1),
 (69, 'xszpnVAvra4jbmcCyP9wBT2gRfl8Dq', 'Fifth post to trash', '<p>fifth post to trash<br></p>', 'fifth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:22:15', '', 1516886535, 1516886535, NULL, 1, 1),
-(70, 'xozvAQLqBWaVe9KbTdf4y2EDmZliwt', 'Sixth post to trash', '<p>sixth post to trash<br></p>', 'sixth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:22:50', '', 1516886570, 1516886570, NULL, 1, 1),
 (71, 'H09sN34fGAOKhZD2Tpyx6lbPeBumvz', 'Seventh post to trash', '<p>seventh post to trash<br></p>', 'seventh-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:22:59', '', 1516886579, 1516886579, NULL, 1, 1),
-(72, 'iNAZTkjV9WhRDzevs1OfI7nBqGElmw', 'Eighth post to trash', '<p>eighth post to trash<br></p>', 'eighth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:23:08', '', 1516886588, 1516886588, NULL, 1, 1),
-(73, 'eV0QhDcYgLXK1z7MEBbn3Wd4Po6lFH', 'Ninth post to trash', '<p>ninth post to trash<br></p>', 'ninth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:23:41', '', 1516886621, 1516886621, NULL, 1, 1),
 (74, 'lHnUoEsbfa37KeVthkDw2xRB6mL8Nr', 'Tenth post to trash', '<p>tenth post to trash<br></p>', 'tenth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:23:51', '', 1516886631, 1516886631, NULL, 1, 1),
-(75, 'n23vomyx1PRfJ8YVMaTU65I7KG9Et4', 'Eleventh post to trash', '<p>eleventh post to trash<br></p>', 'eleventh-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:24:00', '', 1516886640, 1516886640, NULL, 1, 1);
+(75, 'n23vomyx1PRfJ8YVMaTU65I7KG9Et4', 'Eleventh post to trash', '<p>eleventh post to trash<br></p>', 'eleventh-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:24:00', '', 1516886640, 1516886640, NULL, NULL, 1),
+(76, 'SexQi8YyCZ1NvWdAGHUurBfaXPsJkT', 'Twelve post with trash', '<p>twelve post with trash<br></p>', 'twelve-post-with-trash', 0, 'uncategorized', NULL, '2018-01-26 06:34:12', '', 1516948452, 1516948452, NULL, 1, 1),
+(77, 'tcBl7ahXrwC63SxpmTMeJdU4OjsqF1', 'Thirtenth post to trash', '<p>thirtenth post to trash<br></p>', 'thirtenth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-26 06:37:57', '', 1516948677, 1516948677, NULL, 1, 1),
+(78, 'o9OSt20bkF7WNLuKYn5yxjdBvgehGP', 'Fourthtent post to trash', '<p>fourthtent post to trash<br></p>', 'fourthtent-post-to-trash', 0, 'uncategorized', NULL, '2018-01-26 06:38:13', '', 1516948693, 1516948693, NULL, 1, 1),
+(79, 'PmTzRY2xpalSXI1rAGMDUZdcVEi7uh', 'Fifthtenth post to trash', 'Fifthtenth post to trash', 'fifthtenth-post-to-trash', NULL, 'uncategorized', 1, '2018-01-26 06:38:34', '', 1516948714, 1516948714, '2018-01-26 06:39:44', 1, 1),
+(80, '8CMwJPh9pjZF1WvocDykXz73AHSVtU', 'Sixthtent post to trash', '<p>sixthtent post to trash<br></p>', 'sixthtent-post-to-trash', 0, 'uncategorized', 1, '2018-01-26 06:45:01', '', 1516949101, 1516949101, NULL, 1, 1),
+(86, 'kX6YKQ81hcrsSnT3wNCBDf7l0eZHWv', 'Ninth post to delete permanently', '<p>ninth post to delete permanently<br></p>', 'ninth-post-to-delete-permanently', 0, 'uncategorized', 1, '2018-01-26 09:47:18', '', 1516960038, 1516960038, NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -273,17 +270,13 @@ INSERT INTO `post_term` (`term_order`, `term_tag_id`, `term_post_id`, `term_user
 (56, 52, 52, 10, 1516263434),
 (57, 52, 53, 10, 1516263449),
 (58, 52, 54, 10, 1516263464),
-(59, 52, 55, 10, 1516263501),
 (60, 52, 56, 10, 1516263517),
-(61, 52, 57, 10, 1516263529),
 (62, 52, 58, 10, 1516263583),
 (63, 52, 59, 10, 1516263604),
 (64, 52, 60, 10, 1516263627),
 (65, 52, 61, 10, 1516263651),
 (68, 50, 62, 1, 1516777722),
-(71, 50, 63, 10, 1516777850),
-(72, 50, 64, 10, 1516778303),
-(73, 52, 65, NULL, 1516876107);
+(75, 50, 63, 1, 1516964797);
 
 -- --------------------------------------------------------
 
@@ -330,7 +323,9 @@ INSERT INTO `tag` (`tag_id`, `tag_name`, `tag_description`, `tag_slug`, `tag_cre
 (50, 'Backend', 'Backend', 'backend', '2017-12-26 23:39:20', NULL),
 (51, 'Framework', 'Framework', 'framework', '2017-12-26 23:39:30', NULL),
 (52, 'Client Sides', 'Client Sides', 'client-sides', '2017-12-26 23:47:00', '2018-01-11 09:12:53'),
-(63, 'Vbn', 'Vvbn', 'vbn', '2018-01-22 10:47:21', NULL);
+(63, 'Vbn', 'Vvbn', 'vbn', '2018-01-22 10:47:21', NULL),
+(64, 'Zxc', 'Zxc', 'zxc', '2018-01-26 09:19:16', NULL),
+(65, 'Asd', 'Asd', 'asd', '2018-01-26 11:04:37', NULL);
 
 -- --------------------------------------------------------
 
@@ -363,8 +358,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, 'O6Bq9AxeYQ0JUrSBIbCwoO', 1268889823, 1516871558, 1, 'John', 'Cena', 'ADMIN', '0'),
-(10, '::1', 'nobitanobi@gmail.com', '$2y$08$TYDKd28TkyhKl0unfA7I6u9DyoPFyx43CrC7wqRllqEbStx09rh6.', NULL, 'nobitanobi@gmail.com', NULL, NULL, NULL, NULL, 1514429082, 1516862283, 1, 'Nobita', 'Nobi', 'Doraemon', '');
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, 'O6Bq9AxeYQ0JUrSBIbCwoO', 1268889823, 1516964639, 1, 'John', 'Cena', 'ADMIN', '0'),
+(10, '::1', 'nobitanobi@gmail.com', '$2y$08$TYDKd28TkyhKl0unfA7I6u9DyoPFyx43CrC7wqRllqEbStx09rh6.', NULL, 'nobitanobi@gmail.com', NULL, NULL, NULL, NULL, 1514429082, 1516964605, 1, 'Nobita', 'Nobi', 'Doraemon', '');
 
 -- --------------------------------------------------------
 
@@ -489,7 +484,7 @@ ALTER TABLE `user_profile`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `comment`
 --
@@ -509,12 +504,12 @@ ALTER TABLE `login_attempts`
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 --
 -- AUTO_INCREMENT for table `post_term`
 --
 ALTER TABLE `post_term`
-  MODIFY `term_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `term_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 --
 -- AUTO_INCREMENT for table `settings`
 --
@@ -524,7 +519,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `tag`
 --
 ALTER TABLE `tag`
-  MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 --
 -- AUTO_INCREMENT for table `users`
 --
