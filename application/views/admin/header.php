@@ -213,6 +213,9 @@ echo doctype('html5');
         .dropdown-menu>li>a{
             font-size: 13px;
         }
+        .width-20{
+            width: 20%;
+        }
     </style>
 </head>
 <body>
