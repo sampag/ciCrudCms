@@ -71,13 +71,13 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 											 echo $row->post_title;
 										}else{
 											 $featured_img = array(
-											 	'src' => 'assets/img/featured-img/featured-img.jpg',
+											 	'src' => 'assets/img/featured-img/set-featured-img.jpg',
 											 	'width' => '100%',
 											 	'height' => 'auto',
 											 	'class' => 'media-object'
 											 );
 											 echo img($featured_img); 
-											 echo $row->post_title;
+											 echo '<span class="text-sm">'.$row->post_title.'</span>';
 										}
 									 ?>
 									</div>
