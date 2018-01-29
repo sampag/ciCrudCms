@@ -3,10 +3,16 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 <div class="row">
 	<div class="col-md-12">
+		<?php echo form_open(uri_string().'/trash-multi-post'); ?>
 		<div class="table-responsive">
 			<table class="table table-bordered table-striped">
 				<thead>
 					<tr>
+						<td>
+						<?php 
+						  	echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); 
+						?>
+						</td>
 						<td>Title</td>
 						<td>Categories</td>
 						<td>Tags</td>
@@ -17,7 +23,12 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<?php if($item){?>
 					<?php foreach($item as $row){ ?>
 					<tr>
-						<td class="width-20">
+						<td style="width:20px;">
+							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect text-center">
+								<input type="checkbox" name="post_trash[]" value="<?php echo $row->post_id; ?>" class="mdl-checkbox__input">
+							</label>
+						</td>
+						<td>
 							<?php
 								$title_limit =  character_limiter($row->post_title, 30);
 							?>
@@ -69,6 +80,11 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 				</tbody>
 				<thead>
 					<tr>
+						<td>
+						<?php 
+						  	echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); 
+						?>
+						</td>
 						<td>Title</td>
 						<td>Categories</td>
 						<td>Tags</td>
@@ -77,6 +93,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 				</thead>
 			</table>
 		</div>
+		<?php echo form_close(); ?>
 	</div>
 </div><!-- row -->
 <div class="row">
