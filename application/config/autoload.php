@@ -64,6 +64,7 @@ $autoload['libraries'] = array(
 	'form_validation',
 	'parser',
 	'encryption',
+	'encrypt',
 	'ion_auth',
 	'unit_test',
 	'upload',
