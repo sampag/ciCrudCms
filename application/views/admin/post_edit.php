@@ -62,7 +62,7 @@ if($this->session->flashdata('post_update_failed')){
 				?>
 			</div>
 			<div class="form-group">
-				<p class="text-sm">{permalink}</p>
+				<p>{permalink}</p>
 			</div>	
 			<div class="form-group">
 				<?php
