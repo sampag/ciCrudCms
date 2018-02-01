@@ -36,19 +36,30 @@ if($count > 1){
 	<br>
 	<div class="row">
 		<div class="col-md-12">
+			<?php echo form_open(uri_string().'/trash-multi-post'); ?>
 			<div class="table-responsive">
 				<table class="table table-hover table-bordered ">
 					<thead>
 						<tr>
-							<td>Title</td>
-							<td>Category</td>
-							<td>Tag</td>
-							<td>Created</td>
+							<th style="width:90px;">
+							<?php 
+							  	echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); 
+							?>
+							</th>
+							<th>Title</th>
+							<th>Category</th>
+							<th>Tag</th>
+							<th>Created</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php foreach($uncategorized_post as $row): ?>
 						<tr>
+							<td style="width:90px;">
+							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect">
+								<input type="checkbox" name="post_trash[]" value="<?php echo $row->post_random_id; ?>" class="mdl-checkbox__input check">
+							</label>
+							</td>
 							<td class="list-title">	
 							<div class="po-markup">
 								<?php 
@@ -81,6 +92,12 @@ if($count > 1){
 									</div>
 								</div>
 							</div>
+							<div class="text-sm">
+								<a href="<?php echo base_url('member/post-edit/'.$row->post_random_id); ?>" class="text-muted text-sm po-link">Edit</a> |  
+								<?php
+									echo anchor(uri_string().'/trash/'.$row->post_random_id, 'Trash', array('class' => 'text-sm text-muted po-link'));
+								?>
+							</div>
 							</td>
 							<td>
 								<?php
@@ -102,8 +119,10 @@ if($count > 1){
 								?>
 							</td>
 							<td class="text-muted">
-								<?php
-									echo date('m/d/Y', strtotime($row->post_published_created));
+								<?php 
+									if($row->post_published_created){
+										echo date('M d, Y', strtotime($row->post_published_created));
+									}
 								?>
 							</td>
 						</tr>
@@ -111,41 +130,47 @@ if($count > 1){
 					</tbody>
 					<thead>
 						<tr>
-							<td>Title</td>
-							<td>Category</td>
-							<td>Tag</td>
-							<td>Created</td>
+							<th>
+							<?php 
+							  	echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); 
+							?>
+							</th>
+							<th>Title</th>
+							<th>Category</th>
+							<th>Tag</th>
+							<th>Created</th>
 						</tr>
 					</thead>
 				</table>
 			</div>
+			<?php echo form_close(); ?>
 		</div>
 	</div>
 	<div class="row">
-<div class="col-md-12">
-	<nav aria-label="Page navigation" class="text-center pull-right">
-	{pagination}
-</nav>
-</div>
-</div>
+	<div class="col-md-12">
+		<nav aria-label="Page navigation" class="text-center pull-right">
+		{pagination}
+	</nav>
+	</div>
+	</div>
 {javascript}
 <script>
 $(function(){
-	    $('.po-markup > .po-link').popover({
-		    trigger: 'hover',
-		    html: true,  
+    $('.po-markup > .po-link').popover({
+	    trigger: 'hover',
+	    html: true,  
 
-			title: function() {
-		      return $(this).parent().find('.po-title').html();
-		    },
+		title: function() {
+	      return $(this).parent().find('.po-title').html();
+	    },
 
-		    content: function() {
-		      return $(this).parent().find('.po-body').html();
-		    },
+	    content: function() {
+	      return $(this).parent().find('.po-body').html();
+	    },
 
-		    container: 'body',
-		    placement: 'right'
-		    });
+	    container: 'body',
+	    placement: 'right'
+	    });
 });
 </script>
 {footer}
