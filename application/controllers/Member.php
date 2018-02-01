@@ -334,10 +334,10 @@ class Member extends CI_Controller{
 	
 	public function post_edit($random_id)
 	{
-
+		$user = $this->ion_auth->user()->row();
 		//==========================================//
 		$random_id = $this->uri->segment(3);
-		$post      = $this->post_model->get_single($random_id);
+		$post      = $this->member_model->get_single($random_id, $user->id);
 
 		//==========================================//
 		if(! $post){
@@ -587,7 +587,7 @@ class Member extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('member/post/'. $slug),
 			'total_rows'      => 	 $this->member_model->count_uncategorized_post($slug, $user->id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -650,7 +650,7 @@ class Member extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('member/post-category/'. $slug),
 			'total_rows'      => 	 $this->member_model->count_categorized_post($user->id, $category_id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -714,7 +714,7 @@ class Member extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('member/post-category/'. $slug),
 			'total_rows'      => 	 $this->member_model->count_categorized_post($user->id, $category_id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -807,7 +807,7 @@ class Member extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('member/post-tag/'. $slug),
 			'total_rows'      => 	 $this->member_model->post_tag_count($tag->tag_id, $user->id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -1165,6 +1165,137 @@ class Member extends CI_Controller{
 			);
 
 			$this->parser->parse('member/post_search', $data);
+	}
+
+	/*
+	* Trash single post
+	*/
+	public function post_trash($random_id)
+	{	
+		$user = $this->ion_auth->user()->row();
+		$random_id = $this->uri->segment(5);
+		$group     = $this->uri->segment(3);
+		$category  = $this->uri->segment(2);
+
+
+		if(! $random_id){
+			redirect('member/'.$category.'/'.$group);
+		}else{
+			$this->member_model->setTrash($random_id, $user->id);
+			redirect('member/'.$category.'/'.$group);
+		}
+	}
+
+	public function post_trash_paginated($random_id)
+	{	
+		$user = $this->ion_auth->user()->row();
+		$random_id = $this->uri->segment(6);
+		$group = $this->uri->segment(3);
+		$page = $this->uri->segment(4);
+		$category  = $this->uri->segment(2);
+
+		if(! $random_id){
+			redirect('member/'.$category.'/'.$group.'/'.$page);
+		}else{
+			$this->member_model->setTrash($random_id, $user->id);
+			redirect('member/'.$category.'/'.$group.'/'.$page);
+		}
+	}
+
+	/*
+	* Restore single post
+	*/
+	public function post_restore($random_id)
+	{
+		$user = $this->ion_auth->user()->row();
+		$random_id = $this->uri->segment(5);
+		$group = $this->uri->segment(3);
+		$setRestore = $this->post_model->setRestore($random_id, $user->id);
+
+		if($setRestore){
+			$this->post_model->setRestore($random_id, $user->id);
+			redirect('member/post-list/'. $group);
+		}else{
+			redirect('member/post-list/'. $group);
+		}
+	}
+
+	public function post_restore_paginated($random_id)
+	{	
+		$user = $this->ion_auth->user()->row();
+		$random_id = $this->uri->segment(6);
+		$page = $this->uri->segment(4);
+		$group = $this->uri->segment(3);
+		$setRestore = $this->post_model->setRestore($random_id, $user->id);
+
+		if($setRestore){
+			$this->post_model->setRestore($random_id, $user->id);
+			redirect('member/post-list/'. $group.'/'.$page);
+		}else{
+			redirect('member/post-list/'. $group.'/'.$page);
+		}
+	}
+
+	/**
+	* Restore multiple post
+	*/
+	public function restore_multiple()
+	{	
+		$user               = $this->ion_auth->user()->row();
+		$group              = $this->uri->segment(3);
+		$page               = $this->uri->segment(4);
+
+		$restore            = $this->input->post('restore', TRUE);
+		$post               = $this->input->post('post', TRUE);
+
+		if($restore){
+			foreach($post as $id){
+				$this->member_model->restoreMultiplePost($id, $user->id); // Restore handler
+			}
+
+			if(is_numeric($page)){
+				redirect('member/post-list/'.$group.'/'.$page);
+			}else{
+				redirect('member/post-list/'.$group);
+			}
+		}else{
+			if(is_numeric($page)){
+				redirect('member/post-list/'.$group.'/'.$page);
+			}else{
+				redirect('member/post-list/'.$group);
+			}
+		} // Restore
+	}
+
+	/*
+	* Trash multiple post function
+	*/
+	public function trash_multiple()
+	{	
+		$user       = $this->ion_auth->user()->row();
+		$id          = $this->input->post('post_trash');
+		$group       = $this->uri->segment(3);
+		$page        = $this->uri->segment(4);
+		$list        = $this->uri->segment(2);
+
+		if($this->input->post('postTrash')){
+			foreach($id as $i){
+				$this->member_model->trashMultiplePost($i, $user->id);
+			}
+
+			if(is_numeric($page)){
+				redirect('member/'.$list.'/'.$group.'/'.$page);
+				
+			}else{
+				redirect('member/'.$list.'/'.$group);
+			}
+		}else{
+			if(is_numeric($page)){
+				redirect('member/'.$list.'/'.$group.'/'.$page);
+			}else{
+				redirect('member/'.$list.'/'.$group);
+			}
+		}
 	}
 
 } // Member class
