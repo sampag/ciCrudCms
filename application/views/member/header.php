@@ -129,6 +129,9 @@ defined('BASEPATH')OR exit('No direct script access allowed');
         .width-20{
             width: 20%;
         }
+        .select-all{
+            padding-left: 9px;
+        }
     </style>
 </head>
 <body>
