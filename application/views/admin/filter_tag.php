@@ -34,15 +34,21 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 </div>
 <div class="row top-15">
 	<div class="col-md-12">
+		<?php echo form_open(uri_string().'/trash-multi-post'); ?>
 		<div class="table-responsive">
 			<table class="table table-hover table-bordered table-striped">
 				<thead>
 					<tr>
-						<td>Title</td>
-						<td>Category</td>
-						<td>Tag</td>
-						<td>Author</td>
-						<td>Created</td>
+						<th>
+						<?php 
+						  	echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); 
+						?>
+						</th>
+						<th>Title</th>
+						<th>Category</th>
+						<th>Tag</th>
+						<th>Author</th>
+						<th>Created</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -51,6 +57,11 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						foreach($post as $row): 
 					?>
 					<tr>
+						<td style="width:20px;">
+						<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect text-center">
+							<input type="checkbox" name="post_trash[]" value="<?php echo $row->post_id; ?>" class="mdl-checkbox__input">
+						</label>
+						</td>
 						<td class="list-title">	
 							<div class="po-markup">
 								<?php 
@@ -83,6 +94,12 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 									 ?>
 									</div>
 								</div>
+							</div>
+							<div class="text-sm">
+								<a href="<?php echo base_url('admin/post-edit/'.$row->post_random_id); ?>" class="text-muted text-sm po-link">Edit</a> |  
+								<?php
+									echo anchor(uri_string().'/trash/'.$row->post_random_id, 'Trash', array('class' => 'text-sm text-muted po-link'));
+								?>
 							</div>
 							</td>
 						<td class="list-category">
@@ -120,10 +137,10 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 								echo anchor('admin/post-author/'.$author_id, $author_name, array('class' => 'po-link'));
 							?>
 						</td>
-						<td class="list-tag">
+						<td class="list-tag text-muted">
 							<?php 
-							echo date('m/d/Y', strtotime($row->post_published_created));
-							?>	
+								echo date('M d, Y', strtotime($row->post_published_created));
+							 ?>
 						</td>
 					</tr>
 					<?php endforeach;  }else{ ?>
@@ -132,8 +149,21 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					</tr>
 					<?php } ?>
 				</tbody>
+				<thead>
+					<th>
+					<?php 
+					  	echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); 
+					?>
+					</th>
+					<th>Title</th>
+					<th>Category</th>
+					<th>Tag</th>
+					<th>Author</th>
+					<th>Created</th>
+				</thead>
 			</table>
 		</div>
+		<?php echo form_close(); ?>
 	</div>
 </div>
 <div class="row">
