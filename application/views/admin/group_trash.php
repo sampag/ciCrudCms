@@ -3,10 +3,16 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 <div class="row">
 	<div class="col-md-12">
+		<?php echo form_open(uri_string().'/restore-multiple'); ?>
 		<div class="table-responsive">
 			<table class="table table-bordered table-striped">
 				<thead>
 					<tr>
+						<th>
+						<div class="btn-group btn-group-xs">
+							<input type="submit" name="restore" value="Restore" class="btn btn-default" title="Restore" >
+						</div>
+						</th>
 						<th>Title</th>
 						<th>Categories</th>
 						<th>Tags</th>
@@ -17,7 +23,12 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<?php if($item){?>
 					<?php foreach($item as $row){ ?>
 					<tr>
-						<td class="width-20">
+						<td style="width:70px;">
+							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect text-center">
+								<input type="checkbox" name="post[]" value="<?php echo $row->post_random_id; ?>" class="mdl-checkbox__input">
+							</label>
+						</td>
+						<td>
 							<?php
 								$title_limit =  character_limiter($row->post_title, 20);
 							?>
@@ -62,6 +73,11 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 				</tbody>
 				<thead>
 					<tr>
+						<th>
+							<div class="btn-group btn-group-xs">
+							<input type="submit" name="restore" value="Restore" class="btn btn-default" title="Restore" >
+							</div>
+						</th>
 						<th>Title</th>
 						<th>Categories</th>
 						<th>Tags</th>
@@ -70,6 +86,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 				</thead>
 			</table>
 		</div>
+		<?php echo form_close(); ?>
 	</div>
 </div>
 <div class="row">
@@ -81,4 +98,9 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 </div>
 
 {javascript}
+<script type="text/javascript">
+	$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	});
+</script>
 {footer}
