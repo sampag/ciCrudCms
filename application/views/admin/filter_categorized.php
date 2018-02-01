@@ -145,9 +145,9 @@ if($count_item > 1){
 								?>
 							</td>
 							<td class="text-muted list-tag">
-								<?php
-									echo time_ago($row->post_created);
-								?>
+								<?php 
+									echo date('M d, Y', strtotime($row->post_published_created));
+								 ?>
 							</td>
 						</tr>
 					    <?php endforeach;  ?>
