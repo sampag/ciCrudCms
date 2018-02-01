@@ -6,6 +6,8 @@ class Tag_model extends CI_Model{
 	public function count_filter_tag($id)
 	{
 		$this->db->where('term_tag_id', $id);
+		$this->db->join('post', 'post_id = term_post_id','inner');
+		$this->db->where('post_trash', NULL);
 		$this->db->from('post_term');
 		return $this->db->count_all_results();
 	}
@@ -33,6 +35,7 @@ class Tag_model extends CI_Model{
 	{
 		$this->db->limit($limit, $start);
 		$this->db->where('term_tag_id', $id);
+		$this->db->where('post_trash', NULL);
 		$this->db->order_by('term_order', 'DESC');
 		$this->db->join('post', 'post_id = term_post_id', 'left');
 		$query = $this->db->get('post_term');	
