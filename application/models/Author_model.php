@@ -21,6 +21,7 @@ class Author_model extends CI_Model{
 		$this->db->select('*');
 		$this->db->from('post');
 		$this->db->where('user_id', $user_id);
+		$this->db->where('post_trash', NULL);
 		$this->db->limit($limit, $start);
 		$this->db->order_by('post_id', 'DESC');
 		$this->db->join('users', 'id = user_id', 'left');
@@ -40,6 +41,7 @@ class Author_model extends CI_Model{
 	public function author_post_count($u_id)
 	{
 		$this->db->where('user_id', $u_id);
+		$this->db->where('post_trash', NULL);
 		$this->db->from('post');
 		return $this->db->count_all_results();
 	}
