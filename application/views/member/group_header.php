@@ -42,6 +42,21 @@ if($this->uri->segment(3) == 'published'){
 	$active_published = NULL;
 }
 
+if($this->uri->segment(3) == 'trash'){
+	$active_trash = 'btn-primary';
+	$item_count = $count_trash;
+
+	if($count_trash > 1){
+		$word_item = plural('Item');
+	}else{
+		$word_item = singular('Items');
+	}
+}else{
+	$active_trash = NULL;
+}
+
+
+
 ?>
 <div class="row top-15">
 	<div class="col-md-6">
@@ -74,9 +89,14 @@ if($this->uri->segment(3) == 'published'){
 			'class' => 'btn btn-default btn-sm '.$active_published.'',
 		);
 
+		$trash_attr = array(
+			'class' => 'btn btn-default btn-sm '.$active_trash.'',
+		);
+
 		echo anchor('member/post-list/all', 'All ', $all_attr); 
 		echo anchor('member/post-list/mine', 'Mine ',  $mine_attr);
 		echo anchor('member/post-list/published', 'Published ', $pub_attr); 
+		echo anchor('member/post-list/trash', 'Trash ', $trash_attr); 
 		?>
 		</div>
 	</div>
