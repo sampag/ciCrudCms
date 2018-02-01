@@ -421,12 +421,13 @@ class Post extends CI_Controller{
 
 		$this->parser->parse('admin/post_edit', $data);
 
-	} // end of post_edit() method.
+	} 
 
 
 
-
-	// Filter uncategorized post.
+	/*
+	* Filter uncategorized post.
+	*/
 	public function post_filter_uncategorized($uncategorized_slug)
 	{
 		$uncategorized_slug = $this->uri->segment(3);
@@ -435,7 +436,7 @@ class Post extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('admin/post/uncategorized'),
 			'total_rows'      => 	 $this->category_model->count_uncategorized(),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -486,7 +487,7 @@ class Post extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('admin/post/uncategorized'),
 			'total_rows'      => 	 $this->category_model->count_uncategorized(),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -538,7 +539,7 @@ class Post extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('admin/post-author/'.$id),
 			'total_rows'      => 	 $this->author_model->author_post_count($id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -597,7 +598,7 @@ class Post extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('admin/post-author/'.$id),
 			'total_rows'      => 	 $this->author_model->author_post_count($id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -658,11 +659,11 @@ class Post extends CI_Controller{
 		}else{
 			return $this->error_page();
 		}
-		
-		$config = array(
+
+			$config = array(
 			'base_url'        =>     base_url('admin/post-category/'.$categorized_slug),
 			'total_rows'      => 	 $this->category_model->count_categorized_item($single_cat),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -683,6 +684,7 @@ class Post extends CI_Controller{
 			'num_tag_open'    =>     '<li>',
 			'num_tag_close'   =>     '</li>',
 		);
+		
 		$this->pagination->initialize($config);
 		$categorized_post = $this->category_model->categorized_post($config['per_page'], $page, $categorized_slug);
 		
@@ -725,7 +727,7 @@ class Post extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('admin/post-category/'.$categorized_slug),
 			'total_rows'      => 	 $this->category_model->count_categorized_item($single_cat),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -792,7 +794,7 @@ class Post extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('admin/post-tag/'. $slug),
 			'total_rows'      => 	 $this->tag_model->count_filter_tag($id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -838,7 +840,7 @@ class Post extends CI_Controller{
 
 	public function post_filter_tag_paginated()
 	{
-				$slug = $this->uri->segment(3);
+		$slug = $this->uri->segment(3);
 		$page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
 		$tag = $this->tag_model->get_single($slug);
 
@@ -853,7 +855,7 @@ class Post extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('admin/post-tag/'. $slug),
 			'total_rows'      => 	 $this->tag_model->count_filter_tag($id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -936,7 +938,7 @@ class Post extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('post/post-search-result/'. $match),
 			'total_rows'      => 	 $this->post_model->count_search_item($match),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -988,13 +990,15 @@ class Post extends CI_Controller{
 	public function post_trash($random_id)
 	{	
 		$random_id = $this->uri->segment(5);
-		$group = $this->uri->segment(3);
+		$group     = $this->uri->segment(3);
+		$category  = $this->uri->segment(2);
+
 
 		if(! $random_id){
-			redirect('admin/post-list/'.$group);
+			redirect('admin/'.$category.'/'.$group);
 		}else{
 			$this->post_model->setTrash($random_id);
-			redirect('admin/post-list/'.$group);
+			redirect('admin/'.$category.'/'.$group);
 		}
 	}
 
@@ -1003,12 +1007,13 @@ class Post extends CI_Controller{
 		$random_id = $this->uri->segment(6);
 		$group = $this->uri->segment(3);
 		$page = $this->uri->segment(4);
+		$category  = $this->uri->segment(2);
 
 		if(! $random_id){
-			redirect('admin/post-list/'.$group.'/'.$page);
+			redirect('admin/'.$category.'/'.$group.'/'.$page);
 		}else{
 			$this->post_model->setTrash($random_id);
-			redirect('admin/post-list/'.$group.'/'.$page);
+			redirect('admin/'.$category.'/'.$group.'/'.$page);
 		}
 	}
 
