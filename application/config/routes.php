@@ -109,17 +109,31 @@ $route['admin/post-list/mine']              = 'post_group_admin/mine';
 $route['admin/post-list/mine/(:num)']	    = 'post_group_admin/mine/$per_page';
 $route['admin/post-list/published']         = 'post_group_admin/published';
 $route['admin/post-list/published/(:num)']	= 'post_group_admin/published/$per_page';
+
+
+// View all trash post
 $route['admin/post-list/trash']  = 'post_group_admin/trash';
 $route['admin/post-list/trash/(:num)']  = 'post_group_admin/trash';
-// Trash
-$route['admin/post-list/(:any)/trash/(:any)'] = 'post/post_trash/$random_id'; // for non paginated
-$route['admin/post-list/(:any)/(:num)/trash/(:any)'] = 'post/post_trash_paginated/$random_id'; // for paginated
-// Restore
+
+// Trash single post
+$route['admin/(:any)/(:any)/trash/(:any)'] = 'post/post_trash/$random_id'; // for non paginated
+$route['admin/(:any)/(:any)/(:num)/trash/(:any)'] = 'post/post_trash_paginated/$random_id'; // for paginated
+
+// Restore single post
 $route['admin/post-list/trash/restore/(:any)'] = 'post/post_restore/$random_id';// for non paginated
 $route['admin/post-list/trash/(:num)/restore/(:any)'] = 'post/post_restore_paginated/$random_id';// for paginated
+
 // Delete Permanently
 $route['admin/post-list/trash/(:any)/delete-permanently/(:any)'] = 'post/post_delete_permanently_paginated/$random_id'; 
 $route['admin/post-list/trash/delete-permanently/(:any)'] = 'post/post_delete_permanently/$random_id'; 
+
+// Trash multiple post
+$route['admin/(:any)/(:any)/trash-multi-post'] = 'post_group_admin/trash_multiple';
+$route['admin/(:any)/(:any)/(:num)/trash-multi-post'] = 'post_group_admin/trash_multiple';
+
+// Restore multiple post
+$route['admin/post-list/(:any)/restore-multiple'] = 'post_group_admin/restore_multiple'; // non paginated
+$route['admin/post-list/(:any)/(:num)/restore-multiple'] = 'post_group_admin/restore_multiple'; // paginated
 
 
 //======================
@@ -136,9 +150,9 @@ $route['search-categories'] = 'category/category_search';
 $route['search-categories-result/(:any)'] = 'category/category_search_result/$match';
 
 
-//======================
-// Tag
-//======================
+/*
+* Tag routes
+*/
 $route['admin/tag'] = 'tag/index';
 $route['admin/tag-edit/(:num)'] = 'tag/tag_edit/$id';
 $route['add-tag'] = 'tag/tag_add';
@@ -150,25 +164,27 @@ $route['search-tags'] = 'tag/tag_search';
 $route['search-tag-result/(:any)'] = 'tag/tag_search_result/$match';
 
 
-//======================
-// Comment
-//======================
+/**
+* Comment route
+*/
 $route['admin/comment'] = 'comment/index';
 $route['admin/comment-approved/(:num)'] = 'comment/comment_approved/$id';
 $route['admin/comment-delete/(:num)'] = 'comment/comment_delete/$id';
 
-//======================
-// Settings
-//======================
+/**
+* settings route
+*/
 $route['admin/settings'] = 'settings/index';
 $route['save-settings'] = 'settings/settings_save_changes';
-//======================
-// System
-//======================
-$route['admin/system'] = 'system/index';
 
 /**
-* Member Contributors
+* System info route
+*/
+$route['admin/system'] = 'system/index';
+
+
+/**
+* Member Contributor route
 */
 $route['member/post'] = 'member/post_create';
 $route['member/add-post'] = 'member/post_add';
@@ -186,6 +202,9 @@ $route['member/comment'] = 'member/post_comment';
 $route['member/comment-delete/(:num)'] = 'member/delete_comment/$id';
 $route['member/profile'] = 'member/author_profile';
 $route['member/profile-update'] = 'member/author_profile_update';
+/*
+* Group of post
+*/
 $route['member/post-list/all/(:num)']       = 'post_group_contributor/all/$per_page';
 $route['member/post-list/mine/(:num)']      = 'post_group_contributor/mine/$per_page';
 $route['member/post-list/published/(:num)'] = 'post_group_contributor/published/$per_page';
@@ -196,8 +215,28 @@ $route['member/post-category'] = 'member/error_page';
 $route['member/post-tag'] = 'member/error_page';
 $route['member/post-list'] = 'member/error_page';
 $route['member/search-posts'] = 'member/post_search';
+
+// View all trash post
+$route['member/post-list/trash']  = 'post_group_contributor/trash';
+$route['member/post-list/trash/(:num)']  = 'post_group_contributor/trash';
+
+// Trash single post
+$route['member/(:any)/(:any)/trash/(:any)'] = 'member/post_trash/$random_id'; // for non paginated
+$route['member/(:any)/(:any)/(:num)/trash/(:any)'] = 'member/post_trash_paginated/$random_id'; // for paginated
+
+// Restore single post
+$route['member/post-list/trash/restore/(:any)'] = 'member/post_restore/$random_id';// for non paginated
+$route['member/post-list/trash/(:num)/restore/(:any)'] = 'member/post_restore_paginated/$random_id';// for paginated
+
+// Restore multiple post
+$route['member/post-list/(:any)/restore-multiple'] = 'member/restore_multiple'; // non paginated
+$route['member/post-list/(:any)/(:num)/restore-multiple'] = 'member/restore_multiple'; // paginated
+
+// Trash multiple post
+$route['member/(:any)/(:any)/trash-multi-post'] = 'member/trash_multiple';
+$route['member/(:any)/(:any)/(:num)/trash-multi-post'] = 'member/trash_multiple';
+
 /**
 *Public
 */
-
 $route['post'] = 'public_view/post_all';
