@@ -45,7 +45,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						</td>
 						<td class="width-20">
 							<?php 
-								if($row->post_category_id == '0'){
+								if($row->post_category_id == 0){
 									echo anchor('member/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
 
 								}else{
