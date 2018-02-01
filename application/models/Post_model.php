@@ -4,6 +4,47 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 class Post_model extends CI_Model{
 
 	/**
+	* Delete multiple post
+	*/
+	public function deleteMultiplePost($id)
+	{
+		$this->db->where('post_random_id', array('post_random_id' => $id));
+		$this->db->delete('post'); 
+	}
+
+	/**
+	* Restore multiple post
+	*/
+	public function restoreMultiplePost($id)
+	{
+		 $this->db->where('post_random_id', $id);
+		 $this->db->set('post_trash', NULL);
+	     $this->db->update('post');
+	     return $this->db->affected_rows();
+	}
+
+	/**
+	* Restore single Post from trash list
+	*/
+	public function setRestore($random_id)
+	{
+		$this->db->where('post_random_id', $random_id);
+		$this->db->set('post_trash', NULL);
+		$this->db->update('post');
+	}
+
+	/**
+	* Trash multiple post
+	*/
+	public function trashMultiplePost($id)
+	{
+		 $this->db->where('post_id', $id);
+		 $this->db->set('post_trash', TRUE);
+	     $this->db->update('post');
+	     return $this->db->affected_rows();
+	}
+
+	/**
 	* Recent Post for admin
 	*/
 
@@ -55,15 +96,6 @@ class Post_model extends CI_Model{
 		return $query->row();
 	}
 
-	/**
-	* Restore Post for admin
-	*/
-	public function setRestore($random_id)
-	{
-		$this->db->where('post_random_id', $random_id);
-		$this->db->set('post_trash', NULL);
-		$this->db->update('post');
-	}
 
 	/**
 	* Trash Post admin
@@ -71,8 +103,8 @@ class Post_model extends CI_Model{
 	public function getTrash($limit, $start)
 	{
 		$this->db->limit($limit, $start);
-		$this->db->order_by('post_id', 'DESC');
 		$this->db->where('post_trash', TRUE);
+		$this->db->order_by('post_id', 'DESC');
 		$this->db->join('category', 'category_id = post_category_id', 'left');
 		$this->db->join('users', 'id = user_id', 'left');
 		$query = $this->db->get('post');	
@@ -104,7 +136,7 @@ class Post_model extends CI_Model{
 
 
 	/**
-	* Post
+	* Retrive all post where post_trash is NULL
 	*/
 	public function getAll($limit, $start)
 	{
