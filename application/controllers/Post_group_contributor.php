@@ -103,11 +103,13 @@ class Post_group_contributor extends CI_Controller{
 		$count_all = $this->member_model->countAll();
 		$count_mine      = $this->member_model->countMine($user->id);
 		$count_published = $this->member_model->countPublished();
+		$count_trash = $this->member_model->countTrash($user->id);
 
 		$data = array(
 			'count_all'       => $count_all,
 			'count_mine'      => $count_mine,
 			'count_published' => $count_published,
+			'count_trash'     => $count_trash,
 		);
 
 		$this->load->view('member/group_header', $data);
@@ -120,6 +122,69 @@ class Post_group_contributor extends CI_Controller{
 		$this->load->view('member/javascript');
 		$this->load->view('member/footer');
 	}
+
+
+	/*
+	* Group trash post
+	*/
+	public function trash()
+	{
+		$per_page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
+		$user = $this->ion_auth->user()->row();
+
+		$config = array(
+			'base_url'        =>     base_url('member/post-list/trash'),
+			'total_rows'      => 	 $this->member_model->countTrash($user->id),
+			'per_page'        =>     8,
+			'uri_segment'     =>     4,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+
+		$this->pagination->initialize($config);
+		$trash_data = $this->member_model->getTrash($config['per_page'], $per_page, $user->id);
+
+		if(! $trash_data){
+			$data = array(
+				'header'       => $this->header(),
+				'pills_header' => $this->pills_header(),
+				'item' 		   => $trash_data,
+				'pagination'   => $this->pagination->create_links(),
+				'javascript'   => $this->load->view('member/javascript', '', TRUE),
+				'footer'       => $this->load->view('member/footer', '', TRUE),
+			);
+
+			$this->parser->parse('member/group_trash', $data);
+		}else{
+			$data = array(
+				'header'       => $this->header(),
+				'pills_header' => $this->pills_header(),
+				'item' 		   => $trash_data,
+				'pagination'   => $this->pagination->create_links(),
+				'javascript'   => $this->load->view('member/javascript', '', TRUE),
+				'footer'       => $this->load->view('member/footer', '', TRUE),
+			);
+
+			$this->parser->parse('member/group_trash', $data);
+		}
+	}
+
 	// All
 	public function all()
 	{
@@ -128,7 +193,7 @@ class Post_group_contributor extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('member/post-list/all'),
 			'total_rows'      => 	 $this->member_model->countAll(),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -197,7 +262,7 @@ class Post_group_contributor extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('member/post-list/mine'),
 			'total_rows'      => 	 $this->member_model->countMine($user->id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -256,7 +321,7 @@ class Post_group_contributor extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('member/post-list/mine'),
 			'total_rows'      => 	 $this->member_model->countMine($user->id),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
