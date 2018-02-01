@@ -38,11 +38,11 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
-						<td>Title</td>
-						<td>Category</td>
-						<td>Tag</td>
-						<td>Created</td>
-						<td class="text-center">Action</td>
+						<th>Title</th>
+						<th>Category</th>
+						<th>Tag</th>
+						<th>Created</td>
+						<th class="text-center">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -125,11 +125,11 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 				</tbody>
 				<thead>
 					<tr>
-						<td>Title</td>
-						<td>Category</td>
-						<td>Tag</td>
-						<td>Created</td>
-						<td class="text-center">Action</td>
+						<th>Title</th>
+						<th>Category</th>
+						<th>Tag</th>
+						<th>Created</td>
+						<th class="text-center">Action</th>
 					</tr>
 				</thead>
 			</table>
