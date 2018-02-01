@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2018 at 01:32 PM
+-- Generation Time: Jan 27, 2018 at 08:58 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -178,7 +178,7 @@ INSERT INTO `post` (`post_id`, `post_random_id`, `post_title`, `post_content`, `
 (52, 'gGyVPpHvq39MWuhiJC80', 'Sixth post by member', '<p>sixth post by member<br></p>', 'sixth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:17:14', '', 1516263434, NULL, NULL, NULL, 10),
 (53, '6rGASvtNmu4I7VpMse1Y', 'Seventh post by member', '<p>seventh post by member<br></p>', 'seventh-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:17:29', '', 1516263449, NULL, NULL, NULL, 10),
 (54, 'srqOxC95flY4Gvta62c7', 'Eigth post by member', '<p>eigth post by member<br></p>', 'eigth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:17:43', '', 1516263463, NULL, NULL, NULL, 10),
-(56, 'Z8htf6A7VQgFuOpEUxjw', 'Tenth post by member', '<p>tenth post by member<br></p>', 'tenth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:18:37', '', 1516263517, NULL, NULL, NULL, 10),
+(56, 'Z8htf6A7VQgFuOpEUxjw', 'Tenth post by member', '<p>tenth post by member<br></p>', 'tenth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:18:37', '', 1516263517, NULL, NULL, 1, 10),
 (58, 'QEV5zDgHPK9m8y2XbSke', 'Twelvth post by member', '<p>twelvth post by member<br></p>', 'twelvth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:19:43', '', 1516263583, NULL, NULL, NULL, 10),
 (59, 'UemIiqhS6df1YsXkvozM', 'Thirtent post by member', '<p>thirtent post by member<br></p>', 'thirtent-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:20:04', '', 1516263604, NULL, NULL, NULL, 10),
 (60, 'sa0j9TO65xeKC2IzqAvY', 'Fourtenth post by member', '<p>fourtenth post by member<br></p>', 'fourtenth-post-by-member', 0, 'uncategorized', 1, '2018-01-18 08:20:27', '', 1516263627, NULL, NULL, NULL, 10),
@@ -187,14 +187,17 @@ INSERT INTO `post` (`post_id`, `post_random_id`, `post_title`, `post_content`, `
 (63, 'ynPqQjEIUKR1HN73OasV', 'Post with featured img and protected assets folder', 'Post with featured img and protected assets folder', 'post-with-featured-img-and-protected-assets-folder', 13, NULL, 1, '2018-01-24 07:10:39', '2131fd920bd31efa1b33629c32084542.jpg', 1516777839, NULL, '2018-01-24 07:10:50', NULL, 10),
 (69, 'xszpnVAvra4jbmcCyP9wBT2gRfl8Dq', 'Fifth post to trash', '<p>fifth post to trash<br></p>', 'fifth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:22:15', '', 1516886535, 1516886535, NULL, 1, 1),
 (71, 'H09sN34fGAOKhZD2Tpyx6lbPeBumvz', 'Seventh post to trash', '<p>seventh post to trash<br></p>', 'seventh-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:22:59', '', 1516886579, 1516886579, NULL, 1, 1),
-(74, 'lHnUoEsbfa37KeVthkDw2xRB6mL8Nr', 'Tenth post to trash', '<p>tenth post to trash<br></p>', 'tenth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:23:51', '', 1516886631, 1516886631, NULL, 1, 1),
-(75, 'n23vomyx1PRfJ8YVMaTU65I7KG9Et4', 'Eleventh post to trash', '<p>eleventh post to trash<br></p>', 'eleventh-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:24:00', '', 1516886640, 1516886640, NULL, NULL, 1),
+(74, 'lHnUoEsbfa37KeVthkDw2xRB6mL8Nr', 'Tenth post to trash', '<p>tenth post to trash<br></p>', 'tenth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:23:51', '', 1516886631, 1516886631, NULL, NULL, 1),
+(75, 'n23vomyx1PRfJ8YVMaTU65I7KG9Et4', 'Eleventh post to trash', '<p>eleventh post to trash<br></p>', 'eleventh-post-to-trash', 0, 'uncategorized', NULL, '2018-01-25 13:24:00', '', 1516886640, 1516886640, NULL, 1, 1),
 (76, 'SexQi8YyCZ1NvWdAGHUurBfaXPsJkT', 'Twelve post with trash', '<p>twelve post with trash<br></p>', 'twelve-post-with-trash', 0, 'uncategorized', NULL, '2018-01-26 06:34:12', '', 1516948452, 1516948452, NULL, 1, 1),
 (77, 'tcBl7ahXrwC63SxpmTMeJdU4OjsqF1', 'Thirtenth post to trash', '<p>thirtenth post to trash<br></p>', 'thirtenth-post-to-trash', 0, 'uncategorized', NULL, '2018-01-26 06:37:57', '', 1516948677, 1516948677, NULL, 1, 1),
 (78, 'o9OSt20bkF7WNLuKYn5yxjdBvgehGP', 'Fourthtent post to trash', '<p>fourthtent post to trash<br></p>', 'fourthtent-post-to-trash', 0, 'uncategorized', NULL, '2018-01-26 06:38:13', '', 1516948693, 1516948693, NULL, 1, 1),
 (79, 'PmTzRY2xpalSXI1rAGMDUZdcVEi7uh', 'Fifthtenth post to trash', 'Fifthtenth post to trash', 'fifthtenth-post-to-trash', NULL, 'uncategorized', 1, '2018-01-26 06:38:34', '', 1516948714, 1516948714, '2018-01-26 06:39:44', 1, 1),
 (80, '8CMwJPh9pjZF1WvocDykXz73AHSVtU', 'Sixthtent post to trash', '<p>sixthtent post to trash<br></p>', 'sixthtent-post-to-trash', 0, 'uncategorized', 1, '2018-01-26 06:45:01', '', 1516949101, 1516949101, NULL, 1, 1),
-(86, 'kX6YKQ81hcrsSnT3wNCBDf7l0eZHWv', 'Ninth post to delete permanently', '<p>ninth post to delete permanently<br></p>', 'ninth-post-to-delete-permanently', 0, 'uncategorized', 1, '2018-01-26 09:47:18', '', 1516960038, 1516960038, NULL, 1, 1);
+(86, 'kX6YKQ81hcrsSnT3wNCBDf7l0eZHWv', 'Ninth post to delete permanently', '<p>ninth post to delete permanently<br></p>', 'ninth-post-to-delete-permanently', 0, 'uncategorized', 1, '2018-01-26 09:47:18', '', 1516960038, 1516960038, NULL, 1, 1),
+(87, 'QauU2SCzefbXlrJ0HDdE19IZv57cqA', '1 multitple', '<p>1 multitple<br></p>', '1-multitple', 0, 'uncategorized', NULL, '2018-01-27 06:44:56', '', 1517035496, 1517035496, NULL, NULL, 1),
+(88, 'cNQR6Y3CKHEkfm7WgOPiUvjT4BFeaM', '2 multiple', '<p>2 multiple<br></p>', '2-multiple', 0, 'uncategorized', NULL, '2018-01-27 06:45:06', '', 1517035506, 1517035506, NULL, NULL, 1),
+(89, 'vkTpPEJg7hsm5LW1tZODyF0wY9dfeH', '3 multiple', '<p>3 multiple<br></p>', '3-multiple', 0, 'uncategorized', NULL, '2018-01-27 06:45:14', '', 1517035514, 1517035514, NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -358,7 +361,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, 'O6Bq9AxeYQ0JUrSBIbCwoO', 1268889823, 1516964639, 1, 'John', 'Cena', 'ADMIN', '0'),
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, 'O6Bq9AxeYQ0JUrSBIbCwoO', 1268889823, 1517033696, 1, 'John', 'Cena', 'ADMIN', '0'),
 (10, '::1', 'nobitanobi@gmail.com', '$2y$08$TYDKd28TkyhKl0unfA7I6u9DyoPFyx43CrC7wqRllqEbStx09rh6.', NULL, 'nobitanobi@gmail.com', NULL, NULL, NULL, NULL, 1514429082, 1516964605, 1, 'Nobita', 'Nobi', 'Doraemon', '');
 
 -- --------------------------------------------------------
@@ -504,7 +507,7 @@ ALTER TABLE `login_attempts`
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 --
 -- AUTO_INCREMENT for table `post_term`
 --
