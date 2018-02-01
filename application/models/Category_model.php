@@ -12,10 +12,10 @@ class Category_model extends CI_Model{
 	}
 
 
-
 	public function count_uncategorized()
 	{
 		$this->db->where('post_category_id', FALSE);
+		$this->db->where('post_trash', NULL);
 		$this->db->from('post');
 		return $this->db->count_all_results();
 	}
@@ -24,6 +24,7 @@ class Category_model extends CI_Model{
 	{
 		$this->db->limit($limit, $start);
 		$this->db->where('post_uncategorized_slug', $slug);
+		$this->db->where('post_trash', NULL);
 		$this->db->order_by('post_id', 'DESC');
 		$this->db->join('users', 'id = user_id', 'left');
 		$query = $this->db->get('post');	
@@ -41,6 +42,7 @@ class Category_model extends CI_Model{
 	public function count_categorized_item($id)
 	{
 		$this->db->where('post_category_id', $id);
+		$this->db->where('post_trash', NULL);
 		$this->db->from('post');
 		return $this->db->count_all_results();
 	}
@@ -56,15 +58,10 @@ class Category_model extends CI_Model{
 
 	public function categorized_post($limit, $start, $slug)
 	{	
-		// $this->db->where('category_slug', $slug);
-		// $this->db->order_by('post_id', 'DESC');
-		// $this->db->join('post','post_category_id = category_id', 'inner');
-		// $query = $this->db->get('category');
-		// return $query->result();
-
 		$this->db->limit($limit, $start);
 		$this->db->order_by('post_id', 'DESC');
 		$this->db->where('category_slug', $slug);
+		$this->db->where('post_trash', NULL);
 		$this->db->join('post','post_category_id = category_id', 'inner');
 		$query = $this->db->get('category');	
 
