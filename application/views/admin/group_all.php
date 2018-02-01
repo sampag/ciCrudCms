@@ -8,16 +8,16 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 			<table class="table table-bordered table-hovered table-striped">
 				<thead>
 					<tr>
-						<td>
+						<th>
 						<?php 
 						  	echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); 
 						?>
-						</td>
-						<td>Title</td>
-						<td>Categories</td>
-						<td>Tags</td>
-						<td>Authors</td>
-						<td>Created</td>
+						</th>
+						<th>Title</th>
+						<th>Categories</th>
+						<th>Tags</th>
+						<th>Authors</th>
+						<th>Created</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -88,16 +88,16 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 				</tbody>
 				<thead>
 					<tr>
-						<td>
+						<th>
 						<?php 
 						  	echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); 
 						?>
-						</td>
-						<td>Title</td>
-						<td>Categories</td>
-						<td>Tags</td>
-						<td>Authors</td>
-						<td>Created</td>
+						</th>
+						<th>Title</th>
+						<th>Categories</th>
+						<th>Tags</th>
+						<th>Authors</th>
+						<th>Created</th>
 					</tr>
 				</thead>
 			</table>
