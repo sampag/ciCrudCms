@@ -25,6 +25,9 @@ class Post_group_admin extends CI_Controller{
 		$this->load->view('admin/header');
 	}
 
+	/*
+	* Sub header for group post
+	*/
 	private function pills_header()
 	{	
 		$user            = $this->ion_auth->user()->row();
@@ -42,7 +45,68 @@ class Post_group_admin extends CI_Controller{
 
 		$this->load->view('admin/group_header', $data);
 	}
-	//=================================================//
+	/**
+	* Restore multiple post
+	*/
+	public function restore_multiple()
+	{
+		$group              = $this->uri->segment(3);
+		$page               = $this->uri->segment(4);
+		$restore            = $this->input->post('restore', TRUE);
+		$post               = $this->input->post('post', TRUE);
+
+		if($restore){
+			foreach($post as $id){
+				$this->post_model->restoreMultiplePost($id); // Restore handler
+			}
+
+			if(is_numeric($page)){
+				redirect('admin/post-list/'.$group.'/'.$page);
+			}else{
+				redirect('admin/post-list/'.$group);
+			}
+		}else{
+			if(is_numeric($page)){
+				redirect('admin/post-list/'.$group.'/'.$page);
+			}else{
+				redirect('admin/post-list/'.$group);
+			}
+		} // Restore
+	}
+
+	/*
+	* Trash multiple post function
+	*/
+	public function trash_multiple()
+	{
+		$id          = $this->input->post('post_trash');
+		$group       = $this->uri->segment(3);
+		$page        = $this->uri->segment(4);
+		$list        = $this->uri->segment(2);
+
+		if($this->input->post('postTrash')){
+			foreach($id as $i){
+				$this->post_model->trashMultiplePost($i);
+			}
+
+			if(is_numeric($page)){
+				redirect('admin/'.$list.'/'.$group.'/'.$page);
+				
+			}else{
+				redirect('admin/'.$list.'/'.$group);
+			}
+		}else{
+			if(is_numeric($page)){
+				redirect('admin/'.$list.'/'.$group.'/'.$page);
+			}else{
+				redirect('admin/'.$list.'/'.$group);
+			}
+		}
+	}
+
+	/*
+	* Group trash post
+	*/
 	public function trash()
 	{
 		$per_page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
@@ -79,7 +143,7 @@ class Post_group_admin extends CI_Controller{
 			$data = array(
 				'header'       => $this->header(),
 				'pills_header' => $this->pills_header(),
-				'item' 		   => $this->post_model->getAll($config['per_page'], $per_page),
+				'item' 		   => $trash_data,
 				'pagination'   => $this->pagination->create_links(),
 				'javascript'   => $this->load->view('admin/javascript', '', TRUE),
 				'footer'       => $this->load->view('admin/footer', '', TRUE),
@@ -100,14 +164,16 @@ class Post_group_admin extends CI_Controller{
 		}
 	}
 
-	//=================================================//
+	/*
+	* Group all post
+	*/
 
 	public function all()
 	{
 		$per_page = ( $this->uri->segment(4) ) ? $this->uri->segment(4): 0;
 
 		$config = array(
-			'base_url'        =>     base_url('admin/post-list/all/'),
+			'base_url'        =>     base_url('admin/post-list/all'),
 			'total_rows'      => 	 $this->post_model->countAll(),
 			'per_page'        =>     8,
 			'uri_segment'     =>     4,
@@ -159,7 +225,9 @@ class Post_group_admin extends CI_Controller{
 		}
 	}
 
-	//=================================================//
+	/*
+	* Group by users post
+	*/
 	public function mine()
 	{	
 
@@ -221,7 +289,9 @@ class Post_group_admin extends CI_Controller{
 		}
 	}
 
-	//=================================================//
+	/*
+	* Group published post
+	*/
 
 	public function published()
 	{
@@ -282,10 +352,7 @@ class Post_group_admin extends CI_Controller{
 		}
 	}
 
-	
-	//=================================================//
 
 
 
-
-}
+} // end of class
