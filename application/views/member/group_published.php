@@ -106,15 +106,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 								}
 							?>
 						</td>
-						<td class="text-center width-20">
-							<?php
-								if($row->user_id == $user_id){
-									echo anchor(uri_string().'/delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete'));
-								}else{
-									echo '-';
-								}
-							?>
-						</td>
 					</tr>
 					<?php }}else{ ?>
 					<tr>
