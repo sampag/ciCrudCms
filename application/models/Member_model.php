@@ -254,13 +254,40 @@ class Member_model extends CI_Model{
 		$this->db->delete('comment');
 	}
 
-	public function get_comment($user_id)
+	public function get_comment($limit, $start, $user_id)
 	{
-		$this->db->where('comment_user_id', $user_id);
+		$this->db->limit($limit, $start);
 		$this->db->order_by('comment_id','DESC');
 		$this->db->join('post', 'post_id = comment_post_id', 'left');
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->where('post_trash', NULL);
 		$query = $this->db->get('comment');
-		return $query->result();
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
+	}
+
+	public function comment_approved($comment_id, $user_id)
+	{
+		$this->db->where('comment_id', $comment_id);
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->set('comment_approved', TRUE);
+		$this->db->update('comment');
+	}
+
+	public function count_comment_for($user_id)
+	{
+		$this->db->from('comment');
+		$this->db->join('post', 'post_id = comment_post_id', 'left');
+		$this->db->where('post_trash', NULL);
+		$this->db->where('comment_user_id', $user_id);
+		return $this->db->count_all_results();
 	}
 
 	/*-------------------------------
