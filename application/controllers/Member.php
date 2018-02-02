@@ -28,10 +28,10 @@ class Member extends CI_Controller{
 		//===============
 		// Meters
 		//===============
-		$post_count = $this->member_model->count_post($user->id);
+		$post_count     = $this->member_model->count_post($user->id);
 		$category_count = $this->member_model->count_category();
-		$tag_count = $this->member_model->count_tag();
-		$comment_count = $this->member_model->count_comment($user->id);
+		$tag_count      = $this->member_model->count_tag();
+		$comment_count  = $this->member_model->count_comment($user->id);
 
 		// Comment meter
 		if($comment_count > 1){
@@ -397,11 +397,11 @@ class Member extends CI_Controller{
 				$data_count_comment = '<span class="badge badge-danger">'.$comment_count.'</span> Items';
 			}else{
 				$data_comment_header = heading('Comment', 4);
-				$count_post_comment = '<span class="badge badge-danger">'.$comment_count.'</span> Item';
+				$data_count_comment = '<span class="badge badge-danger">'.$comment_count.'</span> Item';
 			}
 		}else{
-			$data_comment_header = '';
-			$data_count_comment = '';
+			$data_comment_header = NULL;
+			$data_count_comment = NULL;
 		}
 
 
@@ -849,58 +849,66 @@ class Member extends CI_Controller{
 		$this->parser->parse('member/filter_tag', $data);
 	}
 
-	public function post_delete_none_paginated()
+	/*
+	* Delete permanently
+	*/
+	public function post_delete_permanently()
 	{	
-		$list       = $this->uri->segment(2);
-		$group      = $this->uri->segment(3);
-		$id         = $this->uri->segment(5);
-		$file_name  = $this->uri->segment(6);
+		// Users Identification
+		$user = $this->ion_auth->user()->row();
 
-		if($file_name){
-			 $this->delete_feat_img_file($file_name);
+		// URI Segments
+		$post_list       = $this->uri->segment(2);
+		$post_group      = $this->uri->segment(3);
+		$random_id       = $this->uri->segment(5);
+
+
+		// Retrieve single post
+		$post = $this->member_model->getSingle($random_id, $user->id);
+
+		if($post->post_featured_img){
+				 $this->delete_feat_img_file($post->post_featured_img);
 		}
 
-		$user        = $this->ion_auth->user()->row();
-		$delete_post = $this->member_model->delete_post($id, $user->id);
-		$this->post_term_model->delete_item($id);
-
+		$delete_post = $this->member_model->delete_post($random_id, $user->id);
+		$this->post_term_model->delete_item($post->post_id);
+		
 		if(! $delete_post){
-			redirect('member/'.$list.'/'.$group);	
+			redirect('member/'.$post_list.'/'.$post_group);	
+		}else{
+			redirect('member/'.$post_list.'/'.$post_group);	
 		}
-
-		redirect('member/'.$list.'/'.$group);	
 	}
 
-	public function post_delete_paginated()
+
+
+	public function post_delete_permanently_paginated()
 	{	
-		$list       = $this->uri->segment(2);
-		$group      = $this->uri->segment(3);
-		$pagination = $this->uri->segment(4);
+		// Users Identification
+		$user = $this->ion_auth->user()->row();
+
+		// URI Segments
+		$post_list       = $this->uri->segment(2);
+		$post_group      = $this->uri->segment(3);
+		$paginated       = $this->uri->segment(4);
+		$random_id       = $this->uri->segment(6);
+
+
+		// Retrieve single post
+		$post = $this->member_model->getSingle($random_id, $user->id);
+
+		if($post->post_featured_img){
+				 $this->delete_feat_img_file($post->post_featured_img);
+		}
+
+		$delete_post = $this->member_model->delete_post($random_id, $user->id);
+		$this->post_term_model->delete_item($post->post_id);
 		
-
-		if($pagination){
-			$id     = $this->uri->segment(6);
-			$page   = $this->uri->segment(4);
-			$file_name  = $this->uri->segment(7);
-		}else{
-			$id         = $this->uri->segment(5);
-			$file_name  = $this->uri->segment(6);
-			$page       = NULL;
-		}
-
-		if($file_name){
-			 $this->delete_feat_img_file($file_name);
-		}
-
-		$user        = $this->ion_auth->user()->row();
-		$delete_post = $this->member_model->delete_post($id, $user->id);
-		$this->post_term_model->delete_item($id);
-
 		if(! $delete_post){
-			redirect('member/'.$list.'/'.$group.'/'.$page);	
+			redirect('member/'.$post_list.'/'.$post_group.'/'.$paginated);	
+		}else{
+			redirect('member/'.$post_list.'/'.$post_group.'/'.$paginated);		
 		}
-
-		redirect('member/'.$list.'/'.$group.'/'.$page);	
 	}
 
 	private function delete_feat_img_file($file_name)
@@ -1297,5 +1305,6 @@ class Member extends CI_Controller{
 			}
 		}
 	}
+
 
 } // Member class

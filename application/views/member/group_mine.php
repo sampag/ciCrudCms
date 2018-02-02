@@ -3,6 +3,14 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 <div class="row">
 	<div class="col-md-12">
+		<ul class="list-unstyled list-inline select-all">
+			<li>
+				<label id ="checkall" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" >
+					<input type="checkbox" class="mdl-checkbox__input">
+					<span class="mdl-checkbox__label text-sm">Select all</span>
+				</label>
+			</li>
+		</ul>
 		<?php echo form_open(uri_string().'/trash-multi-post'); ?>
 		<div class="table-responsive">
 			<table class="table table-bordered table-striped">
@@ -17,7 +25,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<th>Categories</th>
 						<th>Tags</th>
 						<th>Created</th>
-						<th class="text-center">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -25,7 +32,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<?php foreach($item as $row){ ?>
 					<tr>
 						<td style="width:20px;">
-							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect text-center">
+							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check">
 								<input type="checkbox" name="post_trash[]" value="<?php echo $row->post_random_id; ?>" class="mdl-checkbox__input">
 							</label>
 						</td>
@@ -42,7 +49,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 								?>
 							</div>
 						</td>
-						<td class="list-category">
+						<td class="width-20">
 							<?php 
 								if($row->post_category_id == 0){
 									echo anchor('member/post/'.$row->post_uncategorized_slug, 'Uncategorized', array('class'=>'post-list'));
@@ -52,7 +59,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 								}
 							?>
 						</td>
-						<td class="list-tag">
+						<td class="width-20">
 							<?php
 								$id = $row->post_id;
 								$post_tag = $this->post_term_model->count_post_tag($id);
@@ -67,19 +74,10 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 							?>
 						</td>
-						<td class="list-category text-muted">
+						<td class="width-20 text-muted">
 							<?php 
 								if($row->post_published_created){
 									echo date('M d, Y', strtotime($row->post_published_created));
-								}
-							?>
-						</td>
-						<td class="text-center list-category">
-							<?php
-								if($row->user_id == $user_id){
-									echo anchor(uri_string().'/delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete'));
-								}else{
-									echo '-';
 								}
 							?>
 						</td>
@@ -101,7 +99,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<th>Categories</th>
 						<th>Tags</th>
 						<th>Created</th>
-						<th class="text-center">Action</th>
 					</tr>
 				</thead>
 			</table>

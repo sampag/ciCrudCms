@@ -3,6 +3,14 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 <div class="row">
 	<div class="col-md-12">
+		<ul class="list-unstyled list-inline select-all">
+			<li>
+				<label id ="checkall" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" >
+					<input type="checkbox" class="mdl-checkbox__input">
+					<span class="mdl-checkbox__label text-sm">Select all</span>
+				</label>
+			</li>
+		</ul>
 		<?php echo form_open(uri_string().'/trash-multi-post'); ?>
 		<div class="table-responsive">
 			<table class="table table-bordered table-striped">
@@ -16,8 +24,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<th>Title</th>
 						<th>Categories</th>
 						<th>Tags</th>
-						<th>Published</th>
-						<th class="text-center">Action</th>
+						<th>Created</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -26,7 +33,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<tr>
 						<td style="width:20px;">
 							<?php if($row->user_id == $user_id){ ?>
-							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect text-center">
+							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check">
 								<input type="checkbox" name="post_trash[]" value="<?php echo $row->post_random_id; ?>" class="mdl-checkbox__input">
 							</label>
 							<?php } ?>
@@ -103,15 +110,6 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 								}
 							?>
 						</td>
-						<td class="width-20 text-center">
-							<?php
-								if($row->user_id == $user_id){
-									echo anchor(uri_string().'/delete/'.$row->post_id.'/'.$row->post_featured_img, '<i class="fa fa-fw fa-trash"></i>', array('class'=>'po-link', 'title' => 'Delete'));
-								}else{
-									echo '-';
-								}
-							?>
-						</td>
 					</tr>
 					<?php }}else{ ?>
 					<tr>
@@ -129,8 +127,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<th>Title</th>
 						<th>Categories</th>
 						<th>Tags</th>
-						<th>Published</th>
-						<th class="text-center">Action</th>
+						<th>Created</th>
 					</tr>
 				</thead>
 			</table>

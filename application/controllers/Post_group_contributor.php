@@ -370,7 +370,7 @@ class Post_group_contributor extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('member/post-list/published'),
 			'total_rows'      => 	 $this->member_model->countPublished(),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,
@@ -430,7 +430,7 @@ class Post_group_contributor extends CI_Controller{
 		$config = array(
 			'base_url'        =>     base_url('member/post-list/published'),
 			'total_rows'      => 	 $this->member_model->countPublished(),
-			'per_page'        =>     $this->settings_model->pagination(),
+			'per_page'        =>     8,
 			'uri_segment'     =>     4,
 			'last_link'       =>     false,
 			'first_link'      =>     false,

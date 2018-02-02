@@ -3,6 +3,14 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 ?>
 <div class="row">
 	<div class="col-md-12">
+		<ul class="list-unstyled list-inline select-all">
+			<li>
+				<label id ="checkall" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" >
+					<input type="checkbox" class="mdl-checkbox__input">
+					<span class="mdl-checkbox__label text-sm">Select all</span>
+				</label>
+			</li>
+		</ul>
 		<?php echo form_open(uri_string().'/trash-multi-post'); ?>
 		<div class="table-responsive">
 			<table class="table table-bordered table-hovered table-striped">
@@ -26,7 +34,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 					<?php foreach($item as $row){ ?>
 					<tr>
 						<td style="width:20px;">
-							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect text-center">
+							<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect check">
 								<input type="checkbox" name="post_trash[]" value="<?php echo $row->post_id; ?>" class="mdl-checkbox__input">
 							</label>
 						</td>
@@ -117,7 +125,12 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 		<?php
 		$val = 'zxc';
 		echo gettype($val);
-		
+
+		//$key = $this->encryption->create_key(16);
+		// Get a hex-encoded representation of the key:
+		echo br(1);
+		$key = bin2hex($this->encryption->create_key(16));
+		echo $key;
 		?>
 	</div>
 </div>

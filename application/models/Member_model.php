@@ -340,10 +340,21 @@ class Member_model extends CI_Model{
 	//==========================
 	// Post
 	//==========================
-	public function delete_post($id, $user_id)
+	public function getSingle($random_id, $user_id)
 	{
-		$this->db->where('post_id', $id);
+		$this->db->select('post_id, post_featured_img');
+		$this->db->from('post');
+		$this->db->where('post_random_id', $random_id);
 		$this->db->where('user_id', $user_id);
+		$query = $this->db->get();
+		return $query->row();
+	}
+
+	public function delete_post($random_id, $user_id)
+	{
+		$this->db->where('post_random_id', $random_id);
+		$this->db->where('user_id', $user_id);
+		$this->db->where('post_trash', TRUE);
 		$this->db->delete('post');
 	}
 
@@ -409,6 +420,7 @@ class Member_model extends CI_Model{
 	public function count_post($user_id)
 	{
 		$this->db->where('user_id', $user_id);
+		$this->db->where('post_trash', NULL);
 		$this->db->from('post');
 		return $this->db->count_all_results();
 	}

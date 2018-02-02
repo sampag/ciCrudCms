@@ -216,6 +216,9 @@ echo doctype('html5');
         .width-20{
             width: 20%;
         }
+        .select-all{
+            padding-left: 9px;
+        }
     </style>
 </head>
 <body>
