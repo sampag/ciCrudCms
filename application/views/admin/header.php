@@ -219,6 +219,9 @@ echo doctype('html5');
         .select-all{
             padding-left: 9px;
         }
+        .text-flat-success{
+            color: #37c55e;
+        }
     </style>
 </head>
 <body>
