@@ -92,7 +92,6 @@ color: #c5c0c0;
 .btn-flat-primary{
   color: #fff;
   background-color: #4fa5ef;
-  border-color: #4fa5ef;
   border-radius: 2px;
   font-size: 13px;
 } 
@@ -100,13 +99,11 @@ color: #c5c0c0;
 .btn-flat-primary:hover{
   color: #fff;
   background-color: #3f9bea;
-  border-color: #3f9bea;
 }
 
 .btn-flat-primary:focus{
     color: #fff;
     background-color: #3fccf5;
-    border-color: #6ad3f1;
     border-radius: 2px;
 } 
 
