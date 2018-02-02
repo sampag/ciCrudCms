@@ -762,15 +762,89 @@ class Member extends CI_Controller{
 		$this->parser->parse('member/filter_categorized', $data);
 	}
 
+	public function post_comment_approved($comment_id)
+	{	
+		$user       = $this->ion_auth->user()->row();
+		$comment_id = $this->uri->segment(4); // 23
+		$group      = $this->uri->segment(2); // comment
+
+		$approve = $this->member_model->comment_approved($comment_id, $user->id);
+
+		if($approve){
+			redirect('member/'.$group);
+		}else{
+			redirect('member/'.$group);
+		}
+	}
+
+	public function post_comment_approved_paginated($comment_id)
+	{	
+		$user       = $this->ion_auth->user()->row();
+		$comment_id = $this->uri->segment(5); // Ex. member/comment/comment-approved/23/
+		$page       = $this->uri->segment(3); // Ex. member/comment/7/
+		$group      = $this->uri->segment(2); // Ex. member/comment/
+
+
+		$approve = $this->member_model->comment_approved($comment_id, $user->id);
+
+		if($approve){
+			redirect('member/'.$group.'/'.$page);
+		}else{
+			redirect('member/'.$group.'/'.$page);
+		}
+	}
+
 
 	public function post_comment()
 	{	
+		$per_page = ( $this->uri->segment(3) ) ? $this->uri->segment(3): 0;
 		$user = $this->ion_auth->user()->row();
-		$comment = $this->member_model->get_comment($user->id);
+		$count = $this->member_model->count_comment_for($user->id);
+
+		$config = array(
+			'base_url'        =>     base_url('member/comment'),
+			'total_rows'      => 	 $count,
+			'per_page'        =>     6,
+			'uri_segment'     =>     3,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+
+		$this->pagination->initialize($config);
+		$comment = $this->member_model->get_comment($config['per_page'], $per_page, $user->id);
+
+		if(! $comment){
+			return $this->error_page();
+		}
+
+
+		if($count > 1){
+			$item_count = '<span class="badge badge-danger">'.$this->member_model->count_comment_for($user->id).'</span> Items';
+		}else{
+			$item_count = '<span class="badge badge-danger">'.$this->member_model->count_comment_for($user->id).'</span> Item';
+		}
 
 		$data = array(
 			'header' => $this->header(),
 			'comments' => $comment,
+			'pagination'   => $this->pagination->create_links(),
+			'count'    => $item_count,
 			'javascript' => $this->load->view('member/javascript','', TRUE),
 			'footer' => $this->load->view('member/footer','', TRUE),
 		);
