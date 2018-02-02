@@ -2,25 +2,25 @@
 defined('BASEPATH')OR exit('No direct script access allowed');
 
 if($this->uri->segment(3) == 'all'){
-	$active_all = 'btn-primary';
+	$active_all = 'btn-flat-primary';
 }else{
 	$active_all = NULL;
 }
 
 if($this->uri->segment(3) == 'mine'){
-	$active_mine = 'btn-primary';
+	$active_mine = 'btn-flat-primary';
 }else{
 	$active_mine = NULL;
 }
 
 if($this->uri->segment(3) == 'published'){
-	$active_published = 'btn-primary';
+	$active_published = 'btn-flat-primary';
 }else{
 	$active_published = NULL;
 }
 
 if($this->uri->segment(3) == 'trash'){
-	$active_trash = 'btn-primary';
+	$active_trash = 'btn-flat-primary';
 }else{
 	$active_trash = NULL;
 }
@@ -28,7 +28,7 @@ if($this->uri->segment(3) == 'trash'){
 ?>
 <div class="row top-15">
 	<div class="col-md-8">
-		<?php echo anchor('admin/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add New', array('class' => 'btn btn-primary btn-sm')); ?>
+		<?php echo anchor('admin/post', '<i class="fa fa-plus-circle" aria-hidden="true"></i> Add New', array('class' => 'btn btn-flat-primary btn-sm')); ?>
 	</div>
 	<div class="col-md-4">
 		<?php echo form_open('search-posts', array('class' => 'form-inline pull-right')); ?>
