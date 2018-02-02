@@ -40,3 +40,36 @@ $(function(){
 });
 </script>
 <?php } ?>
+<?php if($this->uri->segment(2) == 'comment'){ ?>
+<script type="text/javascript">
+$(function(){
+	$("#checkall input").change(function() {
+		var listElements = document.querySelectorAll('.check');
+
+		for(var i=0, n=listElements.length; i<n; i++){
+			var element = listElements[i];
+
+			if($('#checkall input').is(":checked")) {
+				element.MaterialCheckbox.check();
+	  	}
+		  else {
+				element.MaterialCheckbox.uncheck();
+		  }
+		}
+	});
+
+	$('.check').change(function(){
+		var listElements = document.querySelectorAll('.check');
+
+		for(var i=0, n=listElements.length; i<n; i++){
+			var element = listElements[i];
+			if($('.check input:checked').length == $('.check input').length ) {
+				document.querySelector('#checkall').MaterialCheckbox.check();
+			}else{
+				document.querySelector('#checkall').MaterialCheckbox.uncheck();
+			}
+		}
+	});
+});
+</script>
+<?php } ?>
