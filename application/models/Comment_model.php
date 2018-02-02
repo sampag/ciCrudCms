@@ -32,11 +32,30 @@ class Comment_model extends CI_Model{
 	}
 
 	// Retrieve all rows in the table.
-	public function get_all()
+	public function get_all($limit, $start)
 	{	
+		$this->db->limit($limit, $start);
 		$this->db->join('post', 'post_id = comment_post_id', 'left');
+		$this->db->where('post_trash', NULL);
+		$this->db->order_by('comment_id', 'DESC');
 		$query = $this->db->get('comment');
-		return $query->result();
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
+	}
+
+	public function count_admin_comment()
+	{	
+		$this->db->from('comment');
+		$this->db->join('post', 'post_id = comment_post_id', 'left');
+		$this->db->where('post_trash', NULL);
+		return $this->db->count_all_results();
 	}
 
 
