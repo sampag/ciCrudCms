@@ -168,9 +168,10 @@ $route['search-tag-result/(:any)'] = 'tag/tag_search_result/$match';
 * Comment route
 */
 $route['admin/comment'] = 'comment/index';
-$route['admin/comment-approved/(:num)'] = 'comment/comment_approved/$id';
+$route['admin/comment/(:num)'] = 'comment/index/$per_page';
+$route['admin/comment/comment-approved/(:num)'] = 'comment/comment_approved/$id';
+$route['admin/comment/(:num)/comment-approved/(:num)'] = 'comment/comment_approved_paginated/$comment_id';
 $route['admin/comment-delete/(:num)'] = 'comment/comment_delete/$id';
-
 /**
 * settings route
 */
@@ -197,7 +198,12 @@ $route['member/post-tag/(:any)'] = 'member/post_filter_tag/$slug';
 $route['member/post-tag/(:any)/(:num)'] = 'member/post_filter_tag/$slug/$page';
 $route['member/post/(:any)'] = 'member/post_filter_uncategorized/$slug';
 $route['member/post/(:any)/(:num)'] = 'member/post_filter_uncategorized/$slug/$page';
+
 $route['member/comment'] = 'member/post_comment';
+$route['member/comment/(:num)'] = 'member/post_comment/$per_page';
+$route['member/comment/comment-approved/(:num)'] = 'member/post_comment_approved/$id';
+$route['member/comment/(:num)/comment-approved/(:num)'] = 'member/post_comment_approved_paginated/$id';
+
 $route['member/comment-delete/(:num)'] = 'member/delete_comment/$id';
 $route['member/profile'] = 'member/author_profile';
 $route['member/profile-update'] = 'member/author_profile_update';
