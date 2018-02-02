@@ -14,12 +14,53 @@ class Comment extends CI_Controller{
 		}
 	}
 
+	private function error_page()
+	{
+		$this->load->view('admin/header');
+		$this->load->view('admin/error');
+		$this->load->view('admin/javascript');
+		$this->load->view('admin/footer');
+	}
+
 	public function index()
 	{
-		
-			$comment_count = $this->db->count_all('comment');
+			$per_page = ( $this->uri->segment(3) ) ? $this->uri->segment(3): 0;
+			$comment_count = $this->comment_model->count_admin_comment();
+
+			$config = array(
+				'base_url'        =>     base_url('admin/comment'),
+				'total_rows'      => 	 $comment_count,
+				'per_page'        =>     6,
+				'uri_segment'     =>     3,
+				'last_link'       =>     false,
+				'first_link'      =>     false,
+				'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+				'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+				'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+				'full_tag_close'  =>     '</ul>',
+				'first_tag_open'  =>     '<li>',
+				'first_tag_close' =>   	 '</li>',
+				'last_tag_open'   =>     '<li>',
+				'last_tag_close'  =>     '</li>',
+				'next_tag_open'   =>     '<li>',
+				'next_tag_close'  =>     '</li>',
+				'prev_tag_open'   =>     '<li>',
+				'prev_tag_close'  =>     '</li>',
+				'cur_tag_open'    =>     '<li class="active"><span>',
+				'cur_tag_close'   =>     '</span></li>',
+				'num_tag_open'    =>     '<li>',
+				'num_tag_close'   =>     '</li>',
+			);
+
+			$this->pagination->initialize($config);
+			$comment_item = $this->comment_model->get_all($config['per_page'], $per_page);
+
+			if(! $comment_item){
+				return $this->error_page();
+			}
+
 			if($comment_count > 1){
-				$comment = heading('Comments', 4);
+				$comment = heading('Comment', 4);
 				$count = '<span class="badge badge-danger">'.$comment_count.'</span> Items';
 			}else{
 				$comment = heading('Comment', 4);
@@ -29,9 +70,10 @@ class Comment extends CI_Controller{
 			$data = array(
 				'header' => $this->load->view('admin/header','', TRUE),
 				'javascript' => $this->load->view('admin/javascript','', TRUE),
-				'comments' => $this->comment_model->get_all(),
+				'comments' => $comment_item,
 				'comment' => $comment,
 				'count' => $count,
+				'pagination'   => $this->pagination->create_links(),
 				'footer' => $this->load->view('admin/footer','', TRUE),
 			);
 
@@ -48,20 +90,45 @@ class Comment extends CI_Controller{
 		
 	}
 
-	public function comment_approved($id)
+	public function comment_approved($comment_id)
 	{
-		
+		$comment_id = $this->uri->segment(4);
+		$group      = $this->uri->segment(2);
 
-			$id = $this->uri->segment(3);
+		$status = array(
+			'comment_approved' => TRUE,
+		);
 
-			$status = array(
-				'comment_approved' => TRUE,
-			);
+		$approved = $this->comment_model->approved($comment_id, $status);
 
-			$this->comment_model->approved($id, $status);
+		if($approved){
+			$this->comment_model->approved($comment_id, $status);
+			redirect('admin/'.$group);
+		}else{
+			redirect('admin/'.$group);
+		}
 
-			redirect('admin/comment');
+	}
 
+	public function comment_approved_paginated($comment_id)
+	{
+		$comment_id    = $this->uri->segment(5);
+		$group         = $this->uri->segment(2);
+		$page          = $this->uri->segment(3);
+
+		$status = array(
+			'comment_approved' => TRUE,
+		);
+
+		$approved =	$this->comment_model->approved($comment_id, $status);
+
+		if($approved){
+			$this->comment_model->approved($comment_id, $status);
+
+			redirect('admin/'.$group.'/'.$page);
+		}else{
+			redirect('admin/'.$group.'/'.$page);
+		}
 		
 	}
 
