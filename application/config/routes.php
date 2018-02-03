@@ -169,9 +169,26 @@ $route['search-tag-result/(:any)'] = 'tag/tag_search_result/$match';
 */
 $route['admin/comment'] = 'comment/index';
 $route['admin/comment/(:num)'] = 'comment/index/$per_page';
+$route['admin/comment-trash'] = 'comment/trash';
+$route['admin/comment-trash/(:num)'] = 'comment/trash';
+
+// Restore multiple comment
+$route['admin/comment-trash/restore-multiple'] = 'comment/comment_restore_multiple';
+//Restore single comment
+$route['admin/comment-trash/comment-restore/(:num)'] = 'comment/comment_restore/$id';
+// Approve single comment
 $route['admin/comment/comment-approved/(:num)'] = 'comment/comment_approved/$id';
 $route['admin/comment/(:num)/comment-approved/(:num)'] = 'comment/comment_approved_paginated/$comment_id';
-$route['admin/comment-delete/(:num)'] = 'comment/comment_delete/$id';
+// Unapproved single comment
+$route['admin/comment/comment-unapproved/(:num)'] = 'comment/comment_unapproved/$id';
+$route['admin/comment/(:num)/comment-unapproved/(:num)'] = 'comment/comment_unapproved_paginated/$id';
+// Trash single comment
+$route['admin/comment/comment-trash/(:num)'] = 'comment/comment_trash';
+$route['admin/comment/(:num)/comment-trash/(:num)'] = 'comment/comment_trash_paginated';
+// Trash multiple comment
+$route['admin/comment/trash-multiple'] = 'comment/comment_trash_multiple';
+
+
 /**
 * settings route
 */
