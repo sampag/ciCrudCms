@@ -829,9 +829,7 @@ class Member extends CI_Controller{
 		$this->pagination->initialize($config);
 		$comment = $this->member_model->get_comment($config['per_page'], $per_page, $user->id);
 
-		if(! $comment){
-			return $this->error_page();
-		}
+		
 
 
 		if($count > 1){
@@ -1236,17 +1234,17 @@ class Member extends CI_Controller{
 		}
 
 		$data = array(
-				'header'       => $this->header(),
-				'group_header' => $this->load->view('member/group_header','', TRUE),
-				'posts'        => $search_result,
-				'match'        => $search_match,
-				'count'        => $search_count,
-				'pagination'   => $this->pagination->create_links(),
-				'javascript'   => $this->load->view('member/javascript','', TRUE),
-				'footer'       => $this->load->view('member/footer','', TRUE)
-			);
+			'header'       => $this->header(),
+			'group_header' => $this->load->view('member/group_header','', TRUE),
+			'posts'        => $search_result,
+			'match'        => $search_match,
+			'count'        => $search_count,
+			'pagination'   => $this->pagination->create_links(),
+			'javascript'   => $this->load->view('member/javascript','', TRUE),
+			'footer'       => $this->load->view('member/footer','', TRUE)
+		);
 
-			$this->parser->parse('member/post_search', $data);
+		$this->parser->parse('member/post_search', $data);
 	}
 
 	/*
@@ -1380,5 +1378,193 @@ class Member extends CI_Controller{
 		}
 	}
 
+
+	public function comment_trash()
+	{	
+		$page = ( $this->uri->segment(3) ) ? $this->uri->segment(3): 0;
+		$user = $this->ion_auth->user()->row();
+		$trash_count = $this->member_model->count_trash_comment($user->id);
+
+		$config = array(
+			'base_url'        =>     base_url('member/comment-trash'),
+			'total_rows'      => 	 $trash_count,
+			'per_page'        =>     6,
+			'uri_segment'     =>     3,
+			'last_link'       =>     false,
+			'first_link'      =>     false,
+			'prev_link'       =>     '<span aria-hidden="true">&laquo;</span>',
+			'next_link'       =>     '<span aria-hidden="true">&raquo;</span>',
+			'full_tag_open'   =>     '<ul class="pagination pagination-sm">',
+			'full_tag_close'  =>     '</ul>',
+			'first_tag_open'  =>     '<li>',
+			'first_tag_close' =>   	 '</li>',
+			'last_tag_open'   =>     '<li>',
+			'last_tag_close'  =>     '</li>',
+			'next_tag_open'   =>     '<li>',
+			'next_tag_close'  =>     '</li>',
+			'prev_tag_open'   =>     '<li>',
+			'prev_tag_close'  =>     '</li>',
+			'cur_tag_open'    =>     '<li class="active"><span>',
+			'cur_tag_close'   =>     '</span></li>',
+			'num_tag_open'    =>     '<li>',
+			'num_tag_close'   =>     '</li>',
+		);
+		$this->pagination->initialize($config);
+		$trash_comments = $this->member_model->get_trash_comment($config['per_page'], $page, $user->id);
+
+		if($trash_count > 1){
+			$count = '<span class="badge badge-danger">'.$this->member_model->count_trash_comment($user->id).'</span> Items';
+		}else{
+			$count = '<span class="badge badge-danger">'.$this->member_model->count_trash_comment($user->id).'</span> Item';
+		}
+
+		$data = array(
+			'header'       => $this->header(),
+			'comments'     => $trash_comments,
+			'count'        => $count,
+			'pagination'   => $this->pagination->create_links(),
+			'javascript'   => $this->load->view('member/javascript','', TRUE),
+			'footer'       => $this->load->view('member/footer','', TRUE)
+		);
+
+		$this->parser->parse('member/comment_trash', $data);
+	}
+
+
+	/*
+	* Restore single comment of member user
+	*/
+	public function comment_restore()
+	{	
+		$id    = $this->uri->segment(4);
+		$group = $this->uri->segment(2);
+		$user  = $this->ion_auth->user()->row();
+
+		$restore = $this->member_model->comment_restore($id, $user->id);
+
+		if($restore){
+			$this->member_model->comment_restore($id, $user->id);
+			redirect('member/'. $group);
+		}else{
+			redirect('member/'. $group);
+		}
+	}
+
+	public function comment_restore_paginated()
+	{	
+		$id        = $this->uri->segment(5);
+		$group     = $this->uri->segment(2);
+		$page      = $this->uri->segment(3);
+		$user      = $this->ion_auth->user()->row();
+
+		$restore = $this->member_model->comment_restore($id, $user->id);
+		$trash_count = $this->member_model->count_trash_comment($user->id);
+
+		if($restore){
+			$this->member_model->comment_restore($id, $user->id);
+
+			if($trash_count <= 6){
+				redirect('member/'. $group);
+			}else{
+				redirect('member/'. $group.'/'.$page);
+			}
+			
+		}else{
+			if($trash_count <= 6){
+				redirect('member/'. $group);
+			}else{
+				redirect('member/'. $group.'/'.$page);
+			}
+		}
+	}
+
+	/*
+	* Restore multiple trash for member
+	*/
+	public function comment_restore_multiple()
+	{
+		$restore = $this->input->post('comment_restore', TRUE);
+		$group   = $this->uri->segment(2);
+		$user    = $this->ion_auth->user()->row();
+
+		if($this->input->post('commentRestore')){
+			foreach($restore as $id){
+				$this->member_model->restore_multiple_comment($id, $user->id);
+			}
+
+			redirect('member/'.$group);
+		}else{
+			redirect('member/'.$group);
+		}
+	}
+
+
+	// Paginated
+	public function comment_restore_multiple_paginated()
+	{
+		$restore = $this->input->post('comment_restore', TRUE);
+		$group   = $this->uri->segment(2);
+		$page    = $this->uri->segment(3);
+
+		$user        = $this->ion_auth->user()->row();
+		$trash_count = $this->member_model->count_trash_comment($user->id);
+
+		if($this->input->post('commentRestore')){
+			foreach($restore as $id){
+				$this->member_model->restore_multiple_comment($id, $user->id);
+			}
+
+			if($trash_count <= 7){
+				redirect('member/'.$group);
+			}else{
+				redirect('member/'.$group.'/'.$page);
+			}	
+		}else{
+			if($trash_count <= 7){
+				redirect('member/'.$group);
+			}else{
+				redirect('member/'.$group.'/'.$page);
+			}
+		}
+	}
+
+	/*
+	* Trash single comment for member
+	*/
+	public function trash_comment($comment_id)
+	{
+		$comment_id = $this->uri->segment(4);
+		$group      = $this->uri->segment(2);
+		$user       = $this->ion_auth->user()->row();
+
+		$trash_comment = $this->member_model->set_trash($comment_id, $user->id);
+
+		if($trash_comment){
+			$this->member_model->set_trash($comment_id, $user->id);
+			redirect('member/'.$group);
+		}else{
+			redirect('member/'.$group);
+		}
+	}
+
+	/*
+	* Trash multiple comment for member users
+	*/
+	public function trash_multiple_comment()
+	{
+		$trash  = $this->input->post('comment_trash');
+		$group  = $this->uri->segment(2);
+		$user   = $this->ion_auth->user()->row();
+
+		if($this->input->post('commentTrash')){
+			foreach($trash as $id){
+				$this->member_model->set_trash_multiple($id, $user->id);
+			}
+
+			redirect('member/'.$group);
+		}else{
+			redirect('member/'.$group);
+		}
+	}
 
 } // Member class
