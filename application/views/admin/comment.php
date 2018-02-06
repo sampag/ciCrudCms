@@ -90,8 +90,12 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 				</tr>
 				<?php
 				     endforeach; 
-				    } 
-				 ?>
+				    }else{ 
+				?>
+				<tr>
+					<td colspan="2">No item found!</td>
+				</tr>
+				<?php } ?>
 			</tbody>
 			<thead>
 				<tr>
