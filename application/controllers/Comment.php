@@ -67,7 +67,18 @@ class Comment extends CI_Controller{
 			}
 
 			if(! $comment_item){
-				return $this->error_page();
+				$data = array(
+					'header' => $this->load->view('admin/header','', TRUE),
+					'comment_header' => $this->load->view('admin/comment_header','', TRUE),
+					'comments' => $comment_item,
+					'comment' => $comment,
+					'count' => $count,
+					'pagination'   => $this->pagination->create_links(),
+					'javascript' => $this->load->view('admin/javascript','', TRUE),
+					'footer' => $this->load->view('admin/footer','', TRUE),
+				);
+
+				$this->parser->parse('admin/comment', $data);
 			}
 
 			$data = array(
@@ -153,6 +164,32 @@ class Comment extends CI_Controller{
 			redirect('admin/'.$group);
 		}else{
 			redirect('admin/'.$group);
+		}
+	}
+
+	public function comment_restore_multiple_paginated()
+	{
+		$restore = $this->input->post('comment_restore', TRUE);
+		$group   = $this->uri->segment(2);
+		$page    = $this->uri->segment(3);
+
+		if($this->input->post('commentRestore')){
+			foreach($restore as $id){
+				$this->comment_model->restore_multiple($id);
+			}
+
+			if($this->comment_model->count_trash() <= 6){
+				redirect('admin/'.$group);
+			}else{
+				redirect('admin/'.$group.'/'.$page);
+			}
+
+		}else{
+			if($this->comment_model->count_trash() <= 6){
+				redirect('admin/'.$group);
+			}else{
+				redirect('admin/'.$group.'/'.$page);
+			}
 		}
 	}
 
@@ -274,6 +311,32 @@ class Comment extends CI_Controller{
 		}
 	}
 
+	public function comment_trash_multiple_paginated()
+	{
+		$trash = $this->input->post('comment_trash', TRUE);
+		$group = $this->uri->segment(2);
+		$page  = $this->uri->segment(3);
+
+		if($this->input->post('commentTrash')){
+			foreach($trash as $id){
+				$this->comment_model->trash_multiple_comment($id);
+			}
+
+			if($this->comment_model->count_admin_comment() <= 6){
+				redirect('admin/'.$group);
+			}else{
+				redirect('admin/'.$group.'/'.$page);
+			}
+
+		}else{
+			if($this->comment_model->count_admin_comment() <= 6){
+				redirect('admin/'.$group);
+			}else{
+				redirect('admin/'.$group.'/'.$page);
+			}
+		}
+	}
+
 	/**
 	* Trash single comment
 	*/
@@ -303,9 +366,18 @@ class Comment extends CI_Controller{
 
 		if($trash){
 			$this->comment_model->trash_comment($comment_id);
-			redirect('admin/' .$group. '/' .$page);
+
+			if($this->comment_model->count_admin_comment() <= 6){
+				redirect('admin/' .$group);
+			}else{
+				redirect('admin/' .$group. '/' .$page);
+			}
 		}else{
-			redirect('admin/' .$group. '/' .$page);
+			if($this->comment_model->count_admin_comment() <= 6){
+				redirect('admin/' .$group);
+			}else{
+				redirect('admin/' .$group. '/' .$page);
+			}
 		}	
 
 	}
