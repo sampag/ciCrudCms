@@ -174,6 +174,7 @@ $route['admin/comment-trash/(:num)'] = 'comment/trash';
 
 // Restore multiple comment
 $route['admin/comment-trash/restore-multiple'] = 'comment/comment_restore_multiple';
+$route['admin/comment-trash/(:num)/restore-multiple'] = 'comment/comment_restore_multiple_paginated';
 //Restore single comment
 $route['admin/comment-trash/comment-restore/(:num)'] = 'comment/comment_restore/$id';
 // Approve single comment
@@ -187,6 +188,7 @@ $route['admin/comment/comment-trash/(:num)'] = 'comment/comment_trash';
 $route['admin/comment/(:num)/comment-trash/(:num)'] = 'comment/comment_trash_paginated';
 // Trash multiple comment
 $route['admin/comment/trash-multiple'] = 'comment/comment_trash_multiple';
+$route['admin/comment/(:num)/trash-multiple'] = 'comment/comment_trash_multiple_paginated';
 
 
 /**
@@ -261,6 +263,24 @@ $route['member/(:any)/(:any)/(:num)/trash-multi-post'] = 'member/trash_multiple'
 // Delete Permanently
 $route['member/post-list/trash/delete-permanently/(:any)'] = 'member/post_delete_permanently'; 
 $route['member/post-list/trash/(:num)/delete-permanently/(:any)'] = 'member/post_delete_permanently_paginated'; 
+
+// Trash list
+$route['member/comment-trash'] = 'member/comment_trash';
+$route['member/comment-trash/(:num)'] = 'member/comment_trash';
+
+// Restore single comment for member
+$route['member/comment-trash/comment-restore/(:num)'] = 'member/comment_restore'; // None paginated
+$route['member/comment-trash/(:num)/comment-restore/(:num)'] = 'member/comment_restore_paginated'; // Paginated
+
+// Restore multiple comment for member
+$route['member/comment-trash/restore-multiple'] = 'member/comment_restore_multiple';
+$route['member/comment-trash/(:num)/restore-multiple'] = 'member/comment_restore_multiple_paginated';
+
+// Trash single comment for member 
+$route['member/comment/trash-comment/(:num)'] = 'member/trash_comment/$comment_id';
+
+// Trash multiple comment for member
+$route['member/comment/trash-multiple'] = 'member/trash_multiple_comment';
 
 /**
 *Public
