@@ -3,6 +3,85 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 class Member_model extends CI_Model{
 
+	/*
+	* Trash multiple comment for member users
+	*/
+	public function set_trash_multiple($comment_id, $user_id)
+	{
+		$this->db->where('comment_id', $comment_id);
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->set('comment_trash', TRUE);
+		$this->db->update('comment');
+		 return $this->db->affected_rows();
+	}
+
+	/*
+	* Trash single comment for member user
+	*/
+	public function set_trash($comment_id, $user_id)
+	{
+		$this->db->where('comment_id', $comment_id);
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->set('comment_trash', TRUE);
+		$this->db->update('comment');
+	}
+
+	/*
+	* Restore multiple comment for member user
+	*/
+	public function restore_multiple_comment($comment_id, $user_id)
+	{
+		$this->db->where('comment_id', $comment_id);
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->set('comment_trash', FALSE);
+		$this->db->update('comment');
+		 return $this->db->affected_rows();
+	}
+
+	/*
+	* Restore single comment for member user
+	*/
+	public function comment_restore($comment_id, $user_id)
+	{
+		$this->db->where('comment_id', $comment_id);
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->set('comment_trash', FALSE);
+		$this->db->update('comment');
+	}
+
+	/*
+	* Get trash comment
+	*/
+	public function count_trash_comment($user_id)
+	{
+		$this->db->from('comment');
+		$this->db->join('post', 'post_id = comment_post_id', 'left');
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->where('post_trash', NULL);
+		$this->db->where('comment_trash', TRUE);
+		return $this->db->count_all_results();
+	}
+
+	public function get_trash_comment($limit, $start, $user_id)
+	{
+		$this->db->limit($limit, $start);
+		$this->db->join('post', 'post_id = comment_post_id', 'left');
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->where('post_trash', NULL);
+		$this->db->where('comment_trash', TRUE);
+		$this->db->order_by('comment_id', 'DESC');
+		$query = $this->db->get('comment');
+
+		if($query->num_rows() > 0 ){
+			foreach($query->result() as $row){
+				$data[] = $row;
+			}
+			return $data;
+		}else{
+			return false;
+		}
+	}
+
 	/**
 	* Get single post by random id and user id
 	*/
@@ -261,6 +340,7 @@ class Member_model extends CI_Model{
 		$this->db->join('post', 'post_id = comment_post_id', 'left');
 		$this->db->where('comment_user_id', $user_id);
 		$this->db->where('post_trash', NULL);
+		$this->db->where('comment_trash', FALSE);
 		$query = $this->db->get('comment');
 
 		if($query->num_rows() > 0 ){
@@ -287,6 +367,7 @@ class Member_model extends CI_Model{
 		$this->db->join('post', 'post_id = comment_post_id', 'left');
 		$this->db->where('post_trash', NULL);
 		$this->db->where('comment_user_id', $user_id);
+		$this->db->where('comment_trash', FALSE);
 		return $this->db->count_all_results();
 	}
 
