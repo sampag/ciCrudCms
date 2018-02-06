@@ -79,8 +79,15 @@ class Post_model extends CI_Model{
 	}
 
 	public function meterComment()
-	{
-		return $this->db->count_all('comment');
+	{	
+
+		//return $this->db->count_all('comment');
+
+		$this->db->from('comment');
+		$this->db->join('post', 'post_id = comment_post_id', 'inner');
+		$this->db->where('post_trash', NULL);
+		$this->db->where('comment_trash', FALSE);
+		return $this->db->count_all_results();
 	}
 
 	/**
