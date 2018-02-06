@@ -13,8 +13,8 @@ if($this->uri->segment(2) == 'comment'){
 	<div class="row">
 		<div class="col-md-12">
 			<div class="btn-group btn-group-sm" role="group">
-			  <a href="<?php echo base_url('admin/comment'); ?>" class="btn btn-default <?php echo $active_comment; ?>"><i class="fa fa-fw fa-comment"></i> Comment</a>
-			  <a href="#" class="btn btn-default"><i class="fa fa-fw fa-trash"></i>Trash</a>
+			  <a href="<?php echo base_url('member/comment'); ?>" class="btn btn-default <?php echo $active_comment; ?>"><i class="fa fa-fw fa-comment"></i> Comment</a>
+			  <a href="<?php echo base_url('member/comment-trash'); ?>" class="btn btn-default"><i class="fa fa-fw fa-trash"></i>Trash</a>
 			</div>
 			<span class="pull-right">
 				{count}
@@ -30,12 +30,13 @@ if($this->uri->segment(2) == 'comment'){
 			</label>
 		</li>
 	</ul>
+	<?php echo form_open(uri_string().'/trash-multiple'); ?>
 	<div class="table-responsive">
 		<table class="table table-hover table-bordered table-striped">
 			<thead>
 				<tr>
 					<th>
-						<?php echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); ?>
+						<?php echo form_submit('commentTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); ?>
 					</th>
 					<th>Comment</th>
 					<th>Approved</th>
@@ -70,7 +71,7 @@ if($this->uri->segment(2) == 'comment'){
 								?>
 						  	<ul class="list-unstyled list-inline text-sm">
 					    		<li><a href="<?php echo base_url( uri_string().'/comment-approved/'. $comment->comment_id.'/'); ?>">Approved</a></li>
-					    		<li><a href="<?php echo base_url('member/comment-delete/'.$comment->comment_id); ?>">Trash</a></li>
+					    		<li><a href="<?php echo base_url(uri_string().'/trash-comment/'.$comment->comment_id); ?>">Trash</a></li>
 					    		<li><span class="text-muted"><?php echo timespan($comment->comment_created, time(), 1).' ago'; ?></span></li>
 					    	</ul>
 						  </div>
@@ -88,13 +89,17 @@ if($this->uri->segment(2) == 'comment'){
 				</tr>
 				<?php
 				     endforeach; 
-				    } 
+				    }else{ 
 				 ?>
+				 <tr>
+				 	<td colspan="6">No item found!</td>
+				 </tr>
+				 <?php } ?>
 			</tbody>
 			<thead>
 				<tr>
 					<th>
-						<?php echo form_submit('postTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); ?>
+						<?php echo form_submit('commentTrash', 'Trash', array('class' => 'btn btn-default btn-xs')); ?>
 					</th>
 					<th>Comment</th>
 					<th>Approved</th>
@@ -102,6 +107,7 @@ if($this->uri->segment(2) == 'comment'){
 			</thead>
 		</table>
 	</div>
+	<?php echo form_close(); ?>
 	<div class="row">
 	<div class="col-md-12">
 		<nav aria-label="Page navigation" class="text-center pull-right">
