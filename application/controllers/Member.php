@@ -762,6 +762,9 @@ class Member extends CI_Controller{
 		$this->parser->parse('member/filter_categorized', $data);
 	}
 
+	/*
+	* Approve single comment
+	*/
 	public function post_comment_approved($comment_id)
 	{	
 		$user       = $this->ion_auth->user()->row();
@@ -1547,6 +1550,32 @@ class Member extends CI_Controller{
 		}
 	}
 
+	public function trash_comment_paginated($comment_id)
+	{	
+		$comment_id = $this->uri->segment(5);
+		$page       = $this->uri->segment(3);
+		$group      = $this->uri->segment(2);
+		$user       = $this->ion_auth->user()->row();
+
+		$trash_comment = $this->member_model->set_trash($comment_id, $user->id);
+
+		if($trash_comment){
+			$this->member_model->set_trash($comment_id, $user->id);
+
+			if($this->member_model->count_comment_for($user->id) <= 7){
+				redirect('member/'.$group);
+			}else{
+				redirect('member/'.$group.'/'.$page);
+			}
+		}else{
+			if($this->member_model->count_comment_for($user->id) <= 7){
+				redirect('member/'.$group);
+			}else{
+				redirect('member/'.$group.'/'.$page);
+			}
+		}
+	}
+
 	/*
 	* Trash multiple comment for member users
 	*/
@@ -1556,7 +1585,7 @@ class Member extends CI_Controller{
 		$group  = $this->uri->segment(2);
 		$user   = $this->ion_auth->user()->row();
 
-		if($this->input->post('commentTrash')){
+		if($this->input->post('commentTrash', TRUE)){
 			foreach($trash as $id){
 				$this->member_model->set_trash_multiple($id, $user->id);
 			}
@@ -1564,6 +1593,69 @@ class Member extends CI_Controller{
 			redirect('member/'.$group);
 		}else{
 			redirect('member/'.$group);
+		}
+	}
+
+	// Paginated
+	public function trash_multiple_comment_paginated()
+	{
+		$trash = $this->input->post('comment_trash');
+		$group = $this->uri->segment(2);
+		$page  = $this->uri->segment(3);
+		$user  = $this->ion_auth->user()->row();
+
+		if($this->input->post('commentTrash', TRUE)){
+			foreach($trash as $id){
+				$this->member_model->set_trash_multiple($id, $user->id);
+			}
+
+			if($this->member_model->count_comment_for($user->id) <= 7){
+				redirect('member/'. $group);
+			}else{
+				redirect('member/'. $group . '/' .$page);
+			}
+		}else{
+			if($this->member_model->count_comment_for($user->id) <= 7){
+				redirect('member/'. $group);
+			}else{
+				redirect('member/'. $group . '/' .$page);
+			}
+		}
+	}
+
+	/*
+	* Unapproved single comment for member user
+	*/
+	public function comment_unapproved($comment_id)
+	{	
+		$comment_id = $this->uri->segment(4);
+		$group      = $this->uri->segment(2);
+		$user       = $this->ion_auth->user()->row();
+
+		$unapproved = $this->member_model->set_unapproved($comment_id, $user->id);
+
+		if($unapproved){
+			$this->member_model->set_unapproved($comment_id, $user->id);
+			redirect('member/'. $group);
+		}else{
+			redirect('member/'. $group);
+		}
+	}
+
+	public function comment_unapproved_paginated($comment_id)
+	{	
+		$comment_id = $this->uri->segment(5);
+		$page       = $this->uri->segment(3);
+		$group      = $this->uri->segment(2);
+		$user       = $this->ion_auth->user()->row();
+
+		$unapproved = $this->member_model->set_unapproved($comment_id, $user->id);
+
+		if($unapproved){
+			$this->member_model->set_unapproved($comment_id, $user->id);
+			redirect('member/'. $group.'/'.$page);
+		}else{
+			redirect('member/'. $group.'/'.$page);
 		}
 	}
 
