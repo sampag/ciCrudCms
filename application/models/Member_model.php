@@ -4,6 +4,17 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 class Member_model extends CI_Model{
 
 	/*
+	* Unapproved single comment for member user
+	*/
+	public function set_unapproved($comment_id, $comment_user_id)
+	{
+		$this->db->where('comment_id', $comment_id);
+		$this->db->where('comment_user_id', $comment_user_id);
+		$this->db->set('comment_approved', FALSE);
+		$this->db->update('comment');
+	}
+
+	/*
 	* Trash multiple comment for member users
 	*/
 	public function set_trash_multiple($comment_id, $user_id)
@@ -510,8 +521,9 @@ class Member_model extends CI_Model{
 	//==========================
 	public function count_comment($user_id)
 	{	
-		$this->db->where('comment_user_id', $user_id);
 		$this->db->from('comment');
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->where('comment_trash', FALSE);
 		return $this->db->count_all_results();
 	}
 
@@ -530,6 +542,14 @@ class Member_model extends CI_Model{
 		$this->db->where('user_id', $user_id);
 		$this->db->where('post_trash', NULL);
 		$this->db->from('post');
+		return $this->db->count_all_results();
+	}
+
+	public function count_post_comment($id)
+	{	
+		$this->db->from('comment');
+		$this->db->where('comment_post_id', $id);
+		$this->db->where('comment_trash', FALSE);
 		return $this->db->count_all_results();
 	}
 }
