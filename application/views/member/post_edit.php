@@ -157,7 +157,11 @@ if($this->session->flashdata('post_update_failed')){
 		<div class="col-md-9">
 			<div class="table-responsive">
 				<table class="table table-hover table-bordered table-striped">
-					<?php foreach($comment as $row): ?>
+					<?php 
+						if($comment){ 
+					    foreach($comment as $row):
+					    if($row->comment_trash == FALSE){ 
+					 ?>
 						<tr>
 							<div class="media">
 								<div class="media-left">
@@ -182,7 +186,11 @@ if($this->session->flashdata('post_update_failed')){
 								</div>
 							</div>
 						</tr>
-				    <?php endforeach; ?>
+					<?php 
+						} // if end
+						endforeach; 
+						} // if end
+					?>
 				</table>
 			</div>
 		</div>
