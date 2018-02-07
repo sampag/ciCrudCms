@@ -156,7 +156,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 						<td class="text-center list-tag">
 							<?php
 								$id = $recent_post->post_id;
-								echo $this->comment_model->count_post_comment($id);
+								echo $this->member_model->count_post_comment($id);
 							?>
 						</td>
 						<td class="text-center list-tag">
