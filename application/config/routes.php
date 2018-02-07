@@ -220,8 +220,13 @@ $route['member/post/(:any)/(:num)'] = 'member/post_filter_uncategorized/$slug/$p
 
 $route['member/comment'] = 'member/post_comment';
 $route['member/comment/(:num)'] = 'member/post_comment/$per_page';
+
+// Comment approved and unapproved
 $route['member/comment/comment-approved/(:num)'] = 'member/post_comment_approved/$id';
-$route['member/comment/(:num)/comment-approved/(:num)'] = 'member/post_comment_approved_paginated/$id';
+$route['member/comment/(:num)/comment-approved/(:num)'] = 'member/post_comment_approved_paginated/$id'; // Paginated
+
+$route['member/comment/comment-unapproved/(:num)'] = 'member/comment_unapproved/$comment_id';
+$route['member/comment/(:num)/comment-unapproved/(:num)'] = 'member/comment_unapproved_paginated/$comment_id'; // Paginated
 
 $route['member/comment-delete/(:num)'] = 'member/delete_comment/$id';
 $route['member/profile'] = 'member/author_profile';
@@ -278,9 +283,11 @@ $route['member/comment-trash/(:num)/restore-multiple'] = 'member/comment_restore
 
 // Trash single comment for member 
 $route['member/comment/trash-comment/(:num)'] = 'member/trash_comment/$comment_id';
+$route['member/comment/(:num)/trash-comment/(:num)'] = 'member/trash_comment_paginated/$comment_id'; // Paginated
 
 // Trash multiple comment for member
 $route['member/comment/trash-multiple'] = 'member/trash_multiple_comment';
+$route['member/comment/(:num)/trash-multiple'] = 'member/trash_multiple_comment_paginated';
 
 /**
 *Public
