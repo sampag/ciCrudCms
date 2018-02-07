@@ -16,20 +16,27 @@ if($this->uri->segment(2) == 'comment'){
 			  <a href="<?php echo base_url('member/comment'); ?>" class="btn btn-default <?php echo $active_comment; ?>"><i class="fa fa-fw fa-comment"></i> Comment</a>
 			  <a href="<?php echo base_url('member/comment-trash'); ?>" class="btn btn-default"><i class="fa fa-fw fa-trash"></i>Trash</a>
 			</div>
-			<span class="pull-right">
-				{count}
-			</span>
 		</div>
 	</div>
 	<?php echo br(1); ?>
-	<ul class="list-unstyled list-inline select-all">
-		<li>
-			<label id ="checkall" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" >
-				<input type="checkbox" class="mdl-checkbox__input">
-				<span class="mdl-checkbox__label text-sm">Select all</span>
-			</label>
-		</li>
-	</ul>
+<div class="row">
+	<div class="col-md-12">
+		<ul class="list-unstyled list-inline pull-right">
+			<li>
+				{count}
+			</li>
+		</ul>
+		<ul class="list-unstyled list-inline select-all">
+			<li>
+				<label id ="checkall" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" >
+					<input type="checkbox" class="mdl-checkbox__input">
+					<span class="mdl-checkbox__label text-sm">Select all</span>
+				</label>
+			</li>
+		</ul>
+		
+	</div>
+</div><!-- row -->
 	<?php echo form_open(uri_string().'/trash-multiple'); ?>
 	<div class="table-responsive">
 		<table class="table table-hover table-bordered table-striped">
@@ -70,7 +77,16 @@ if($this->uri->segment(2) == 'comment'){
 									echo '<b class="text-primary">'.$comment->comment_name.'</b> commented on <span class="text-muted">'. anchor('member/post-edit/'.$comment->post_random_id, $comment->post_title). '</span>';
 								?>
 						  	<ul class="list-unstyled list-inline text-sm">
-					    		<li><a href="<?php echo base_url( uri_string().'/comment-approved/'. $comment->comment_id.'/'); ?>">Approved</a></li>
+					    		<li>
+					    			<?php if($comment->comment_approved == FALSE){ ?>
+						    			<a href="<?php echo base_url( uri_string().'/comment-approved/'. $comment->comment_id.'/'); ?>">
+						    				Approved
+						    			</a>
+					    			<?php }else{ ?>
+						    			<a href="<?php echo base_url( uri_string().'/comment-unapproved/'. $comment->comment_id.'/'); ?>">   Unapproved
+						    			</a>
+					    			<?php } ?>
+					    		</li>
 					    		<li><a href="<?php echo base_url(uri_string().'/trash-comment/'.$comment->comment_id); ?>">Trash</a></li>
 					    		<li><span class="text-muted"><?php echo timespan($comment->comment_created, time(), 1).' ago'; ?></span></li>
 					    	</ul>
