@@ -4,6 +4,17 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 class Member_model extends CI_Model{
 
 	/*
+	* Delete single comment for member user
+	*/
+	public function delete_permanently_comment($comment_id, $user_id)
+	{	
+		$this->db->where('comment_id', $comment_id);
+		$this->db->where('comment_trash', TRUE);
+		$this->db->where('comment_user_id', $user_id);
+		$this->db->delete('comment');
+	}
+
+	/*
 	* Unapproved single comment for member user
 	*/
 	public function set_unapproved($comment_id, $comment_user_id)
@@ -333,16 +344,6 @@ class Member_model extends CI_Model{
 		}
 	}
 
-
-	//==========================
-	// Comment by comment_user_id
-	//==========================
-	public function delete_comment($comment_id, $user_id)
-	{	
-		$this->db->where('comment_id', $comment_id);
-		$this->db->where('comment_user_id', $user_id);
-		$this->db->delete('comment');
-	}
 
 	public function get_comment($limit, $start, $user_id)
 	{
