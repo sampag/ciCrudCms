@@ -123,7 +123,7 @@ $route['admin/(:any)/(:any)/(:num)/trash/(:any)'] = 'post/post_trash_paginated/$
 $route['admin/post-list/trash/restore/(:any)'] = 'post/post_restore/$random_id';// for non paginated
 $route['admin/post-list/trash/(:num)/restore/(:any)'] = 'post/post_restore_paginated/$random_id';// for paginated
 
-// Delete Permanently
+// Delete Post Permanently
 $route['admin/post-list/trash/delete-permanently/(:any)'] = 'post/post_delete_permanently/$random_id'; 
 $route['admin/post-list/trash/(:any)/delete-permanently/(:any)'] = 'post/post_delete_permanently_paginated/$random_id'; 
 
@@ -189,6 +189,9 @@ $route['admin/comment/(:num)/comment-trash/(:num)'] = 'comment/comment_trash_pag
 // Trash multiple comment
 $route['admin/comment/trash-multiple'] = 'comment/comment_trash_multiple';
 $route['admin/comment/(:num)/trash-multiple'] = 'comment/comment_trash_multiple_paginated';
+// Delete comment permanently
+$route['admin/comment-trash/delete-permanently/(:num)'] = 'comment/delete_comment_permanently/$id';
+$route['admin/comment-trash/(:num)/delete-permanently/(:num)'] = 'comment/delete_comment_permanently_paginated/$id';
 
 
 /**
@@ -288,6 +291,10 @@ $route['member/comment/(:num)/trash-comment/(:num)'] = 'member/trash_comment_pag
 // Trash multiple comment for member
 $route['member/comment/trash-multiple'] = 'member/trash_multiple_comment';
 $route['member/comment/(:num)/trash-multiple'] = 'member/trash_multiple_comment_paginated';
+
+// Delete permanently single comment in the trash
+$route['member/comment-trash/delete-permanently/(:num)'] = 'member/delete_comment_permanently/$id';
+$route['member/comment-trash/(:num)/delete-permanently/(:num)'] = 'member/delete_comment_permanently_paginated/$id'; // Page
 
 /**
 *Public
