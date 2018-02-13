@@ -3,6 +3,13 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 
 class Comment_model extends CI_Model{
 
+	public function delete_comment_permanently($comment_id)
+	{
+		$this->db->where('comment_id', $comment_id);
+		$this->db->where('comment_trash', TRUE);
+		$this->db->delete('comment');
+	}
+
 	public function trash_comment($id)
 	{
 		$this->db->where('comment_id', $id);
