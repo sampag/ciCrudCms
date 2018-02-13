@@ -7,7 +7,7 @@ class Member extends CI_Controller{
 	{
 		parent::__construct();
 
-		# multiple groups (by id) and check if all exist
+		// multiple groups (by id) and check if all exist
 		$group = 2;
 		if (! $this->ion_auth->in_group($group)){
 			redirect('login');
@@ -1657,6 +1657,54 @@ class Member extends CI_Controller{
 		}else{
 			redirect('member/'. $group.'/'.$page);
 		}
+	}
+
+	/*
+	* Delete permanently comment in the trash of member
+	*/
+	public function delete_comment_permanently($comment_id)
+	{
+		$comment_id    = $this->uri->segment(4);
+		$group         = $this->uri->segment(2);
+		$user          = $this->ion_auth->user()->row();
+
+		$delete_permanently = $this->member_model->delete_permanently_comment($comment_id, $user->id);
+
+		if($delete_permanently){
+			$this->member_model->delete_permanently_comment($comment_id, $user->id);
+			redirect('member/'. $group);
+		}else{
+			redirect('member/'. $group);
+		}
+	}
+
+	public function delete_comment_permanently_paginated($comment_id)
+	{
+		$comment_id   = $this->uri->segment(5);
+		$group        = $this->uri->segment(2);
+		$page         = $this->uri->segment(3);
+		$user         = $this->ion_auth->user()->row();
+
+		$delete_permanently = $this->member_model->delete_permanently_comment($comment_id, $user->id);
+		$trash_count = $this->member_model->count_trash_comment($user->id);
+
+		if($delete_permanently){
+			$this->member_model->delete_permanently_comment($comment_id, $user->id);
+
+			if($trash_count <= 7){
+				redirect('member/'.$group);
+			}else{
+				redirect('member/'.$group.'/'.$page);
+			}
+
+		}else{
+			if($trash_count <= 7){
+				redirect('member/'.$group);
+			}else{
+				redirect('member/'.$group.'/'.$page);
+			}
+		}
+
 	}
 
 } // Member class
