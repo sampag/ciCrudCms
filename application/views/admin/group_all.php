@@ -120,19 +120,5 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 	</nav>
 	</div>
 </div>
-<div class="row">
-	<div class="col-md-12">
-		<?php
-		$val = 'zxc';
-		echo gettype($val);
-
-		//$key = $this->encryption->create_key(16);
-		// Get a hex-encoded representation of the key:
-		echo br(1);
-		$key = bin2hex($this->encryption->create_key(16));
-		echo $key;
-		?>
-	</div>
-</div>
 {javascript}
 {footer}
