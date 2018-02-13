@@ -86,7 +86,7 @@ if($this->uri->segment(2) == 'comment-trash'){
 								?>
 						  	<ul class="list-unstyled list-inline text-sm">
 					    		<li><a href="<?php echo base_url( uri_string().'/comment-restore/'. $comment->comment_id); ?>">Restore</a></li>
-					    		<li><a href="<?php echo base_url('member/comment-delete-permanently/'.$comment->comment_id); ?>">Delete Permanently</a></li>
+					    		<li><a href="<?php echo base_url(uri_string().'/delete-permanently/'.$comment->comment_id); ?>">Delete Permanently</a></li>
 					    		<li><span class="text-muted"><?php echo timespan($comment->comment_created, time(), 1).' ago'; ?></span></li>
 					    	</ul>
 						  </div>
