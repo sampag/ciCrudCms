@@ -79,20 +79,22 @@ class Comment extends CI_Controller{
 				);
 
 				$this->parser->parse('admin/comment', $data);
+			}else{
+				$data = array(
+					'header' => $this->load->view('admin/header','', TRUE),
+					'comment_header' => $this->load->view('admin/comment_header','', TRUE),
+					'comments' => $comment_item,
+					'comment' => $comment,
+					'count' => $count,
+					'pagination'   => $this->pagination->create_links(),
+					'javascript' => $this->load->view('admin/javascript','', TRUE),
+					'footer' => $this->load->view('admin/footer','', TRUE),
+				);
+
+				$this->parser->parse('admin/comment', $data);
 			}
 
-			$data = array(
-				'header' => $this->load->view('admin/header','', TRUE),
-				'comment_header' => $this->load->view('admin/comment_header','', TRUE),
-				'comments' => $comment_item,
-				'comment' => $comment,
-				'count' => $count,
-				'pagination'   => $this->pagination->create_links(),
-				'javascript' => $this->load->view('admin/javascript','', TRUE),
-				'footer' => $this->load->view('admin/footer','', TRUE),
-			);
-
-			$this->parser->parse('admin/comment', $data);
+			
 
 	}
 
@@ -380,6 +382,50 @@ class Comment extends CI_Controller{
 			}
 		}	
 
+	}
+
+	/*
+	* Delete single comment permanently
+	*/
+	public function delete_comment_permanently($comment_id)
+	{
+		$comment_id  = $this->uri->segment(4);
+		$group       = $this->uri->segment(2);
+
+		$delete_permanently = $this->comment_model->delete_comment_permanently($comment_id);
+
+		if($delete_permanently){
+			$this->comment_model->delete_comment_permanently($comment_id);
+			redirect('admin/'. $group);
+		}else{
+			redirect('admin/'. $group);
+		}
+	}
+
+	public function delete_comment_permanently_paginated($comment_id)
+	{
+		$comment_id  = $this->uri->segment(5);
+		$group       = $this->uri->segment(2);
+		$page        = $this->uri->segment(3);
+
+		$delete_permanently = $this->comment_model->delete_comment_permanently($comment_id);
+		$count              = $this->comment_model->count_trash();
+
+		if($delete_permanently){
+			$this->comment_model->delete_comment_permanently($comment_id);
+			if($count <= 7){
+				redirect('admin/'. $group);
+			}else{
+				redirect('admin/'. $group . '/' . $page);
+			}
+
+		}else{
+			if($count <= 7){
+				redirect('admin/'. $group);
+			}else{
+				redirect('admin/'. $group . '/' . $page);
+			}
+		}
 	}
 
 }
